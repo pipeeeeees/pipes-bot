@@ -8,3 +8,7 @@ def scrape(url):
 def chunkParser(scrape, needle):
     ind = scrape.find(needle)
     return scrape[ind:ind+60]
+
+def BigChunkParser(scrape, needle):
+    ind = scrape.find(needle)
+    return scrape[ind:ind+180]

@@ -1,73 +1,93 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Nov 11 21:38:53 2021
-
-@author: dpipes
-"""
-
+import nest_asyncio
+nest_asyncio.apply()
 import discord
-import time
-import requests
-import os
-import pandas as pd
-from datetime import date
-from keep_alive import keep_alive
-import schedule
+
+import creds
 import pollen
+import gas
 
-client = discord.Client()
-my_secret = os.environ['gas_bot_key']
+# client is our connection to Discord
+print('attempting to establish connection...')
+flag = False
+while flag == False:
+    try:
+        client = discord.Client()
+        flag = True
+    except:
+        flag = False
+print('connection established!')
 
-
-def historicals():
-  writeCSVrow()
-
-schedule.every().day.at("01:00").do(historicals)
-
-
-# client
-@client.event
+# when the bot is ready
+@client.event 
 async def on_ready():
-  print('We have logged in as {0.user}'.format(client))
+    print('We have logged in as {0.user}'.format(client))
 
 @client.event
 async def on_message(message):
-  if message.author == client.user:
-    return
+    
+    # need to ensure bot does not reply to itself
+    if message.author == client.user:
+        return
+    
+    # simple hello return
+    if message.content.startswith('$hello'):
+        if message.author.name == 'pipeeeeees' or message.author.name == 'Guwop':
+            await message.channel.send('Hello, King!')
+        elif message.author.name == 'steebon':
+            await message.channel.send('Hello, Loser!')
+        else:
+            await message.channel.send('Hello {0.author.mention}').format(message)
+    
+    if 'penis' in str(message.content).lower():
+        await message.channel.send('P-word detected^')
 
-  if message.content.startswith('$hello'):
-    if message.author.name == 'pipeeeeees' or message.author.name == 'Dave-bon' or message.author.name == 'Guwop-bon':
-      await message.channel.send('Hello, King!')
-    elif message.author.name == 'steebon':
-      await message.channel.send('Hello, Loser!')
-    else:
-      await message.channel.send('Hello!')
-
-  if 'val?' in str(message.content).lower():
-    await message.channel.send('Loser detected^')
-
-  if 'FACTS' in str(message.content).upper():
-    await message.channel.send('Factual statement detected^')
-
-  if 'sheeeee' in str(message.content).lower():
-    await message.channel.send('Major sheesh detected^')
-
-  if ' eagles' in str(message.content).lower():
-    await message.channel.send('The Philadelphia Eagles. Worst team in the NFL.')
+    if 'val' in str(message.content).lower() and '?' in str(message.content).lower():
+        await message.channel.send('Valorant loser detected^')
+    
+    if 'FACTS' in str(message.content).upper():
+        await message.channel.send('Factual statement detected^')
+      
+    if 'sheeeee' in str(message.content).lower():
+        await message.channel.send('Major sheesh detected^')
+    
+    if ' eagles' in str(message.content).lower():
+        await message.channel.send('The Philadelphia Eagles. Worst team in the NFL.')
+    
+    if message.content.startswith('$test'):
+        await message.channel.send(message.author)
+    
+    if message.author.name == 'steebon':
+        if 'air fryer' in str(message.content).lower():
+            await message.channel.send('Chef Steph back with another air fryer abomination')
   
-  if message.content.startswith('$test'):
-    await message.channel.send(message.author)
-
-  if message.author.name == 'steebon':
-    if 'air fryer' in str(message.content).lower():
-      await message.channel.send('Chef Steph back with another air fryer abomination')
+    if message.content.startswith('$pregnant'):
+        if message.author.name == 'Guwop' or message.author.name == 'NotJuiceton' or message.author.name == 'beastsign14':
+            await message.channel.send("Congrats, you're pregnant!")
+        else:
+            await message.channel.send("Not Pregnant.")
   
-  if message.content.startswith('$pollen'):
-    await message.channel.send('The pollen count in Atlanta for the day is ' + str(pollen.getPollenCount()))
+    if message.content.startswith('$pollen'):
+        await message.channel.send('The pollen count in Atlanta for the day is ' + str(pollen.getPollenCount()))
+      
+    if message.content.startswith('$gas'):
+        if message.author.name == 'Guwop' or message.author.name == 'yamoe':
+            reg,mid,prem,die = gas.getGaGasTX()
+            msg = 'Today in the state of Texas, the average gas prices are:\n\t\tRegular: {}\n\t\tMidgrade: {}\n\t\tPremium: {}\n\nSource: https://gasprices.aaa.com/?state=TX'.format(reg,mid,prem)
+            await message.channel.send(msg)
 
-keep_alive()
-client.run(os.getenv('gas_bot_key'))
+        else:
+            reg,mid,prem,die = gas.getGaGas()
+            msg = 'Today in the state of Georgia, the average gas prices are:\n\t\tRegular: {}\n\t\tMidgrade: {}\n\t\tPremium: {}\n\nSource: https://gasprices.aaa.com/?state=GA'.format(reg,mid,prem)
+            await message.channel.send(msg)
 
-while True:
-    schedule.run_pending()
-    time.sleep(60) # wait one minute
+    if message.content.startswith('Wordle '):
+        ind = str(message.content).find('/') - 1
+        if int(str(message.content)[ind]) == 1:
+            await message.channel.send("Cheater Detected^")
+        elif int(str(message.content)[ind]) == 2:
+            await message.channel.send("Nerd Detected^")
+        elif int(str(message.content)[ind]) == 6:
+            await message.channel.send("Idiot detected^")
+            
+
+client.run(creds.pipesbot_key)

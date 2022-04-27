@@ -9,4 +9,5 @@ def getPollenCount():
             return j
         except:
             continue
-    return 69
+    print(mylist)
+    return 69420

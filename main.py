@@ -1,13 +1,12 @@
 import nest_asyncio
 nest_asyncio.apply()
 import discord
+import random
 
 import creds
 import pollen
 import gas
 import APIs
-
-cntr = 0
 
 # client is our connection to Discord
 print('attempting to establish connection...')
@@ -27,12 +26,11 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    global cntr
     # need to ensure bot does not reply to itself
     if message.author == client.user:
         return
     
-    # simple hello return
+
     if message.content.startswith('$info'):
         msg = """
 I am Pipes Bot. I am here to provide information and detect key phrases. You can use the following commands:
@@ -40,13 +38,20 @@ I am Pipes Bot. I am here to provide information and detect key phrases. You can
 - $gas: to return the current average gas price in Georgia
 - $pollen: to return the daily pollen count in the Atlanta area
 - $kanye: to receive a quote from Kanye West
-- $pregnant: to return a personal pregnancy test
 
 All feature requests can be made to @pipeeeeees#3187     
         """
         await message.channel.send(msg)
     
-    
+    if message.content.startswith('$update'):
+        msg = """
+Updates:
+- Randomized tom brady pics on command
+
+Known bugs:
+- $hello not working for some
+        """
+        await message.channel.send(msg)
     
     
     
@@ -63,11 +68,9 @@ All feature requests can be made to @pipeeeeees#3187
             
             
             
-    if 'tom brady' in str(message.content).lower():
-        await message.channel.send(file=discord.File('brady' + str(cntr) + '.jpg'))
-        cntr = cntr + 1
-        if cntr == 10:
-            cntr = 0
+    if 'brady' in str(message.content).lower():
+        await message.channel.send(file=discord.File('brady/brady' + str(random.randrange(0, 9)) + '.jpg'))
+
             
     
     if 'penis' in str(message.content).lower():
@@ -99,14 +102,14 @@ All feature requests can be made to @pipeeeeees#3187
     if 'kanye' in str(message.content).lower():
         await message.channel.send('"' + APIs.yeezyQuote() + '" - Kanye West')
   
-    if message.content.startswith('$pregnant'):
-        if message.author.name == 'Guwop' or message.author.name == 'NotJuiceton' or message.author.name == 'beastsign14':
-            await message.channel.send("Congrats, you're pregnant!")
-        else:
-            await message.channel.send("Not Pregnant.")
   
     if message.content.startswith('$pollen'):
-        await message.channel.send('The pollen count in Atlanta for the day is ' + str(pollen.getPollenCount()))
+        try:
+            int(pollen.getPollenCount())
+            await message.channel.send('The pollen count in Atlanta for the day is ' + str(pollen.getPollenCount()))
+        except:
+            await message.channel.send(str(pollen.getPollenCount()))
+        
       
     if message.content.startswith('$gas'):
         if message.author.name == 'Guwop' or message.author.name == 'yamoe':

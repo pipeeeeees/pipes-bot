@@ -69,9 +69,14 @@ Known bugs:
             
             
     if 'brady' in str(message.content).lower():
-        await message.channel.send(file=discord.File('brady/brady' + str(random.randrange(0, 9)) + '.jpg'))
+        await message.channel.send(file=discord.File('brady/brady' + str(random.randrange(0, 13)) + '.jpg'))
 
+    if 'biden' in str(message.content).lower():
+        await message.channel.send(file=discord.File('biden/biden' + str(random.randrange(0, 9)) + '.jpg'))
+        
+        
             
+    
     
     if 'penis' in str(message.content).lower():
         await message.channel.send('P-word detected^')
@@ -129,7 +134,7 @@ Known bugs:
         elif int(str(message.content)[ind]) == 2:
             await message.channel.send("Nerd Detected^")
         elif int(str(message.content)[ind]) == 6:
-            await message.channel.send("Idiot detected^ ☠️")
+            await message.channel.send("Idiot detected^ ☠️ why did you even post bro")
             
 
 client.run(creds.pipesbot_key)

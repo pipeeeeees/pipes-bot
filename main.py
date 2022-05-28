@@ -8,6 +8,11 @@ import pollen
 import gas
 import APIs
 
+biden_list = []
+brady_list = []
+obama_list = []
+lebron_list = []
+
 # client is our connection to Discord
 print('attempting to establish connection...')
 flag = False
@@ -19,13 +24,23 @@ while flag == False:
         flag = False
 print('connection established!')
 
+
+
 # when the bot is ready
 @client.event 
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
 
+
+
+
 @client.event
 async def on_message(message):
+    global biden_list
+    global brady_list
+    global obama_list
+    global lebron_list
+    
     # need to ensure bot does not reply to itself
     if message.author == client.user:
         return
@@ -69,12 +84,48 @@ Known bugs:
             
             
     if 'brady' in str(message.content).lower():
-        await message.channel.send(file=discord.File('brady/brady' + str(random.randrange(0, 13)) + '.jpg'))
+        num_brady_pics = 14
+        if len(brady_list) == num_brady_pics:
+            brady_list = []
+        rand_int = str(random.randrange(0, num_brady_pics))
+        while rand_int in brady_list:
+            rand_int = str(random.randrange(0, num_brady_pics))
+        brady_list.append(rand_int)
+        print(brady_list)
+        await message.channel.send(file=discord.File('brady/brady' + str(rand_int) + '.jpg'))
 
     if 'biden' in str(message.content).lower():
-        await message.channel.send(file=discord.File('biden/biden' + str(random.randrange(0, 9)) + '.jpg'))
+        num_biden_pics = 10
+        if len(biden_list) == num_biden_pics:
+            biden_list = []
+        rand_int = str(random.randrange(0, num_biden_pics))
+        while rand_int in biden_list:
+            rand_int = str(random.randrange(0, num_biden_pics))
+        biden_list.append(rand_int)
+        print(biden_list)
+        await message.channel.send(file=discord.File('biden/biden' + str(rand_int) + '.jpg'))
         
+    if 'obama' in str(message.content).lower():
+        num_obama_pics = 8
+        if len(obama_list) == num_obama_pics:
+            obama_list = []
+        rand_int = str(random.randrange(0, num_obama_pics))
+        while rand_int in obama_list:
+            rand_int = str(random.randrange(0, num_obama_pics))
+        obama_list.append(rand_int)
+        print(obama_list)
+        await message.channel.send(file=discord.File('obama/obama' + str(rand_int) + '.jpg'))
         
+    if 'lebron' in str(message.content).lower():
+        num_lebron_pics = 4
+        if len(lebron_list) == num_lebron_pics:
+            lebron_list = []
+        rand_int = str(random.randrange(0, num_lebron_pics))
+        while rand_int in lebron_list:
+            rand_int = str(random.randrange(0, num_lebron_pics))
+        lebron_list.append(rand_int)
+        print(lebron_list)
+        await message.channel.send(file=discord.File('lebron/lebron' + str(rand_int) + '.jpg'))
             
     
     
@@ -133,8 +184,8 @@ Known bugs:
             await message.channel.send("Cheater Detected^ 🤡")
         elif int(str(message.content)[ind]) == 2:
             await message.channel.send("Nerd Detected^")
-        elif int(str(message.content)[ind]) == 6:
-            await message.channel.send("Idiot detected^ ☠️ why did you even post bro")
+        elif str(message.content)[ind] == 'X':
+            await message.channel.send("Fuckin dumbass")
             
 
 client.run(creds.pipesbot_key)

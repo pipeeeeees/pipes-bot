@@ -31,7 +31,7 @@ TODO:
 msg_info = """
 lol nothing here yet
 """
-current_working_directory = os.getcwd()
+current_working_directory = r'C:\Users\pipee\Documents\PyProjects\Discord-Bot'
 
 biden_list = []
 brady_list = []

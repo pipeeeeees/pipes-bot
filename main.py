@@ -12,11 +12,11 @@ import pickle
 import time
 import os
 
-from Modules import creds.py as creds
-from Modules import pollen.py as pollen
-from Modules import gas.py as gas
-from Modules import APIs.py as APIs
-from Modules import spotify_search.py as spotify_search
+from Modules import creds as creds
+from Modules import pollen as pollen
+from Modules import gas as gas
+from Modules import APIs as APIs
+from Modules import spotify_search as spotify_search
 
 msg_update = """
 Updates (July 25th, 2022):

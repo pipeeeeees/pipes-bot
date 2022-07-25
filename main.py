@@ -91,7 +91,7 @@ Known bugs:
             rand_int = str(random.randrange(0, num_brady_pics))
         brady_list.append(rand_int)
         print(brady_list)
-        await message.channel.send(file=discord.File('brady/brady' + str(rand_int) + '.jpg'))
+        await message.channel.send(file=discord.File(r'C:\Users\pipee\Documents\PyProjects\Discord-Bot\brady\brady' + str(rand_int) + '.jpg'))
 
     if 'biden' in str(message.content).lower():
         num_biden_pics = 10
@@ -102,7 +102,7 @@ Known bugs:
             rand_int = str(random.randrange(0, num_biden_pics))
         biden_list.append(rand_int)
         print(biden_list)
-        await message.channel.send(file=discord.File('biden/biden' + str(rand_int) + '.jpg'))
+        await message.channel.send(file=discord.File(r'C:\Users\pipee\Documents\PyProjects\Discord-Bot\biden\biden' + str(rand_int) + '.jpg'))
         
     if 'obama' in str(message.content).lower():
         num_obama_pics = 8
@@ -113,7 +113,7 @@ Known bugs:
             rand_int = str(random.randrange(0, num_obama_pics))
         obama_list.append(rand_int)
         print(obama_list)
-        await message.channel.send(file=discord.File('obama/obama' + str(rand_int) + '.jpg'))
+        await message.channel.send(file=discord.File(r'C:\Users\pipee\Documents\PyProjects\Discord-Bot\obama\obama' + str(rand_int) + '.jpg'))
         
     if 'lebron' in str(message.content).lower():
         num_lebron_pics = 11
@@ -126,7 +126,7 @@ Known bugs:
                 rand_int = str(random.randrange(0, num_lebron_pics))
             lebron_list.append(rand_int)
             print(lebron_list)
-            await message.channel.send(file=discord.File('lebron/lebron' + str(rand_int) + '.jpg'))
+            await message.channel.send(file=discord.File(r'C:\Users\pipee\Documents\PyProjects\Discord-Bot\lebron\lebron' + str(rand_int) + '.jpg'))
             
     
     if 'FACTS' in str(message.content).upper():

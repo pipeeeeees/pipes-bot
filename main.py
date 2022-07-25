@@ -1,6 +1,7 @@
 """
-
-
+Discord Bot: main.py
+Desc: this file orchestrates and runs the discord bot
+Author: pipeeeeees@gmail.com
 """
 
 import nest_asyncio
@@ -8,19 +9,36 @@ nest_asyncio.apply()
 import discord
 import random
 import pickle
+import time
+import os
 
-import creds
-import pollen
-import gas
-import APIs
-import spotify_search
+from Modules import creds
+from Modules import pollen
+from Modules import gas
+from Modules import APIs
+from Modules import spotify_search
+
+msg_update = """
+Updates (July 25th, 2022):
+- fixed lebron, brady, biden, obama meme posts feature
+- re-organized source code
+
+TODO:
+- add runtime reporter
+- add feature request option
+- revamp $info
+"""
+msg_info = """
+lol nothing here yet
+"""
+current_working_directory = os.getcwd()
 
 biden_list = []
 brady_list = []
 obama_list = []
 lebron_list = []
 
-# client is our connection to Discord
+# check in the terminal if connection has been established
 print('attempting to establish connection...')
 flag = False
 while flag == False:
@@ -29,6 +47,8 @@ while flag == False:
         flag = True
     except:
         flag = False
+        print('   connection failed, trying again...')
+        time.sleep(1)
 print('connection established!')
 
 # when the bot is ready
@@ -36,40 +56,31 @@ print('connection established!')
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
 
-
 @client.event
 async def on_message(message):
     global biden_list
     global brady_list
     global obama_list
     global lebron_list
+    global msg_update
+    global msg_info
+    global current_working_directory
     
     # need to ensure bot does not reply to itself
     if message.author == client.user:
         return
     
-
     if message.content.startswith('$info'):
-        msg = """
-I am Pipes Bot. I am here to provide information and detect key phrases. You can use the following commands:
-- $hello: to receive a greeting
-- $gas: to return the current average gas price in Georgia
-- $pollen: to return the daily pollen count in the Atlanta area
-- $kanye: to receive a quote from Kanye West
-
-All feature requests can be made to @pipeeeeees#3187     
-        """
-        await message.channel.send(msg)
+        await message.channel.send(msg_info)
+        
+    if message.content.startswith('$help'):
+        await message.channel.send(msg_info)
     
     if message.content.startswith('$update'):
-        msg = """
-Updates:
-- Randomized tom brady pics on command
-
-Known bugs:
-- $hello not working for some
-        """
-        await message.channel.send(msg)
+        await message.channel.send(msg_update)
+        
+    if message.content.startswith('$test'):
+        await message.channel.send(message.author)
     
     if message.content.startswith('$hello'):
         if message.author.name == 'pipeeeeees' or message.author.name == 'Guwop':
@@ -78,12 +89,9 @@ Known bugs:
             await message.channel.send('Hello, Loser!')
         else:
             await message.channel.send('Hello {0.author.mention}').format(message)
-            
-    if message.content.startswith('$test'):
-        await message.channel.send(message.author)
                     
     if 'brady' in str(message.content).lower():
-        num_brady_pics = 14
+        num_brady_pics = len(os.listdir(current_working_directory + '\brady'))
         if len(brady_list) == num_brady_pics:
             brady_list = []
         rand_int = str(random.randrange(0, num_brady_pics))
@@ -91,10 +99,10 @@ Known bugs:
             rand_int = str(random.randrange(0, num_brady_pics))
         brady_list.append(rand_int)
         print(brady_list)
-        await message.channel.send(file=discord.File('brady/brady' + str(rand_int) + '.jpg'))
+        await message.channel.send(file=discord.File(current_working_directory + '\brady\brady' + str(rand_int) + '.jpg'))
 
     if 'biden' in str(message.content).lower():
-        num_biden_pics = 10
+        num_biden_pics = len(os.listdir(current_working_directory + '\biden'))
         if len(biden_list) == num_biden_pics:
             biden_list = []
         rand_int = str(random.randrange(0, num_biden_pics))
@@ -102,10 +110,10 @@ Known bugs:
             rand_int = str(random.randrange(0, num_biden_pics))
         biden_list.append(rand_int)
         print(biden_list)
-        await message.channel.send(file=discord.File('biden/biden' + str(rand_int) + '.jpg'))
+        await message.channel.send(file=discord.File(current_working_directory + '\biden\biden' + str(rand_int) + '.jpg'))
         
     if 'obama' in str(message.content).lower():
-        num_obama_pics = 8
+        num_obama_pics = len(os.listdir(current_working_directory + '\obama'))
         if len(obama_list) == num_obama_pics:
             obama_list = []
         rand_int = str(random.randrange(0, num_obama_pics))
@@ -113,12 +121,12 @@ Known bugs:
             rand_int = str(random.randrange(0, num_obama_pics))
         obama_list.append(rand_int)
         print(obama_list)
-        await message.channel.send(file=discord.File('obama/obama' + str(rand_int) + '.jpg'))
+        await message.channel.send(file=discord.File(current_working_directory + '\obama\obama' + str(rand_int) + '.jpg'))
         
     if 'lebron' in str(message.content).lower():
-        num_lebron_pics = 11
+        num_lebron_pics = len(os.listdir(current_working_directory + '\lebron'))
         if len(lebron_list) == num_lebron_pics:
-            await message.channel.send(file=discord.File('lebron/lebron_gif_1.gif'))
+            await message.channel.send(file=discord.File(current_working_directory + '\lebron\lebron_gif_1.gif'))
             lebron_list = []
         else:
             rand_int = str(random.randrange(0, num_lebron_pics))
@@ -126,8 +134,11 @@ Known bugs:
                 rand_int = str(random.randrange(0, num_lebron_pics))
             lebron_list.append(rand_int)
             print(lebron_list)
-            await message.channel.send(file=discord.File('lebron/lebron' + str(rand_int) + '.jpg'))
+            await message.channel.send(file=discord.File(current_working_directory + '\lebron\lebron' + str(rand_int) + '.jpg'))
             
+    
+    
+    
     
     if 'FACTS' in str(message.content).upper():
         await message.channel.send('Factual statement detected^')

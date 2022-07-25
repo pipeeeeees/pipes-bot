@@ -91,7 +91,7 @@ async def on_message(message):
             await message.channel.send('Hello {0.author.mention}').format(message)
                     
     if 'brady' in str(message.content).lower():
-        num_brady_pics = len(os.listdir(current_working_directory + '\brady'))
+        num_brady_pics = len([x for x in os.listdir(current_working_directory + '\brady') if '.gif' not in x])
         if len(brady_list) == num_brady_pics:
             brady_list = []
         rand_int = str(random.randrange(0, num_brady_pics))
@@ -102,7 +102,7 @@ async def on_message(message):
         await message.channel.send(file=discord.File(current_working_directory + '\brady\brady' + str(rand_int) + '.jpg'))
 
     if 'biden' in str(message.content).lower():
-        num_biden_pics = len(os.listdir(current_working_directory + '\biden'))
+        num_biden_pics = len([x for x in os.listdir(current_working_directory + '\biden') if '.gif' not in x])
         if len(biden_list) == num_biden_pics:
             biden_list = []
         rand_int = str(random.randrange(0, num_biden_pics))

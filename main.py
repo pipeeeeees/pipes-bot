@@ -91,7 +91,7 @@ async def on_message(message):
             await message.channel.send('Hello {0.author.mention}').format(message)
                     
     if 'brady' in str(message.content).lower():
-        num_brady_pics = len([x for x in os.listdir(current_working_directory + '\brady') if '.gif' not in x])
+        num_brady_pics = len([x for x in os.listdir(current_working_directory + '\\brady') if '.gif' not in x])
         if len(brady_list) == num_brady_pics:
             brady_list = []
         rand_int = str(random.randrange(0, num_brady_pics))
@@ -99,10 +99,10 @@ async def on_message(message):
             rand_int = str(random.randrange(0, num_brady_pics))
         brady_list.append(rand_int)
         print(brady_list)
-        await message.channel.send(file=discord.File(current_working_directory + '\brady\brady' + str(rand_int) + '.jpg'))
+        await message.channel.send(file=discord.File(current_working_directory + '\\brady\\brady' + str(rand_int) + '.jpg'))
 
     if 'biden' in str(message.content).lower():
-        num_biden_pics = len([x for x in os.listdir(current_working_directory + '\biden') if '.gif' not in x])
+        num_biden_pics = len([x for x in os.listdir(current_working_directory + '\\biden') if '.gif' not in x])
         if len(biden_list) == num_biden_pics:
             biden_list = []
         rand_int = str(random.randrange(0, num_biden_pics))
@@ -110,10 +110,10 @@ async def on_message(message):
             rand_int = str(random.randrange(0, num_biden_pics))
         biden_list.append(rand_int)
         print(biden_list)
-        await message.channel.send(file=discord.File(current_working_directory + '\biden\biden' + str(rand_int) + '.jpg'))
+        await message.channel.send(file=discord.File(current_working_directory + '\\biden\\biden' + str(rand_int) + '.jpg'))
         
     if 'obama' in str(message.content).lower():
-        num_obama_pics = len([x for x in os.listdir(current_working_directory + '\obama') if '.gif' not in x])
+        num_obama_pics = len([x for x in os.listdir(current_working_directory + '\\obama') if '.gif' not in x])
         if len(obama_list) == num_obama_pics:
             obama_list = []
         rand_int = str(random.randrange(0, num_obama_pics))
@@ -121,12 +121,12 @@ async def on_message(message):
             rand_int = str(random.randrange(0, num_obama_pics))
         obama_list.append(rand_int)
         print(obama_list)
-        await message.channel.send(file=discord.File(current_working_directory + '\obama\obama' + str(rand_int) + '.jpg'))
+        await message.channel.send(file=discord.File(current_working_directory + '\\obama\\obama' + str(rand_int) + '.jpg'))
         
     if 'lebron' in str(message.content).lower():
-        num_lebron_pics = len([x for x in os.listdir(current_working_directory + '\lebron') if '.gif' not in x])
+        num_lebron_pics = len([x for x in os.listdir(current_working_directory + '\\lebron') if '.gif' not in x])
         if len(lebron_list) == num_lebron_pics:
-            await message.channel.send(file=discord.File(current_working_directory + '\lebron\lebron_gif_1.gif'))
+            await message.channel.send(file=discord.File(current_working_directory + '\\lebron\\lebron_gif_1.gif'))
             lebron_list = []
         else:
             rand_int = str(random.randrange(0, num_lebron_pics))
@@ -134,7 +134,7 @@ async def on_message(message):
                 rand_int = str(random.randrange(0, num_lebron_pics))
             lebron_list.append(rand_int)
             print(lebron_list)
-            await message.channel.send(file=discord.File(current_working_directory + '\lebron\lebron' + str(rand_int) + '.jpg'))
+            await message.channel.send(file=discord.File(current_working_directory + '\\lebron\\lebron' + str(rand_int) + '.jpg'))
             
     
     

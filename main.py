@@ -17,9 +17,10 @@ import pollen
 import gas
 import APIs
 import spotify_search
+import meme_selector
 
 msg_update = """
-Updates (July 25th, 2022):
+Updates (August 1st, 2022):
 - fixed lebron, brady, biden, obama meme posts feature
 - re-organized source code
 
@@ -37,15 +38,18 @@ Here is a list of commands:
 - Gas commands:
     - $gas : find out what the average gas prices are in the state of Georgia
     - $gas [state-abbreviation] : find average gas prices in any state
-$kanye : get a random Kanye quote
-$spotify [keyword] : does a spotify search of the top songs with that keyword
+- $kanye : get a random Kanye quote
+- $spotify [keyword] : does a spotify search of the top songs with that keyword
+- Meme commands:
+    - $brady
+    - $lebron
+    - $obama
+    - $biden
+
+Pipes Bot also reacts to really great or very bad Wordle scores shared to it. Try it out!
 """
 current_working_directory = r'C:\Users\pipee\Documents\PyProjects\Discord-Bot'
-
-biden_list = []
-brady_list = []
-obama_list = []
-lebron_list = []
+current_working_directory = os.getcwd()
 
 # check in the terminal if connection has been established
 print('attempting to establish connection...')
@@ -100,55 +104,17 @@ async def on_message(message):
             await message.channel.send('Hello {0.author.mention}').format(message)
                     
     if 'brady' in str(message.content).lower():
-        num_brady_pics = len([x for x in os.listdir(current_working_directory + '\\brady') if '.gif' not in x])
-        if len(brady_list) == num_brady_pics:
-            brady_list = []
-        rand_int = str(random.randrange(0, num_brady_pics))
-        while rand_int in brady_list:
-            rand_int = str(random.randrange(0, num_brady_pics))
-        brady_list.append(rand_int)
-        print(brady_list)
-        await message.channel.send(file=discord.File(current_working_directory + '\\brady\\brady' + str(rand_int) + '.jpg'))
+        await message.channel.send(file=discord.File(meme_selector.Brady.return_path()))
 
     if 'biden' in str(message.content).lower():
-        num_biden_pics = len([x for x in os.listdir(current_working_directory + '\\biden') if '.gif' not in x])
-        if len(biden_list) == num_biden_pics:
-            biden_list = []
-        rand_int = str(random.randrange(0, num_biden_pics))
-        while rand_int in biden_list:
-            rand_int = str(random.randrange(0, num_biden_pics))
-        biden_list.append(rand_int)
-        print(biden_list)
-        await message.channel.send(file=discord.File(current_working_directory + '\\biden\\biden' + str(rand_int) + '.jpg'))
+        await message.channel.send(file=discord.File(meme_selector.Biden.return_path()))
         
     if 'obama' in str(message.content).lower():
-        num_obama_pics = len([x for x in os.listdir(current_working_directory + '\\obama') if '.gif' not in x])
-        if len(obama_list) == num_obama_pics:
-            obama_list = []
-        rand_int = str(random.randrange(0, num_obama_pics))
-        while rand_int in obama_list:
-            rand_int = str(random.randrange(0, num_obama_pics))
-        obama_list.append(rand_int)
-        print(obama_list)
-        await message.channel.send(file=discord.File(current_working_directory + '\\obama\\obama' + str(rand_int) + '.jpg'))
+        await message.channel.send(file=discord.File(meme_selector.Obama.return_path()))
         
     if 'lebron' in str(message.content).lower():
-        num_lebron_pics = len([x for x in os.listdir(current_working_directory + '\\lebron') if '.gif' not in x])
-        if len(lebron_list) == num_lebron_pics:
-            await message.channel.send(file=discord.File(current_working_directory + '\\lebron\\lebron_gif_1.gif'))
-            lebron_list = []
-        else:
-            rand_int = str(random.randrange(0, num_lebron_pics))
-            while rand_int in lebron_list:
-                rand_int = str(random.randrange(0, num_lebron_pics))
-            lebron_list.append(rand_int)
-            print(lebron_list)
-            await message.channel.send(file=discord.File(current_working_directory + '\\lebron\\lebron' + str(rand_int) + '.jpg'))
+        await message.channel.send(file=discord.File(meme_selector.Lebron.return_path()))
             
-    
-    
-    
-    
     if 'FACTS' in str(message.content).upper():
         await message.channel.send('Factual statement detected^')
       

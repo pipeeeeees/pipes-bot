@@ -29,7 +29,16 @@ TODO:
 - revamp $info
 """
 msg_info = """
-lol nothing here yet
+Hello! I am Pipes Bot, a bot created by David H. Pipes as a means to implement useful commands and features on an online platform.
+
+Here is a list of commands:
+- $update : find out what features have been added or taken away
+- $pollen : find out the pollen count in the Atlanta area
+- Gas commands:
+    - $gas : find out what the average gas prices are in the state of Georgia
+    - $gas [state-abbreviation] : find average gas prices in any state
+$kanye : get a random Kanye quote
+$spotify [keyword] : does a spotify search of the top songs with that keyword
 """
 current_working_directory = r'C:\Users\pipee\Documents\PyProjects\Discord-Bot'
 

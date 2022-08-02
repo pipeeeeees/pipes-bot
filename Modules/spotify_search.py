@@ -15,6 +15,7 @@ def look_for_playlists(keyword):
     for item in items:
         list_of_playlist_uris.append(item['uri'])
     try:
+        #tries to look for more in 50 playlist groups
         for i in range(19):
             results = sp.search(keyword, limit=50, offset=((i+1)*50), type='playlist', market='US')
             playlist = results['playlists']
@@ -22,7 +23,7 @@ def look_for_playlists(keyword):
             for item in items:
                 list_of_playlist_uris.append(item['uri'])
     except:
-        pass
+        print('error occured')
     num_playlists = len(list_of_playlist_uris)
     print(f'\n{len(list_of_playlist_uris)} playlists found for keyword {keyword}')
     return list_of_playlist_uris

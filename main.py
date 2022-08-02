@@ -79,6 +79,9 @@ async def on_message(message):
     global msg_info
     global current_working_directory
     
+    # say who and what the message sent was
+    print(str(message.author.name) + ' sent: "' + str(message.content) + '"')
+    
     # need to ensure bot does not reply to itself
     if message.author == client.user:
         return

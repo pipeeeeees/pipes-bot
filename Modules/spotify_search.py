@@ -22,6 +22,8 @@ def look_for_playlists(keyword):
             playlist = results['playlists']
             if len(playlist) == 0:
                 break
+            else:
+                print(len(playlist))
             items = playlist['items']
             for item in items:
                 list_of_playlist_uris.append(item['uri'])

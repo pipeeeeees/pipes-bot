@@ -64,6 +64,28 @@ while flag == False:
         time.sleep(1)
 print('connection established!')
 
+start = time.time()
+
+intervals = (
+    ('weeks', 604800),  # 60 * 60 * 24 * 7
+    ('days', 86400),    # 60 * 60 * 24
+    ('hours', 3600),    # 60 * 60
+    ('minutes', 60),
+    ('seconds', 1),
+)
+
+def display_time(seconds, granularity=2):
+    result = []
+
+    for name, count in intervals:
+        value = seconds // count
+        if value:
+            seconds -= value * count
+            if value == 1:
+                name = name.rstrip('s')
+            result.append("{} {}".format(value, name))
+    return ', '.join(result[:granularity])
+
 # when the bot is ready
 @client.event 
 async def on_ready():
@@ -97,6 +119,11 @@ async def on_message(message):
         
     if message.content.startswith('$test'):
         await message.channel.send(message.author)
+        
+    if message.content.startswith('$uptime'):
+        end = time.time()
+        uptime = display_time(end - start, 4)
+        await message.channel.send(f'Pipes Bot has been online for {uptime}.')
     
     if message.content.startswith('$hello'):
         if message.author.name == 'pipeeeeees' or message.author.name == 'Guwop':

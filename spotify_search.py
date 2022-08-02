@@ -95,7 +95,7 @@ def print_track_dict(track_popularity_dict, keyword):
     count = 1
     count2 = 0
     for key, value in track_popularity_dict.items():
-        strang = strang + f'\n{count}. {key} ; {value}/{num_playlists}'
+        strang = strang + f'\n{count}. {key} ; ({value})'
         count += 1
     print(len(strang))
     return(strang)

@@ -15,7 +15,7 @@ def look_for_playlists(keyword):
         items = playlist['items']
         for item in items:
             list_of_playlist_uris.append(item['uri'])
-    
+    """
     # returns 50 playlists containing the keyword, no idea how it selects the 50 but it is consistent
     results = sp.search(keyword, limit=50, offset=0, type='playlist', market='US')
     playlist = results['playlists']
@@ -35,7 +35,7 @@ def look_for_playlists(keyword):
     except:
         print('error occured looking for more playlists')
     
-    
+    """
     
     list_of_playlist_uris = list(set(list_of_playlist_uris))
     num_playlists = len(list_of_playlist_uris)

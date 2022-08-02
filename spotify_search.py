@@ -9,17 +9,18 @@ def look_for_playlists(keyword):
     global sp
     global num_playlists
 
-    # returns 50 playlists containing the keyword, no idea how it selects the 50 but it is consistent
-    results = sp.search(keyword, limit=50, offset=0, type='playlist', market='US')
-    playlist = results['playlists']
-    items = playlist['items']
     list_of_playlist_uris = []
-    for item in items:
-        list_of_playlist_uris.append(item['uri'])
+    # returns 50 playlists containing the keyword, no idea how it selects the 50 but it is consistent
+    for i in range(20):
+        results = sp.search(keyword, limit=50, offset=i*50, type='playlist', market='US')
+        playlist = results['playlists']
+        items = playlist['items']
+        for item in items:
+            list_of_playlist_uris.append(item['uri'])
+    """
     try:
         #tries to look for more in 50 playlist groups
         for i in range(19):
-            print(i)
             results = sp.search(keyword, limit=50, offset=((i+1)*50), type='playlist', market='US')
             playlist = results['playlists']
             items = playlist['items']
@@ -27,6 +28,7 @@ def look_for_playlists(keyword):
                 list_of_playlist_uris.append(item['uri'])
     except:
         print('error occured looking for more playlists')
+    """
     
     list_of_playlist_uris = list(set(list_of_playlist_uris))
     num_playlists = len(list_of_playlist_uris)
@@ -35,7 +37,7 @@ def look_for_playlists(keyword):
 
 def find_playlist_track_uris(playlist_uri):
     global sp
-    pl_results = sp.playlist(playlist_uri, fields=None, market=None, additional_types=('track', ))
+    pl_results = sp.playlist(playlist_uri, fields=None, market='US', additional_types=('track', ))
     pl_tracks = pl_results['tracks']
     pl_tracks_items = pl_tracks['items']
     list_of_track_uris = []
@@ -77,7 +79,7 @@ def popular_tracks_based_on_keyword(keyword):
         else:
             track_names_and_popularity[track_uri_to_trackname(key)] = value
             counter += 1
-            if counter == 30:
+            if counter == 25:
                 break
     print(f'{len(track_names_and_popularity)} of these tracks are deemed relevant')
     track_names_and_popularity_sorted = dict(sorted(track_names_and_popularity.items(), key=lambda item: item[1], reverse = True))

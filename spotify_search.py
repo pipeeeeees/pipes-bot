@@ -3,18 +3,12 @@ from spotipy.oauth2 import SpotifyClientCredentials
 
 sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
 
+num_playlists = 50
+
 def look_for_playlists(keyword):
     global sp
-    
-    list_of_playlist_uris = []
-    for i in range(20):
-        print(i)
-        results = sp.search(keyword, limit=50, offset=((i)*50), type='playlist', market='US')
-        playlist = results['playlists']
-        items = playlist['items']
-        for item in items:
-            list_of_playlist_uris.append(item['uri'])
-    """
+    global num_playlists
+
     # returns 50 playlists containing the keyword, no idea how it selects the 50 but it is consistent
     results = sp.search(keyword, limit=50, offset=0, type='playlist', market='US')
     playlist = results['playlists']
@@ -34,11 +28,9 @@ def look_for_playlists(keyword):
     except:
         print('error occured looking for more playlists')
     
-    """
-    
     list_of_playlist_uris = list(set(list_of_playlist_uris))
     num_playlists = len(list_of_playlist_uris)
-    print(f'\n{len(list_of_playlist_uris)} playlists found for keyword {keyword}')
+    print(f'\n{num_playlists} playlists found for keyword {keyword}')
     return list_of_playlist_uris
 
 def find_playlist_track_uris(playlist_uri):
@@ -85,7 +77,7 @@ def popular_tracks_based_on_keyword(keyword):
         else:
             track_names_and_popularity[track_uri_to_trackname(key)] = value
             counter += 1
-            if counter == 25:
+            if counter == 30:
                 break
     print(f'{len(track_names_and_popularity)} of these tracks are deemed relevant')
     track_names_and_popularity_sorted = dict(sorted(track_names_and_popularity.items(), key=lambda item: item[1], reverse = True))
@@ -95,11 +87,13 @@ def track_uri_to_trackname(track_uri):
     global sp
     return sp.track(track_uri, market=None)['name']
 
-def print_track_dict(track_popualrity_dict, keyword):
-    strang = f'\nA spotify playlist search of "{keyword}" found these top songs:'
+def print_track_dict(track_popularity_dict, keyword):
+    global num_playlists
+    strang = f'\nA spotify playlist search of "{keyword}" found {num_playlists} playlists containing these common songs:'
     count = 1
-    for key, value in track_popualrity_dict.items():
-        strang = strang + f'\n{count}. {key} ; appeared in {value} playlists'
+    count2 = 0
+    for key, value in track_popularity_dict.items():
+        strang = strang + f'\n{count}. {key} ; {value}/{num_playlists}'
         count += 1
     print(len(strang))
     return(strang)

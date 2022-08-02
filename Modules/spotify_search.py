@@ -6,6 +6,7 @@ sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
 def look_for_playlists(keyword):
     global sp
     
+    list_of_playlist_uris = []
     for i in range(20):
         print(i)
         results = sp.search(keyword, limit=50, offset=((i)*50), type='playlist', market='US')

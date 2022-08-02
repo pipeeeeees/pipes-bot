@@ -17,6 +17,7 @@ def look_for_playlists(keyword):
     try:
         #tries to look for more in 50 playlist groups
         for i in range(19):
+            print(i)
             results = sp.search(keyword, limit=50, offset=((i+1)*50), type='playlist', market='US')
             playlist = results['playlists']
             items = playlist['items']

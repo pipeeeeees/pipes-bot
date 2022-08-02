@@ -25,6 +25,7 @@ def look_for_playlists(keyword):
                 list_of_playlist_uris.append(item['uri'])
     except:
         print('error occured')
+    list_of_playlist_uris = list(set(list_of_playlist_uris))
     num_playlists = len(list_of_playlist_uris)
     print(f'\n{len(list_of_playlist_uris)} playlists found for keyword {keyword}')
     return list_of_playlist_uris

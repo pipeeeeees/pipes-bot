@@ -7,6 +7,15 @@ num_playlists = 50
 def look_for_playlists(keyword):
     global sp
     global num_playlists
+    
+    for i in range(20):
+        print(i)
+        results = sp.search(keyword, limit=50, offset=((i)*50), type='playlist', market='US')
+        playlist = results['playlists']
+        items = playlist['items']
+        for item in items:
+            list_of_playlist_uris.append(item['uri'])
+    
     # returns 50 playlists containing the keyword, no idea how it selects the 50 but it is consistent
     results = sp.search(keyword, limit=50, offset=0, type='playlist', market='US')
     playlist = results['playlists']
@@ -20,15 +29,14 @@ def look_for_playlists(keyword):
             print(i)
             results = sp.search(keyword, limit=50, offset=((i+1)*50), type='playlist', market='US')
             playlist = results['playlists']
-            if len(playlist) == 0:
-                break
-            else:
-                print(len(playlist))
             items = playlist['items']
             for item in items:
                 list_of_playlist_uris.append(item['uri'])
     except:
-        print('error occured')
+        print('error occured looking for more playlists')
+    
+    
+    
     list_of_playlist_uris = list(set(list_of_playlist_uris))
     num_playlists = len(list_of_playlist_uris)
     print(f'\n{len(list_of_playlist_uris)} playlists found for keyword {keyword}')

@@ -2,11 +2,9 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
 sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
-num_playlists = 50
 
 def look_for_playlists(keyword):
     global sp
-    global num_playlists
     
     for i in range(20):
         print(i)

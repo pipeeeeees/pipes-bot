@@ -20,6 +20,8 @@ def look_for_playlists(keyword):
             print(i)
             results = sp.search(keyword, limit=50, offset=((i+1)*50), type='playlist', market='US')
             playlist = results['playlists']
+            if len(playlist) == 0:
+                break
             items = playlist['items']
             for item in items:
                 list_of_playlist_uris.append(item['uri'])

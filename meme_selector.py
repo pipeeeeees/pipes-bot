@@ -15,7 +15,7 @@ class MemeFolder:
             random.shuffle(self.self_list)
         path_return = os.getcwd() + '\\' + self.name + '\\' + self.self_list[self.index]
         self.index += 1
-        print(path_return)
+        #print(path_return)
         return path_return
     
 Obama = MemeFolder('obama')

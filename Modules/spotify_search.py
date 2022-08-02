@@ -2,15 +2,28 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
 sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
+num_playlists = 50
 
 def look_for_playlists(keyword):
     global sp
-    results = sp.search(keyword, limit=50, offset=0, type='playlist')
+    global num_playlists
+    # returns 50 playlists containing the keyword, no idea how it selects the 50 but it is consistent
+    results = sp.search(keyword, limit=50, offset=0, type='playlist', market='US')
     playlist = results['playlists']
     items = playlist['items']
     list_of_playlist_uris = []
     for item in items:
         list_of_playlist_uris.append(item['uri'])
+    try:
+        for i in range(19):
+            results = sp.search(keyword, limit=50, offset=((i+1)*50), type='playlist', market='US')
+            playlist = results['playlists']
+            items = playlist['items']
+            for item in items:
+                list_of_playlist_uris.append(item['uri'])
+    except:
+        pass
+    num_playlists = len(list_of_playlist_uris)
     print(f'\n{len(list_of_playlist_uris)} playlists found for keyword {keyword}')
     return list_of_playlist_uris
 
@@ -30,21 +43,30 @@ def find_playlist_track_uris(playlist_uri):
     return list_of_track_uris
 
 def popular_tracks_based_on_keyword(keyword):
+    # get a list of playlist uri's
     playlists = look_for_playlists(keyword)
     track_popularity = {}
-    for pl_uri in playlists:
+    for ind, pl_uri in enumerate(playlists):
+        if (ind+1)/len(playlists) == 0:
+            pass
+        elif ind%50 == 0:
+            print(str((ind+1)/len(playlists)*100) + ' percent complete...')
+        # get a list of every track uri for each playlist
         track_uris = find_playlist_track_uris(pl_uri)
         for track_uri in track_uris:
+            #print(track_uri_to_trackname(track_uri))
             if track_uri in track_popularity:
                 track_popularity[track_uri] = track_popularity[track_uri] + 1
+                #print(track_popularity[track_uri])
             else:
                 track_popularity[track_uri] = 1
+        #print('\n\n-----------------------------------\n\n')
     print(f'{len(track_popularity)} unique tracks found')
     # let's trim all the tracks that only occur once or twice
     track_names_and_popularity = {}
     counter = 0
     for key, value in track_popularity.items():
-        if value < 4:
+        if value < 3:
             pass
         else:
             track_names_and_popularity[track_uri_to_trackname(key)] = value

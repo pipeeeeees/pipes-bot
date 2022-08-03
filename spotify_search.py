@@ -64,26 +64,29 @@ def popular_tracks_based_on_keyword(keyword):
         for track_uri in track_uris:
             #print(track_uri_to_trackname(track_uri))
             if track_uri in track_popularity:
+                #print(str(track_uri_to_trackname(track_uri)) + str(track_popularity[track_uri]) + 'before')
                 track_popularity[track_uri] = track_popularity[track_uri] + 1
+                #print(str(track_uri_to_trackname(track_uri)) + str(track_popularity[track_uri]) + 'after)
                 #print(track_popularity[track_uri])
             else:
                 track_popularity[track_uri] = 1
         #print('\n\n-----------------------------------\n\n')
     print(f'{len(track_popularity)} unique tracks found')
-    # let's trim all the tracks that only occur once or twice
-    track_names_and_popularity = {}
+    
+    # sort
+    track_popularity_sorted = dict(sorted(track_popularity.items(), key=lambda item: item[1], reverse = True))
+    
+    # let's get the top 25
+    final = {}
     counter = 0
-    for key, value in track_popularity.items():
-        if value < 3:
-            pass
-        else:
-            track_names_and_popularity[track_uri_to_trackname(key)] = value
-            counter += 1
-            if counter == 25:
-                break
-    print(f'{len(track_names_and_popularity)} of these tracks are deemed relevant')
-    track_names_and_popularity_sorted = dict(sorted(track_names_and_popularity.items(), key=lambda item: item[1], reverse = True))
-    return print_track_dict(track_names_and_popularity_sorted, keyword)
+    for key, value in track_popularity_sorted.items():
+        final[track_uri_to_trackname(key)] = value
+        counter += 1
+        if counter == 25:
+            break
+    #print(f'{len(track_names_and_popularity)} of these tracks are deemed relevant')
+    final_sorted = dict(sorted(final.items(), key=lambda item: item[1], reverse = True))
+    return print_track_dict(final_sorted, keyword)
 
 def track_uri_to_trackname(track_uri):
     global sp

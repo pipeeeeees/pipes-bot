@@ -11,7 +11,7 @@ def look_for_playlists(keyword):
 
     list_of_playlist_uris = []
     # returns 50 playlists containing the keyword, no idea how it selects the 50 but it is consistent
-    for i in range(20):
+    for i in range(1):
         results = sp.search(keyword, limit=50, offset=i*50, type='playlist', market=None)
         playlist = results['playlists']
         items = playlist['items']
@@ -58,7 +58,7 @@ def popular_tracks_based_on_keyword(keyword):
         if (ind+1)/len(playlists) == 0:
             pass
         elif ind%50 == 0:
-            print(str((ind+1)/len(playlists)*100) + ' percent complete...')
+            print(str(round((ind+1)/len(playlists)*100,1)) + ' percent complete...')
         # get a list of every track uri for each playlist
         track_uris = find_playlist_track_uris(pl_uri)
         for track_uri in track_uris:

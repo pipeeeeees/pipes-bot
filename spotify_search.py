@@ -66,8 +66,10 @@ def popular_tracks_based_on_keyword(keyword):
             if track_uri in track_popularity:
                 #print(str(track_uri_to_trackname(track_uri)) + str(track_popularity[track_uri]) + 'before')
                 track_popularity[track_uri] = track_popularity[track_uri] + 1
+                """
                 if track_popularity[track_uri] >= 4:
                     print(str(track_popularity[track_uri]) + ' : ' + str(track_uri_to_trackname(track_uri)))
+                """
                 #print(track_popularity[track_uri])
             else:
                 track_popularity[track_uri] = 1
@@ -76,6 +78,8 @@ def popular_tracks_based_on_keyword(keyword):
     
     # sort
     track_popularity_sorted = dict(sorted(track_popularity.items(), key=lambda item: item[1], reverse = True))
+    for key, value in track_popularity_sorted.items():
+        print(str(value) + ' : ' + 'key')
     
     # let's get the top 25
     final = {}

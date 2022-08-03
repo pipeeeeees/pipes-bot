@@ -57,16 +57,16 @@ def popular_tracks_based_on_keyword(keyword):
     for ind, pl_uri in enumerate(playlists):
         if (ind+1)/len(playlists) == 0:
             pass
-        elif ind%50 == 0:
-            print(str(round((ind+1)/len(playlists)*100,1)) + ' percent complete...')
+        elif ind%25 == 0:
+            print(str(round((ind+1)/len(playlists)*100,1)) + '% complete...')
         # get a list of every track uri for each playlist
         track_uris = find_playlist_track_uris(pl_uri)
         for track_uri in track_uris:
             #print(track_uri_to_trackname(track_uri))
             if track_uri in track_popularity:
-                #print(str(track_uri_to_trackname(track_uri)) + str(track_popularity[track_uri]) + 'before')
+                print(str(track_uri_to_trackname(track_uri)) + str(track_popularity[track_uri]) + 'before')
                 track_popularity[track_uri] = track_popularity[track_uri] + 1
-                #print(str(track_uri_to_trackname(track_uri)) + str(track_popularity[track_uri]) + 'after)
+                print(str(track_uri_to_trackname(track_uri)) + str(track_popularity[track_uri]) + 'after)
                 #print(track_popularity[track_uri])
             else:
                 track_popularity[track_uri] = 1

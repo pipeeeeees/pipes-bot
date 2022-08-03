@@ -66,7 +66,7 @@ def popular_tracks_based_on_keyword(keyword):
             if track_uri in track_popularity:
                 print(str(track_uri_to_trackname(track_uri)) + str(track_popularity[track_uri]) + 'before')
                 track_popularity[track_uri] = track_popularity[track_uri] + 1
-                print(str(track_uri_to_trackname(track_uri)) + str(track_popularity[track_uri]) + 'after)
+                print(str(track_uri_to_trackname(track_uri)) + str(track_popularity[track_uri]) + 'after')
                 #print(track_popularity[track_uri])
             else:
                 track_popularity[track_uri] = 1

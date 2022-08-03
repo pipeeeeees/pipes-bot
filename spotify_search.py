@@ -11,7 +11,7 @@ def look_for_playlists(keyword):
 
     list_of_playlist_uris = []
     # returns 50 playlists containing the keyword, no idea how it selects the 50 but it is consistent
-    for i in range(1):
+    for i in range(19):
         results = sp.search(keyword, limit=50, offset=i*50, type='playlist', market=None)
         playlist = results['playlists']
         items = playlist['items']

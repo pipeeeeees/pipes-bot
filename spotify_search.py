@@ -12,7 +12,7 @@ def look_for_playlists(keyword):
     list_of_playlist_uris = []
     # returns 50 playlists containing the keyword, no idea how it selects the 50 but it is consistent
     for i in range(20):
-        results = sp.search(keyword, limit=50, offset=i*50, type='playlist', market='US')
+        results = sp.search(keyword, limit=50, offset=i*50, type='playlist', market=None)
         playlist = results['playlists']
         items = playlist['items']
         for item in items:
@@ -37,7 +37,7 @@ def look_for_playlists(keyword):
 
 def find_playlist_track_uris(playlist_uri):
     global sp
-    pl_results = sp.playlist(playlist_uri, fields=None, market='US', additional_types=('track', ))
+    pl_results = sp.playlist(playlist_uri, fields=None, market=None, additional_types=('track', ))
     pl_tracks = pl_results['tracks']
     pl_tracks_items = pl_tracks['items']
     list_of_track_uris = []

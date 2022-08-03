@@ -33,14 +33,15 @@ msg_info = """
 Hello! I am Pipes Bot, a bot created by David H. Pipes as a means to implement useful commands and features on an online platform.
 
 Here is a list of commands:
-- $update : find out what features have been added or taken away
-- $pollen : find out the pollen count in the Atlanta area
-- Gas commands:
+$update : find out what features have been added or taken away
+$uptime : reports how long the bot has been up since last start
+$pollen : find out the pollen count in the Atlanta area
+Gas commands:
     - $gas : find out what the average gas prices are in the state of Georgia
     - $gas [state-abbreviation] : find average gas prices in any state
-- $kanye : get a random Kanye quote
-- $spotify [keyword] : does a spotify search of the top songs with that keyword
-- Meme commands:
+$kanye : get a random Kanye quote
+$spotify [keyword] : does a spotify search of the top songs with that keyword
+Meme commands:
     - $brady
     - $lebron
     - $obama
@@ -83,7 +84,7 @@ def display_time(seconds, granularity=2):
             seconds -= value * count
             if value == 1:
                 name = name.rstrip('s')
-            result.append("{} {}".format(value, name))
+            result.append("{} {}".format(int(value), name))
     return ', '.join(result[:granularity])
 
 # when the bot is ready

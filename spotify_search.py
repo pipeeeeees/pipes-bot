@@ -78,17 +78,21 @@ def popular_tracks_based_on_keyword(keyword):
     
     # sort
     track_popularity_sorted = dict(sorted(track_popularity.items(), key=lambda item: item[1], reverse = True))
+    """
     for key, value in track_popularity_sorted.items():
         if value > 3:
-            print(str(value) + ' : ' + str(key))
+            print(str(value) + ' : ' + str(track_uri_to_trackname(key)))
+    """
     
-    # let's get the top 25
+    # let's get the top results
     final = {}
-    counter = 0
+
     for key, value in track_popularity_sorted.items():
-        final[track_uri_to_trackname(key)] = value
-        counter += 1
-        if counter == 25:
+        if track_uri_to_trackname(key) in final:
+            final[track_uri_to_trackname(key)] += value
+        else:
+            final[track_uri_to_trackname(key)] = value
+        if len(final.items()) >= 30:
             break
     #print(f'{len(track_names_and_popularity)} of these tracks are deemed relevant')
     final_sorted = dict(sorted(final.items(), key=lambda item: item[1], reverse = True))

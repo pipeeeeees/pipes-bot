@@ -155,7 +155,7 @@ async def on_message(message):
         await message.channel.send('Major sheesh detected^')
             
     if '$kanye' in str(message.content).lower():
-        await message.channel.send('"' + KanyeREST.yeezyQuote() + '" - Kanye West')
+        await message.channel.send('"' + KanyeREST.yeezy_quote() + '" - Kanye West')
   
     if message.content.startswith('$spotify '):
         keyword = str(message.content).replace('$spotify ','')

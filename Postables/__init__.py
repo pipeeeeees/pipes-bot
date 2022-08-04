@@ -10,5 +10,3 @@ for file in folder_contents:
         pass
     else:
         folders_only.append(file)
-for folder in folders_only:
-    globals()[folder] = MemeFolder(folder.lower())

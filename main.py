@@ -40,6 +40,8 @@ for file in postables_folder_contents:
         pass
     else:
         postables_folders_only.append(file)
+for folder in postables_folders_only:
+    globals()[folder] = Postables.MemeFolder(folder.lower())
 
 # check in the terminal if connection has been established
 print('attempting to establish connection...')
@@ -119,7 +121,7 @@ async def on_message(message):
     
     for sub_folder in postables_folders_only:
         if sub_folder in str(message.content).lower():
-            await message.channel.send(file=discord.File(Postables.globals()[sub_folder].return_path()))
+            await message.channel.send(file=discord.File(globals()[sub_folder].return_path()))
             
     if 'FACTS' in str(message.content).upper():
         await message.channel.send('Factual statement detected^')

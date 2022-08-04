@@ -1,9 +1,9 @@
 """
 Discord Bot: main.py
-Desc: this file orchestrates and runs the discord bot
 Author: pipeeeeees@gmail.com
 """
 
+# packages
 import nest_asyncio
 nest_asyncio.apply()
 import discord
@@ -12,12 +12,16 @@ import pickle
 import time
 import os
 
+# my packages
+import KanyeREST
+import Postables
+
+# modules
 import creds
 import pollen
 import gas
-import APIs
 import spotify_search
-import meme_selector
+
 
 msg_update = """
 Updates (August 1st, 2022):
@@ -79,9 +83,8 @@ intervals = (
     ('seconds', 1),
 )
 
-def display_time(seconds, granularity=2):
+def display_time(seconds):
     result = []
-
     for name, count in intervals:
         value = seconds // count
         if value:
@@ -89,7 +92,7 @@ def display_time(seconds, granularity=2):
             if value == 1:
                 name = name.rstrip('s')
             result.append("{} {}".format(int(value), name))
-    return ', '.join(result[:granularity])
+    return ', '.join(result)
 
 # when the bot is ready
 @client.event 
@@ -98,17 +101,12 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    global biden_list
-    global brady_list
-    global obama_list
-    global lebron_list
     global msg_update
     global msg_info
     global current_working_directory
     
     # say who and what the message sent was
     print(str(message.author.name) + ' sent: "' + str(message.content) + '"')
-    
     # need to ensure bot does not reply to itself
     if message.author == client.user:
         return
@@ -127,7 +125,7 @@ async def on_message(message):
         
     if message.content.startswith('$uptime'):
         end = time.time()
-        uptime = display_time(end - start, 4)
+        uptime = display_time(end - start)
         await message.channel.send(f'Pipes Bot has been online for {uptime}.')
     
     if message.content.startswith('$hello'):
@@ -139,16 +137,16 @@ async def on_message(message):
             await message.channel.send('Hello {0.author.mention}').format(message)
                     
     if 'brady' in str(message.content).lower():
-        await message.channel.send(file=discord.File(meme_selector.Brady.return_path()))
+        await message.channel.send(file=discord.File(Postables.brady.return_path()))
 
     if 'biden' in str(message.content).lower():
-        await message.channel.send(file=discord.File(meme_selector.Biden.return_path()))
+        await message.channel.send(file=discord.File(Postables.biden.return_path()))
         
     if 'obama' in str(message.content).lower():
-        await message.channel.send(file=discord.File(meme_selector.Obama.return_path()))
+        await message.channel.send(file=discord.File(Postables.obama.return_path()))
         
     if 'lebron' in str(message.content).lower():
-        await message.channel.send(file=discord.File(meme_selector.Lebron.return_path()))
+        await message.channel.send(file=discord.File(Postables.lebron.return_path()))
             
     if 'FACTS' in str(message.content).upper():
         await message.channel.send('Factual statement detected^')
@@ -157,7 +155,7 @@ async def on_message(message):
         await message.channel.send('Major sheesh detected^')
             
     if '$kanye' in str(message.content).lower():
-        await message.channel.send('"' + APIs.yeezyQuote() + '" - Kanye West')
+        await message.channel.send('"' + KanyeREST.yeezyQuote() + '" - Kanye West')
   
     if message.content.startswith('$spotify '):
         keyword = str(message.content).replace('$spotify ','')

@@ -52,7 +52,8 @@ Meme commands:
 
 Pipes Bot also reacts to really great or very bad Wordle scores shared to it. Try it out!
 """
-current_working_directory = r'C:\Users\pipee\Documents\PyProjects\Discord-Bot'
+
+#current_working_directory = r'C:\Users\pipee\Documents\PyProjects\Discord-Bot'
 current_working_directory = os.getcwd()
 
 # check in the terminal if connection has been established

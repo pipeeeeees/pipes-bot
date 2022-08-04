@@ -28,6 +28,9 @@ TODO:
 - add runtime reporter
 - add feature request option
 - revamp $info
+- add gas plotting
+- figure out running things on a schedule
+- figure out how to post things to specific channels
 """
 msg_info = """
 Hello! I am Pipes Bot, a bot created by David H. Pipes as a means to implement useful commands and features on an online platform.

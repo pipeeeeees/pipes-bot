@@ -11,12 +11,17 @@ def look_for_playlists(keyword):
 
     list_of_playlist_uris = []
     # returns 50 playlists containing the keyword, no idea how it selects the 50 but it is consistent
-    for i in range(19):
+    for i in range(1):
         results = sp.search(keyword, limit=50, offset=i*50, type='playlist', market=None)
+        """
         playlist = results['playlists']
         items = playlist['items']
         for item in items:
             list_of_playlist_uris.append(item['uri'])
+        """
+        for result in results:
+            list_of_playlist_uris.append(result['playlists']['items']['uri'])
+        print(list(results['playlists']['items']['uri']))
     """
     try:
         #tries to look for more in 50 playlist groups
@@ -30,7 +35,7 @@ def look_for_playlists(keyword):
         print('error occured looking for more playlists')
     """
     
-    list_of_playlist_uris = list(set(list_of_playlist_uris))
+    #list_of_playlist_uris = list(set(list_of_playlist_uris))
     num_playlists = len(list_of_playlist_uris)
     print(f'\n{num_playlists} playlists found for keyword {keyword}')
     return list_of_playlist_uris
@@ -38,6 +43,7 @@ def look_for_playlists(keyword):
 def find_playlist_track_uris(playlist_uri):
     global sp
     pl_results = sp.playlist(playlist_uri, fields=None, market=None, additional_types=('track', ))
+    """
     pl_tracks = pl_results['tracks']
     pl_tracks_items = pl_tracks['items']
     list_of_track_uris = []
@@ -48,6 +54,13 @@ def find_playlist_track_uris(playlist_uri):
         except:
             continue
         list_of_track_uris.append(song_uri)
+    """
+    for result in pl_results['tracks']['items']:
+        try:
+            list_of_track_uris.append(result['track']['uri'])
+        except:
+            continue
+
     return list_of_track_uris
 
 def popular_tracks_based_on_keyword(keyword):
@@ -92,7 +105,7 @@ def popular_tracks_based_on_keyword(keyword):
             final[track_uri_to_trackname(key)] += value
         else:
             final[track_uri_to_trackname(key)] = value
-        if len(final.items()) >= 30:
+        if len(final.items()) >= 40:
             break
     #print(f'{len(track_names_and_popularity)} of these tracks are deemed relevant')
     final_sorted = dict(sorted(final.items(), key=lambda item: item[1], reverse = True))

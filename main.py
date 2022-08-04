@@ -11,6 +11,7 @@ import random
 import pickle
 import time
 import os
+import pathlib
 
 # my packages
 import KanyeREST
@@ -21,44 +22,24 @@ import creds
 import pollen
 import gas
 import spotify_search
+import messages
 
+main_directory = str(pathlib.Path(__file__).parent.resolve())
+if '/' in main_directory:
+    system = 'MAC'
+else:
+    system = 'WIN'
 
-msg_update = """
-Updates (August 1st, 2022):
-- fixed lebron, brady, biden, obama meme posts feature
-- re-organized source code
-
-TODO:
-- add runtime reporter
-- add feature request option
-- revamp $info
-- add gas plotting
-- figure out running things on a schedule
-- figure out how to post things to specific channels
-"""
-msg_info = """
-Hello! I am Pipes Bot, a bot created by David H. Pipes as a means to implement useful commands and features on an online platform.
-
-Here is a list of commands:
-$update : find out what features have been added or taken away
-$uptime : reports how long the bot has been up since last start
-$pollen : find out the pollen count in the Atlanta area
-Gas commands:
-    - $gas : find out what the average gas prices are in the state of Georgia
-    - $gas [state-abbreviation] : find average gas prices in any state
-$kanye : get a random Kanye quote
-$spotify [keyword] : does a spotify search of the top songs with that keyword
-Meme commands:
-    - $brady
-    - $lebron
-    - $obama
-    - $biden
-
-Pipes Bot also reacts to really great or very bad Wordle scores shared to it. Try it out!
-"""
-
-#current_working_directory = r'C:\Users\pipee\Documents\PyProjects\Discord-Bot'
-current_working_directory = os.getcwd()
+if system == 'MAC':
+    postables_folder_contents = os.listdir(str(pathlib.Path(__file__).parent.resolve()) + '/Postables')
+else:
+    postables_folder_contents = os.listdir(str(pathlib.Path(__file__).parent.resolve()) + '\\Postables')
+postables_folders_only = []
+for file in postables_folder_contents:
+    if '.' in str(file):
+        pass
+    else:
+        postables_folders_only.append(file)
 
 # check in the terminal if connection has been established
 print('attempting to establish connection...')
@@ -103,7 +84,7 @@ async def on_ready():
 async def on_message(message):
     global msg_update
     global msg_info
-    global current_working_directory
+    global main_directory
     
     # say who and what the message sent was
     print(str(message.author.name) + ' sent: "' + str(message.content) + '"')
@@ -112,13 +93,13 @@ async def on_message(message):
         return
     
     if message.content.startswith('$info'):
-        await message.channel.send(msg_info)
+        await message.channel.send(messages.msg_info)
         
     if message.content.startswith('$help'):
-        await message.channel.send(msg_info)
+        await message.channel.send(messages.msg_info)
     
     if message.content.startswith('$update'):
-        await message.channel.send(msg_update)
+        await message.channel.send(messages.msg_update)
         
     if message.content.startswith('$test'):
         await message.channel.send(message.author)
@@ -135,18 +116,10 @@ async def on_message(message):
             await message.channel.send('Hello, Loser!')
         else:
             await message.channel.send('Hello {0.author.mention}').format(message)
-                    
-    if 'brady' in str(message.content).lower():
-        await message.channel.send(file=discord.File(Postables.brady.return_path()))
-
-    if 'biden' in str(message.content).lower():
-        await message.channel.send(file=discord.File(Postables.biden.return_path()))
-        
-    if 'obama' in str(message.content).lower():
-        await message.channel.send(file=discord.File(Postables.obama.return_path()))
-        
-    if 'lebron' in str(message.content).lower():
-        await message.channel.send(file=discord.File(Postables.lebron.return_path()))
+    
+    for sub_folder in postables_folders_only:
+        if sub_folder in str(message.content).lower():
+            await message.channel.send(file=discord.File(Postables.sub_folder.return_path()))
             
     if 'FACTS' in str(message.content).upper():
         await message.channel.send('Factual statement detected^')

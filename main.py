@@ -119,7 +119,7 @@ async def on_message(message):
     
     for sub_folder in postables_folders_only:
         if sub_folder in str(message.content).lower():
-            await message.channel.send(file=discord.File(Postables.sub_folder.return_path()))
+            await message.channel.send(file=discord.File(Postables.globals()[sub_folder].return_path()))
             
     if 'FACTS' in str(message.content).upper():
         await message.channel.send('Factual statement detected^')

@@ -42,10 +42,11 @@ def look_for_playlists(keyword):
 def find_playlist_track_uris(playlist_uri):
     global sp
     pl_results = sp.playlist(playlist_uri, fields=None, market=None, additional_types=('track', ))
+    list_of_track_uris = []
     """
     pl_tracks = pl_results['tracks']
     pl_tracks_items = pl_tracks['items']
-    list_of_track_uris = []
+    
     for song in pl_tracks_items:
         song_info = song['track']
         try:

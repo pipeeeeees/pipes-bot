@@ -19,9 +19,8 @@ def look_for_playlists(keyword):
         for item in items:
             list_of_playlist_uris.append(item['uri'])
         """
-        for result in results:
-            list_of_playlist_uris.append(result['playlists']['items']['uri'])
-        print(list(results['playlists']['items']['uri']))
+        for result in results['playlists']['items']:
+            list_of_playlist_uris.append(result['uri'])
     """
     try:
         #tries to look for more in 50 playlist groups

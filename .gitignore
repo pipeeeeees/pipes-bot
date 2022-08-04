@@ -1,3 +1,11 @@
 
 creds.py
 .DS_Store
+*.pyc
+__pycache__/gas.cpython-39.pyc
+__pycache__/APIs.cpython-39.pyc
+__pycache__/pollen.cpython-39.pyc
+__pycache__/spotify_search.cpython-39.pyc
+Modules/.cache
+*.pyc
+*.pyc

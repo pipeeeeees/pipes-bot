@@ -1,4 +1,4 @@
-import webscraper as ws
+import Gas.webscraper as ws
 
 def getPollenCount():
     mylist = ws.chunkParser(ws.scrape('https://www.atlantaallergy.com/pollen_counts'),

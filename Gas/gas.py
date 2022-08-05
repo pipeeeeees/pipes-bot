@@ -1,4 +1,4 @@
-import webscraper as ws
+import Gas.webscraper as ws
 
 state_dict = {
     'Alabama' : 'AL',

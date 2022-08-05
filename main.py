@@ -160,26 +160,18 @@ async def on_message(message):
     if message.content.startswith('$gas'):
         if len(str(message.content)) != 4:
             if len(str(message.content).replace('$gas','').replace(' ','')) == 2:
-                try:
-                    initials = str((message.content).replace('$gas','').replace(' ','')).upper()
-                    reg,mid,prem,die = gas.getGaGasANY(initials)
-                    msg = f'Today in {initials}, the average gas prices are:\n\t\tRegular: {reg}\n\t\tMidgrade: {mid}\n\t\tPremium: {prem}\nSource: https://gasprices.aaa.com/?state={initials}'
-                    await message.channel.send(msg)
-                except:
-                    pass
+                initials = str((message.content).replace('$gas','').replace(' ','')).upper()
+                await message.channel.send(gas.getGaGasANY(initials))
+            else:
+                state_name = str((message.content).replace('$gas','').replace(' ','')).capitalize()
+                await message.channel.send(gas.getGaGasANY(state_name))
         # if these specific users call out $gas
         elif message.author.name == 'Guwop' or message.author.name == 'yamoe':
-            reg,mid,prem,die = gas.getGaGasANY('TX')
-            msg = 'Today in the state of Texas, the average gas prices are:\n\t\tRegular: {}\n\t\tMidgrade: {}\n\t\tPremium: {}\nSource: https://gasprices.aaa.com/?state=TX'.format(reg,mid,prem)
-            await message.channel.send(msg)
+            await message.channel.send(gas.getGaGasANY('TX'))
         elif message.author.name == 'mal-bon':
-            reg,mid,prem,die = gas.getGaGasANY('NC')
-            msg = 'Today in the state of North Carolina, the average gas prices are:\n\t\tRegular: {}\n\t\tMidgrade: {}\n\t\tPremium: {}\nSource: https://gasprices.aaa.com/?state=NC'.format(reg,mid,prem)
-            await message.channel.send(msg)
+            await message.channel.send(gas.getGaGasANY('NC'))
         else:
-            reg,mid,prem,die = gas.getGaGas()
-            msg = 'Today in the state of Georgia, the average gas prices are:\n\t\tRegular: {}\n\t\tMidgrade: {}\n\t\tPremium: {}\nSource: https://gasprices.aaa.com/?state=GA'.format(reg,mid,prem)
-            await message.channel.send(msg)
+            await message.channel.send(gas.getGaGasANY('GA'))
 
     if message.content.startswith('Wordle '):
         ind = str(message.content).find('/') - 1

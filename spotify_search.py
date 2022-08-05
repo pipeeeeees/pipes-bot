@@ -1,4 +1,5 @@
 import spotipy
+import time
 from spotipy.oauth2 import SpotifyClientCredentials
 
 sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
@@ -51,6 +52,7 @@ def find_playlist_track_uris(playlist_uri):
     return list_of_track_uris
 
 def popular_tracks_based_on_keyword(keyword):
+    t0 = time.time()
     # variables
     track_popularity = {}
     all_tracks = []
@@ -73,28 +75,32 @@ def popular_tracks_based_on_keyword(keyword):
                 track_popularity[track_uri] = track_popularity[track_uri] + 1
             else:
                 track_popularity[track_uri] = 1
-        
+        """
         # alternate
         all_tracks.extend(track_uris)
+        """
 
 
     print(f'{len(track_popularity)} unique tracks found')
+    """
     # alternate
     all_tracks_once = list(set(all_tracks))
     print(f'{len(all_tracks_once)} unique tracks found')
+    """
     
     # sort
     track_popularity_sorted = dict(sorted(track_popularity.items(), key=lambda item: item[1], reverse = True))
     # alternate
+    """
     my_dict = {}
     for track in all_tracks_once:
         my_dict[track] = all_tracks.count(track)
     my_dict_sorted = dict(sorted(my_dict.items(), key=lambda item: item[1], reverse = True))
-    
+    """
     # let's get the top results
     final = {}
 
-    for key, value in my_dict_sorted.items():
+    for key, value in track_popularity_sorted.items():
         if track_uri_to_trackname(key) in final:
             final[track_uri_to_trackname(key)] += value
         else:
@@ -103,6 +109,8 @@ def popular_tracks_based_on_keyword(keyword):
             break
     #print(f'{len(track_names_and_popularity)} of these tracks are deemed relevant')
     final_sorted = dict(sorted(final.items(), key=lambda item: item[1], reverse = True))
+    t1 = time.time()
+    print(t1-t0)
     return print_track_dict(final_sorted, keyword)
 
 def track_uri_to_trackname(track_uri):

@@ -69,7 +69,7 @@ def popular_tracks_based_on_keyword(keyword):
 
         # get a list of every track uri for each playlist
         track_uris = find_playlist_track_uris(pl_uri)
-        
+        """
         for track_uri in track_uris:
             if track_uri in track_popularity:
                 track_popularity[track_uri] = track_popularity[track_uri] + 1
@@ -78,16 +78,16 @@ def popular_tracks_based_on_keyword(keyword):
         """
         # alternate
         all_tracks.extend(track_uris)
-        """
+        
 
-
+    """
     print(f'{len(track_popularity)} unique tracks found')
     """
     # alternate
     all_tracks_once = list(set(all_tracks))
     print(f'{len(all_tracks_once)} unique tracks found')
-    """
     
+    """
     # sort
     track_popularity_sorted = dict(sorted(track_popularity.items(), key=lambda item: item[1], reverse = True))
     # alternate
@@ -96,11 +96,11 @@ def popular_tracks_based_on_keyword(keyword):
     for track in all_tracks_once:
         my_dict[track] = all_tracks.count(track)
     my_dict_sorted = dict(sorted(my_dict.items(), key=lambda item: item[1], reverse = True))
-    """
+    
     # let's get the top results
     final = {}
 
-    for key, value in track_popularity_sorted.items():
+    for key, value in my_dict_sorted.items():
         if track_uri_to_trackname(key) in final:
             final[track_uri_to_trackname(key)] += value
         else:

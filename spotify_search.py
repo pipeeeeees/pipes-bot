@@ -43,64 +43,58 @@ def find_playlist_track_uris(playlist_uri):
     global sp
     pl_results = sp.playlist(playlist_uri, fields=None, market=None, additional_types=('track', ))
     list_of_track_uris = []
-    """
-    pl_tracks = pl_results['tracks']
-    pl_tracks_items = pl_tracks['items']
-    
-    for song in pl_tracks_items:
-        song_info = song['track']
-        try:
-            song_uri = song_info['uri']
-        except:
-            continue
-        list_of_track_uris.append(song_uri)
-    """
     for result in pl_results['tracks']['items']:
         try:
             list_of_track_uris.append(result['track']['uri'])
         except:
             continue
-
     return list_of_track_uris
 
 def popular_tracks_based_on_keyword(keyword):
+    # variables
+    track_popularity = {}
+    all_tracks = []
+
     # get a list of playlist uri's
     playlists = look_for_playlists(keyword)
-    track_popularity = {}
+
     for ind, pl_uri in enumerate(playlists):
+        # status printout
         if (ind+1)/len(playlists) == 0:
             pass
         elif ind%25 == 0:
             print(str(round((ind+1)/len(playlists)*100,1)) + '% complete...')
+
         # get a list of every track uri for each playlist
         track_uris = find_playlist_track_uris(pl_uri)
+        
         for track_uri in track_uris:
-            #print(track_uri_to_trackname(track_uri))
             if track_uri in track_popularity:
-                #print(str(track_uri_to_trackname(track_uri)) + str(track_popularity[track_uri]) + 'before')
                 track_popularity[track_uri] = track_popularity[track_uri] + 1
-                """
-                if track_popularity[track_uri] >= 4:
-                    print(str(track_popularity[track_uri]) + ' : ' + str(track_uri_to_trackname(track_uri)))
-                """
-                #print(track_popularity[track_uri])
             else:
                 track_popularity[track_uri] = 1
-        #print('\n\n-----------------------------------\n\n')
+        
+        # alternate
+        all_tracks.extend(track_uris)
+
+
     print(f'{len(track_popularity)} unique tracks found')
+    # alternate
+    all_tracks_once = list(set(all_tracks))
+    print(f'{len(all_tracks_once)} unique tracks found')
     
     # sort
     track_popularity_sorted = dict(sorted(track_popularity.items(), key=lambda item: item[1], reverse = True))
-    """
-    for key, value in track_popularity_sorted.items():
-        if value > 3:
-            print(str(value) + ' : ' + str(track_uri_to_trackname(key)))
-    """
+    # alternate
+    my_dict = {}
+    for track in all_tracks_once:
+        my_dict[track] = all_tracks.count(track)
+    my_dict_sorted = dict(sorted(my_dict.items(), key=lambda item: item[1], reverse = True))
     
     # let's get the top results
     final = {}
 
-    for key, value in track_popularity_sorted.items():
+    for key, value in my_dict_sorted.items():
         if track_uri_to_trackname(key) in final:
             final[track_uri_to_trackname(key)] += value
         else:

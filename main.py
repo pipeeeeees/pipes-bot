@@ -19,10 +19,10 @@ import Postables
 
 # modules
 import creds
-import pollen
-import gas
-import spotify_search
-import messages
+import Pollen.pollen as pollen
+import Gas.gas as gas
+import Spotify.spotify_search as spotify_search
+import Messages.messages as messages
 
 main_directory = str(pathlib.Path(__file__).parent.resolve())
 if '/' in main_directory:
@@ -55,7 +55,6 @@ while flag == False:
         print('   connection failed, trying again...')
         time.sleep(1)
 print('connection established!')
-
 start = time.time()
 
 intervals = (

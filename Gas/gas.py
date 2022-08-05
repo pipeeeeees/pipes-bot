@@ -1,4 +1,4 @@
-import webscraper as ws
+import Gas.webscraper as ws
 
 state_dict = {
     'Alabama' : 'AL',
@@ -52,8 +52,19 @@ state_dict = {
     'Wisconsin' : 'WI',
     'Wyoming' : 'WY'
 }
-    
+
 def get_gas(fullname_or_abbr):
+        if len(fullname_or_abbr) == 2:
+            mylist = ws.BigChunkParser(ws.scrape('https://gasprices.aaa.com/?state='+fullname_or_abbr),
+                                            'Current Avg.').replace('</td>','').split('<td>')
+            return mylist[1][0:6],mylist[2][0:6],mylist[3][0:6],mylist[4][0:6]
+        else:
+            abbr = state_dict[fullname_or_abbr]
+            mylist = ws.BigChunkParser(ws.scrape('https://gasprices.aaa.com/?state='+abbr),
+                                            'Current Avg.').replace('</td>','').split('<td>')
+            return mylist[1][0:6],mylist[2][0:6],mylist[3][0:6],mylist[4][0:6]
+
+def get_gas_msg(fullname_or_abbr):
         if len(fullname_or_abbr) == 2:
             mylist = ws.BigChunkParser(ws.scrape('https://gasprices.aaa.com/?state='+fullname_or_abbr),
                                             'Current Avg.').replace('</td>','').split('<td>')

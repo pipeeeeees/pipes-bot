@@ -1,11 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Jun 21 21:51:47 2022
-
-@author: scheduler
-"""
-
-import gas
+import Gas.gas as gas
 import pickle
 #import matplotlib.pyplot as plt
 
@@ -13,7 +6,8 @@ import pickle
 def daily_pickle_gas():
     with open("pickles/gas_georgia.p", "rb" ) as f:
     	gas_georgia = pickle.load(f)
-    reg,mid,prem,die = gas.getGaGas()
+
+    reg, mid, prem, die = gas.get_gas('GA')
     temp = []
     temp.append(reg)
     temp.append(mid)

@@ -161,18 +161,19 @@ async def on_message(message):
         if len(str(message.content)) != 4:
             if len(str(message.content).replace('$gas','').replace(' ','')) == 2:
                 try:
-                    initials = str(message.content).replace('$gas','').replace(' ','').upper()
+                    initials = str((message.content).replace('$gas','').replace(' ','')).upper()
                     reg,mid,prem,die = gas.getGaGasANY(initials)
                     msg = f'Today in {initials}, the average gas prices are:\n\t\tRegular: {reg}\n\t\tMidgrade: {mid}\n\t\tPremium: {prem}\nSource: https://gasprices.aaa.com/?state={initials}'
                     await message.channel.send(msg)
                 except:
                     pass
+        # if these specific users call out $gas
         elif message.author.name == 'Guwop' or message.author.name == 'yamoe':
-            reg,mid,prem,die = gas.getGaGasTX()
+            reg,mid,prem,die = gas.getGaGasANY('TX')
             msg = 'Today in the state of Texas, the average gas prices are:\n\t\tRegular: {}\n\t\tMidgrade: {}\n\t\tPremium: {}\nSource: https://gasprices.aaa.com/?state=TX'.format(reg,mid,prem)
             await message.channel.send(msg)
         elif message.author.name == 'mal-bon':
-            reg,mid,prem,die = gas.getGaGasNC()
+            reg,mid,prem,die = gas.getGaGasANY('NC')
             msg = 'Today in the state of North Carolina, the average gas prices are:\n\t\tRegular: {}\n\t\tMidgrade: {}\n\t\tPremium: {}\nSource: https://gasprices.aaa.com/?state=NC'.format(reg,mid,prem)
             await message.channel.send(msg)
         else:

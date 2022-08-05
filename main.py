@@ -160,17 +160,17 @@ async def on_message(message):
         if len(str(message.content)) != 4:
             if len(str(message.content).replace('$gas ','')) == 2:
                 initials = str((message.content).replace('$gas ','')).upper()
-                await message.channel.send(gas.get_gas(initials))
+                await message.channel.send(gas.get_gas_msg(initials))
             else:
                 state_name = str((message.content).replace('$gas ','')).title()
-                await message.channel.send(gas.get_gas(state_name))
+                await message.channel.send(gas.get_gas_msg(state_name))
         # if these specific users call out $gas
         elif message.author.name == 'Guwop' or message.author.name == 'yamoe':
-            await message.channel.send(gas.get_gas('TX'))
+            await message.channel.send(gas.get_gas_msg('TX'))
         elif message.author.name == 'mal-bon':
-            await message.channel.send(gas.get_gas('NC'))
+            await message.channel.send(gas.get_gas_msg('NC'))
         else:
-            await message.channel.send(gas.get_gas('GA'))
+            await message.channel.send(gas.get_gas_msg('GA'))
 
     if message.content.startswith('Wordle '):
         ind = str(message.content).find('/') - 1

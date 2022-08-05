@@ -1,12 +1,11 @@
-import Gas.gas as gas
+import gas
 import pickle
 #import matplotlib.pyplot as plt
 
     
 def daily_pickle_gas():
     with open("pickles/gas_georgia.p", "rb" ) as f:
-    	gas_georgia = pickle.load(f)
-
+        gas_georgia = pickle.load(f)
     reg, mid, prem, die = gas.get_gas('GA')
     temp = []
     temp.append(reg)

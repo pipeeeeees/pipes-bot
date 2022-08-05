@@ -66,7 +66,7 @@ def getGaGasANY(fullname_or_abbr):
             mylist = ws.BigChunkParser(ws.scrape('https://gasprices.aaa.com/?state='+fullname_or_abbr),
                                             'Current Avg.').replace('</td>','').split('<td>')
             reg,mid,prem,die = mylist[1][0:6],mylist[2][0:6],mylist[3][0:6],mylist[4][0:6]
-            msg = f'Today in the state of {state_dict.keys()[state_dict.values().index(fullname_or_abbr)]}, the average gas prices are:\n\t\tRegular: {reg}\n\t\tMidgrade: {mid}\n\t\tPremium: {prem}\n\t\tDiesel: {die}\nSource: https://gasprices.aaa.com/?state={fullname_or_abbr}'
+            msg = f'Today in the state of {get_key(fullname_or_abbr, state_dict)}, the average gas prices are:\n\t\tRegular: {reg}\n\t\tMidgrade: {mid}\n\t\tPremium: {prem}\n\t\tDiesel: {die}\nSource: https://gasprices.aaa.com/?state={fullname_or_abbr}'
             return msg
         elif len(fullname_or_abbr) >= 4:
             abbr = state_dict[fullname_or_abbr]
@@ -78,3 +78,7 @@ def getGaGasANY(fullname_or_abbr):
         else:
             return f'idk what other case, fullname or abbr is {fullname_or_abbr}'
 
+def get_key(val, my_dict):
+    for key, value in my_dict.items():
+         if val == value:
+             return key

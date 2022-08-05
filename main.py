@@ -147,7 +147,8 @@ async def on_message(message):
                 time.sleep(2)
             if flag == True:
                 break
-        await message.channel.send('An error occurred. Please try again.')
+        if flag == False:
+            await message.channel.send('An error occurred. Please try again.')
   
     if message.content.startswith('$pollen'):
         try:

@@ -159,11 +159,11 @@ async def on_message(message):
       
     if message.content.startswith('$gas'):
         if len(str(message.content)) != 4:
-            if len(str(message.content).replace('$gas','')) == 2:
-                initials = str((message.content).replace('$gas','')).upper()
+            if len(str(message.content).replace('$gas ','')) == 2:
+                initials = str((message.content).replace('$gas ','')).upper()
                 await message.channel.send(gas.get_gas(initials))
             else:
-                state_name = str((message.content).replace('$gas','')).capitalize()
+                state_name = str((message.content).replace('$gas ','')).capitalize()
                 await message.channel.send(gas.get_gas(state_name))
         # if these specific users call out $gas
         elif message.author.name == 'Guwop' or message.author.name == 'yamoe':

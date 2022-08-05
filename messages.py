@@ -1,12 +1,10 @@
 
 msg_update = """
-Updates (August 1st, 2022):
+Updates (August 5th, 2022):
 - fixed lebron, brady, biden, obama meme posts feature
 - re-organized source code
 
 TODO:
-- add runtime reporter
-- add feature request option
 - revamp $info
 - add gas plotting
 - figure out running things on a schedule
@@ -27,8 +25,6 @@ $spotify [keyword] : does a spotify search of the top songs with that keyword
 Meme commands:
     - $brady
     - $lebron
-    - $obama
-    - $biden
 
 Pipes Bot also reacts to really great or very bad Wordle scores shared to it. Try it out!
 """

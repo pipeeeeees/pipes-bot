@@ -62,20 +62,19 @@ def getGaGas():
         return 'HTML ERROR','HTML ERROR','HTML ERROR','HTML ERROR'
     
 def getGaGasANY(fullname_or_abbr):
-    try:
         if len(fullname_or_abbr) == 2:
             mylist = ws.BigChunkParser(ws.scrape('https://gasprices.aaa.com/?state='+fullname_or_abbr),
                                             'Current Avg.').replace('</td>','').split('<td>')
             reg,mid,prem,die = mylist[1][0:6],mylist[2][0:6],mylist[3][0:6],mylist[4][0:6]
-            msg = f'Today in the state of {state_dict.keys()[state_dict.values().index(fullname_or_abbr)]}, the average gas prices are:\n\t\tRegular: {reg}\n\t\tMidgrade: {mid}\n\t\tPremium: {prem}\n\t\Diesel: {die}\nSource: https://gasprices.aaa.com/?state={fullname_or_abbr}'
+            msg = f'Today in the state of {state_dict.keys()[state_dict.values().index(fullname_or_abbr)]}, the average gas prices are:\n\t\tRegular: {reg}\n\t\tMidgrade: {mid}\n\t\tPremium: {prem}\n\t\tDiesel: {die}\nSource: https://gasprices.aaa.com/?state={fullname_or_abbr}'
             return msg
         elif len(fullname_or_abbr) >= 4:
             abbr = state_dict[fullname_or_abbr]
             mylist = ws.BigChunkParser(ws.scrape('https://gasprices.aaa.com/?state='+abbr),
                                             'Current Avg.').replace('</td>','').split('<td>')
             reg,mid,prem,die = mylist[1][0:6],mylist[2][0:6],mylist[3][0:6],mylist[4][0:6]
-            msg = f'Today in the state of {fullname_or_abbr}, the average gas prices are:\n\t\tRegular: {reg}\n\t\tMidgrade: {mid}\n\t\tPremium: {prem}\n\t\Diesel: {die}\nSource: https://gasprices.aaa.com/?state={abbr}'
+            msg = f'Today in the state of {fullname_or_abbr}, the average gas prices are:\n\t\tRegular: {reg}\n\t\tMidgrade: {mid}\n\t\tPremium: {prem}\n\t\tDiesel: {die}\nSource: https://gasprices.aaa.com/?state={abbr}'
             return msg
-    except:
-        return 'HTML ERROR OCCURED (potentially due to wrong state abbreviation)'
+        else:
+            return f'idk what other case, fullname or abbr is {fullname_or_abbr}'
 

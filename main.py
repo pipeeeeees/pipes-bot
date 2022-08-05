@@ -138,9 +138,13 @@ async def on_message(message):
         #try:
         mystring = f"""You have requested to search Spotify for playlists containing the keyword '{keyword}'. I will return the top songs that appear the most in those playlists. Please wait while I retrieve that information...\n"""
         await message.channel.send(mystring)
-        await message.channel.send(spotify_search.popular_tracks_based_on_keyword(keyword))
-        #except:
-            #await message.channel.send('An error occurred. Please try again.')
+        for i in range(10):
+            try:
+                await message.channel.send(spotify_search.popular_tracks_based_on_keyword(keyword))
+                break
+            except:
+                time.sleep(2)
+        await message.channel.send('An error occurred. Please try again.')
   
     if message.content.startswith('$pollen'):
         try:

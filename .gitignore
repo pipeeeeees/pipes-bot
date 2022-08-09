@@ -12,3 +12,4 @@ Modules/.cache
 __pycache__/spotify_search.cpython-39.pyc
 .cache
 Postables/**/
+.cache

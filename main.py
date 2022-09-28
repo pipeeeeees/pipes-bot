@@ -24,13 +24,21 @@ import Gas.gas as gas
 import Spotify.spotify_search as spotify_search
 import Messages.messages as messages
 
+def mac_or_windows():
+    main_directory = str(pathlib.Path(__file__).parent.resolve())
+    if '/' in main_directory:
+        return 'MAC'
+    else:
+        return 'WIN'
+"""
 main_directory = str(pathlib.Path(__file__).parent.resolve())
 if '/' in main_directory:
     system = 'MAC'
 else:
     system = 'WIN'
+"""
 
-if system == 'MAC':
+if mac_or_windows() == 'MAC':
     postables_folder_contents = os.listdir(str(pathlib.Path(__file__).parent.resolve()) + '/Postables')
 else:
     postables_folder_contents = os.listdir(str(pathlib.Path(__file__).parent.resolve()) + '\\Postables')

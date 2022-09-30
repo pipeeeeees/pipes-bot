@@ -154,9 +154,9 @@ async def on_message(message):
                 break
         if flag == False:
             await message.channel.send('An error occurred. Please try again.')
-    elif message.content.startswith('$spotify'):
+    elif message.content.startswith('$spotify-'):
         try:
-            numtimes = int(str(message.content).split(" ")[1])
+            numtimes = int(str(message.content).replace("$spotify-","").split(" ")[0])
             keyword = str(message.content).split(" ")[2]
             
             #try:

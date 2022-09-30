@@ -122,7 +122,7 @@ async def on_message(message):
         elif message.author.name == 'steebon':
             await message.channel.send('Hello, Loser!')
         else:
-            await message.channel.send('Hello {0.author.mention}').format(message)
+            await message.channel.send('Hello, {0.author.mention}').format(message)
     
     for sub_folder in postables_folders_only:
         if sub_folder in str(message.content).lower():

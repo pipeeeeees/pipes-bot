@@ -25,13 +25,13 @@ def display_time(seconds):
             result.append("{} {}".format(int(value), name))
     return ', '.join(result)
 
-def look_for_playlists(keyword):
+def look_for_playlists(keyword, num_searches_19):
     global sp
     global num_playlists
 
     list_of_playlist_uris = []
     # returns 50 playlists containing the keyword, no idea how it selects the 50 but it is consistent
-    for i in range(19):
+    for i in range(num_searches_19):
         results = sp.search(keyword, limit=50, offset=i*50, type='playlist', market=None)
         """
         playlist = results['playlists']
@@ -70,7 +70,7 @@ def find_playlist_track_uris(playlist_uri):
             continue
     return list_of_track_uris
 
-def popular_tracks_based_on_keyword(keyword):
+def popular_tracks_based_on_keyword(keyword, num_searches_19):
     t0 = time.time()
     # variables
     track_popularity = {}
@@ -78,7 +78,7 @@ def popular_tracks_based_on_keyword(keyword):
 
     # get a list of playlist uri's
     start_time = time.time()
-    playlists = look_for_playlists(keyword)
+    playlists = look_for_playlists(keyword, num_searches_19)
     end_time = time.time()
     uptime = display_time(end_time - start_time)
     print(f'It took {uptime} to find all the playlists...')
@@ -91,7 +91,7 @@ def popular_tracks_based_on_keyword(keyword):
         elif ind%25 == 0:
             print(str(round((ind+1)/len(playlists)*100,1)) + '% complete...')
 
-        # get a list of every track uri for each playlist
+        # get a list of every track uri for each playlist (long part)
         track_uris = find_playlist_track_uris(pl_uri)
         
         for track_uri in track_uris:
@@ -115,11 +115,7 @@ def popular_tracks_based_on_keyword(keyword):
     """
     
     # sort
-    start_time = time.time()
     track_popularity_sorted = dict(sorted(track_popularity.items(), key=lambda item: item[1], reverse = True))
-    end_time = time.time()
-    uptime = display_time(end_time - start_time)
-    print(f'It took {uptime} to sort the big dictionary...')
 
     # alternate
     """
@@ -161,7 +157,7 @@ def print_track_dict(track_popularity_dict, keyword):
     return(strang)
 
 def main():
-    popular_tracks_based_on_keyword(input('What keyword should we search with?\n'))
+    popular_tracks_based_on_keyword(input('What keyword should we search with?\n'), 19)
 
 if __name__ == '__main__':
     main()

@@ -88,7 +88,7 @@ def popular_tracks_based_on_keyword(keyword, num_searches_19):
         # status printout
         if (ind+1)/len(playlists) == 0:
             pass
-        elif ind%25 == 0:
+        elif ind%50 == 0:
             print(str(round((ind+1)/len(playlists)*100,1)) + '% complete...')
 
         # get a list of every track uri for each playlist (long part)

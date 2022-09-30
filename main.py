@@ -157,7 +157,10 @@ async def on_message(message):
     elif message.content.startswith('$spotify-'):
         try:
             numtimes = int(str(message.content).replace("$spotify-","").split(" ")[0])
-            keyword = str(message.content).split(" ")[1]
+            if str(message.content)[9] == ' ':
+                keyword = str(message.content)[10:]
+            else:
+                keyword = str(message.content)[11:]
             
             #try:
             mystring = f"""You have requested to search Spotify for playlists containing the keyword '{keyword}'. I will return the top songs that appear the most in those playlists. Please wait while I retrieve that information...\n"""

@@ -145,6 +145,7 @@ async def on_message(message):
         await message.channel.send(mystring)
         flag = False
         for i in range(10):
+            await message.channel.send(spotify_search.popular_tracks_based_on_keyword(keyword),19)
             try:
                 await message.channel.send(spotify_search.popular_tracks_based_on_keyword(keyword),19)
                 flag = True

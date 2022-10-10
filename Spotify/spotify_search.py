@@ -6,13 +6,32 @@ sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
 
 num_playlists = 50
 
-def look_for_playlists(keyword):
+INTERVALS = (
+    ('weeks', 604800),  # 60 * 60 * 24 * 7
+    ('days', 86400),    # 60 * 60 * 24
+    ('hours', 3600),    # 60 * 60
+    ('minutes', 60),
+    ('seconds', 1),
+)
+
+def display_time(seconds):
+    result = []
+    for name, count in INTERVALS:
+        value = seconds // count
+        if value:
+            seconds -= value * count
+            if value == 1:
+                name = name.rstrip('s')
+            result.append("{} {}".format(int(value), name))
+    return ', '.join(result)
+
+def look_for_playlists(keyword, num_searches_19):
     global sp
     global num_playlists
 
     list_of_playlist_uris = []
     # returns 50 playlists containing the keyword, no idea how it selects the 50 but it is consistent
-    for i in range(19):
+    for i in range(num_searches_19):
         results = sp.search(keyword, limit=50, offset=i*50, type='playlist', market=None)
         """
         playlist = results['playlists']
@@ -51,23 +70,28 @@ def find_playlist_track_uris(playlist_uri):
             continue
     return list_of_track_uris
 
-def popular_tracks_based_on_keyword(keyword):
+def popular_tracks_based_on_keyword(keyword, num_searches_19):
     t0 = time.time()
     # variables
     track_popularity = {}
     all_tracks = []
 
     # get a list of playlist uri's
-    playlists = look_for_playlists(keyword)
+    start_time = time.time()
+    playlists = look_for_playlists(keyword, num_searches_19)
+    end_time = time.time()
+    uptime = display_time(end_time - start_time)
+    print(f'It took {uptime} to find all the playlists...')
 
+    start_time = time.time()
     for ind, pl_uri in enumerate(playlists):
         # status printout
         if (ind+1)/len(playlists) == 0:
             pass
-        elif ind%25 == 0:
+        elif ind%50 == 0:
             print(str(round((ind+1)/len(playlists)*100,1)) + '% complete...')
 
-        # get a list of every track uri for each playlist
+        # get a list of every track uri for each playlist (long part)
         track_uris = find_playlist_track_uris(pl_uri)
         
         for track_uri in track_uris:
@@ -79,7 +103,9 @@ def popular_tracks_based_on_keyword(keyword):
         # alternate
         all_tracks.extend(track_uris)
         """
-
+    end_time = time.time()
+    uptime = display_time(end_time - start_time)
+    print(f'It took {uptime} to make a dictionary of song occurances...')
 
     print(f'{len(track_popularity)} unique tracks found')
     """
@@ -90,6 +116,7 @@ def popular_tracks_based_on_keyword(keyword):
     
     # sort
     track_popularity_sorted = dict(sorted(track_popularity.items(), key=lambda item: item[1], reverse = True))
+
     # alternate
     """
     my_dict = {}
@@ -100,6 +127,7 @@ def popular_tracks_based_on_keyword(keyword):
     # let's get the top results
     final = {}
 
+    
     for key, value in track_popularity_sorted.items():
         if track_uri_to_trackname(key) in final:
             final[track_uri_to_trackname(key)] += value
@@ -129,7 +157,7 @@ def print_track_dict(track_popularity_dict, keyword):
     return(strang)
 
 def main():
-    popular_tracks_based_on_keyword(input('What keyword should we search with?\n'))
+    popular_tracks_based_on_keyword(input('What keyword should we search with?\n'), 19)
 
 if __name__ == '__main__':
     main()

@@ -24,26 +24,41 @@ import Gas.gas as gas
 import Spotify.spotify_search as spotify_search
 import Messages.messages as messages
 
+INTERVALS = (
+    ('weeks', 604800),  # 60 * 60 * 24 * 7
+    ('days', 86400),    # 60 * 60 * 24
+    ('hours', 3600),    # 60 * 60
+    ('minutes', 60),
+    ('seconds', 1),
+)
+
+def display_time(seconds):
+    result = []
+    for name, count in INTERVALS:
+        value = seconds // count
+        if value:
+            seconds -= value * count
+            if value == 1:
+                name = name.rstrip('s')
+            result.append("{} {}".format(int(value), name))
+    return ', '.join(result)
+
 def mac_or_windows():
     main_directory = str(pathlib.Path(__file__).parent.resolve())
     if '/' in main_directory:
         return 'MAC'
     else:
         return 'WIN'
-"""
-main_directory = str(pathlib.Path(__file__).parent.resolve())
-if '/' in main_directory:
-    system = 'MAC'
-else:
-    system = 'WIN'
-"""
 
-if mac_or_windows() == 'MAC':
-    postables_folder_contents = os.listdir(str(pathlib.Path(__file__).parent.resolve()) + '/Postables')
-else:
-    postables_folder_contents = os.listdir(str(pathlib.Path(__file__).parent.resolve()) + '\\Postables')
+def postables_pathfinder():
+    if mac_or_windows() == 'MAC':
+        return os.listdir(str(pathlib.Path(__file__).parent.resolve()) + '/Postables')
+    else:
+        return os.listdir(str(pathlib.Path(__file__).parent.resolve()) + '\\Postables')
+
+
 postables_folders_only = []
-for file in postables_folder_contents:
+for file in postables_pathfinder():
     if '.' in str(file):
         pass
     else:
@@ -65,29 +80,11 @@ while flag == False:
 print('connection established!')
 start = time.time()
 
-intervals = (
-    ('weeks', 604800),  # 60 * 60 * 24 * 7
-    ('days', 86400),    # 60 * 60 * 24
-    ('hours', 3600),    # 60 * 60
-    ('minutes', 60),
-    ('seconds', 1),
-)
-
-def display_time(seconds):
-    result = []
-    for name, count in intervals:
-        value = seconds // count
-        if value:
-            seconds -= value * count
-            if value == 1:
-                name = name.rstrip('s')
-            result.append("{} {}".format(int(value), name))
-    return ', '.join(result)
-
 # when the bot is ready
 @client.event 
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
+
 
 @client.event
 async def on_message(message):
@@ -95,12 +92,13 @@ async def on_message(message):
     global msg_info
     global main_directory
     
-    # say who and what the message sent was
-    print(str(message.author.name) + ' sent: "' + str(message.content) + '"')
     # need to ensure bot does not reply to itself
     if message.author == client.user:
         return
     
+    # say who and what the message sent was
+    print(str(message.author.name) + ' sent: "' + str(message.content) + '"')
+
     if message.content.startswith('$info'):
         await message.channel.send(messages.msg_info)
         
@@ -124,7 +122,7 @@ async def on_message(message):
         elif message.author.name == 'steebon':
             await message.channel.send('Hello, Loser!')
         else:
-            await message.channel.send('Hello {0.author.mention}').format(message)
+            await message.channel.send('Hello, {0.author.mention}').format(message)
     
     for sub_folder in postables_folders_only:
         if sub_folder in str(message.content).lower():
@@ -148,7 +146,7 @@ async def on_message(message):
         flag = False
         for i in range(10):
             try:
-                await message.channel.send(spotify_search.popular_tracks_based_on_keyword(keyword))
+                await message.channel.send(spotify_search.popular_tracks_based_on_keyword(keyword,19))
                 flag = True
             except:
                 time.sleep(2)
@@ -156,6 +154,30 @@ async def on_message(message):
                 break
         if flag == False:
             await message.channel.send('An error occurred. Please try again.')
+    elif message.content.startswith('$spotify-'):
+        try:
+            numtimes = int(str(message.content).replace("$spotify-","").split(" ")[0])
+            if str(message.content)[9] == ' ':
+                keyword = str(message.content)[10:]
+            else:
+                keyword = str(message.content)[11:]
+            
+            #try:
+            mystring = f"""You have requested to search Spotify for playlists containing the keyword '{keyword}'. I will return the top songs that appear the most in those playlists. Please wait while I retrieve that information...\n"""
+            await message.channel.send(mystring)
+            flag = False
+            for i in range(10):
+                try:
+                    await message.channel.send(spotify_search.popular_tracks_based_on_keyword(keyword,numtimes))
+                    flag = True
+                except:
+                    time.sleep(2)
+                if flag == True:
+                    break
+            if flag == False:
+                await message.channel.send('An error occurred. Please try again.')
+        except:
+            await message.channel.send('An error occurred. Syntax is wrong.')
   
     if message.content.startswith('$pollen'):
         try:

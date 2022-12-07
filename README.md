@@ -1,2 +1,8 @@
 # Discord-Bot
-A Discord Bot project made for the enjoyment of the "Steebon's Paradise" Discord community. This bot reports information such as gas prices, pollen count, and other useful information.
+
+A discord bot created as a means to exercise my hobby code. Features include:
+- a spotify keyword search for finding relevant music
+- gas price reporting
+- pollen count reporting (Georgia)
+
+... and with more features to come

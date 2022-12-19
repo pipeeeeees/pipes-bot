@@ -16,17 +16,13 @@ import creds
 import Pollen.pollen as pollen
 import Gas.gas as gas
 import Spotify.spotify_search as spotify_search
-import Messages.messages as messages
+import messages
 import uptime
 import postables
 
 # Set up the postables folder
-postables_folders_only = []
-for file in postables.postables_pathfinder():
-    if '.' in str(file):
-        pass
-    else:
-        postables_folders_only.append(file)
+postables_folders_only = postables.return_postables_folders()
+# Create the variables using globals()
 for folder in postables_folders_only:
     globals()[folder] = Postables.MemeFolder(folder.lower())
 
@@ -45,7 +41,6 @@ while flag == False:
         print('   connection failed, trying again...')
         time.sleep(1)
 print('connection established!')
-
 
 # Confirmation that pipes-bot is ready to go
 @client.event 
@@ -115,19 +110,21 @@ async def on_message(message):
             await message.channel.send('Hello, {0.author.mention}').format(message)
     """
     # post from the postables folder
-    for sub_folder in postables.postables_folders_only:
+    for sub_folder in postables_folders_only:
         if sub_folder in str(message.content).lower():
             await message.channel.send(file=discord.File(globals()[sub_folder].return_path()))
     
-
+    # Facts
     if 'FACTS' in str(message.content).upper():
         await message.channel.send('Factual statement detected^')
       
+    # SHEEEEEESH
     if 'sheeee' in str(message.content).lower():
         await message.channel.send('Major sheesh detected^')
             
-    
-  
+    # Spotify Search
+    #TODO: Needs refactoring, also threaded API calling to reduce search time
+    #TODO: Longer term, figure out how to make other searching tools...
     if message.content.startswith('$spotify '):
         keyword = str(message.content).replace('$spotify ','')
         
@@ -170,7 +167,10 @@ async def on_message(message):
         except:
             await message.channel.send('An error occurred. Syntax is wrong.')
   
-    
+    # Gas
+    #TODO: add a way to add favorite gas stations per user
+    #TODO: add a way to grab gas stations by zip code? 
+    #TODO: add a way to grab historicals
     if message.content.startswith('$gas'):
         if len(str(message.content)) != 4:
             if len(str(message.content).replace('$gas ','')) == 2:

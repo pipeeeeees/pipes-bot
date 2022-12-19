@@ -16,3 +16,12 @@ def postables_pathfinder():
         return os.listdir(str(pathlib.Path(__file__).parent.resolve()) + '/Postables')
     else:
         return os.listdir(str(pathlib.Path(__file__).parent.resolve()) + '\\Postables')
+
+def return_postables_folders():
+    postables_folders_only = []
+    for file in postables_pathfinder():
+        if '.' in str(file):
+            pass
+        else:
+            postables_folders_only.append(file)
+    return postables_folders_only

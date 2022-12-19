@@ -1,9 +1,3 @@
-"""
-Discord Bot: main.py
-Author: pipeeeeees@gmail.com
-"""
-
-# packages
 import nest_asyncio
 nest_asyncio.apply()
 import discord
@@ -24,24 +18,11 @@ import Gas.gas as gas
 import Spotify.spotify_search as spotify_search
 import Messages.messages as messages
 import uptime
+import postables
 
-
-def mac_or_windows():
-    main_directory = str(pathlib.Path(__file__).parent.resolve())
-    if '/' in main_directory:
-        return 'MAC'
-    else:
-        return 'WIN'
-
-def postables_pathfinder():
-    if mac_or_windows() == 'MAC':
-        return os.listdir(str(pathlib.Path(__file__).parent.resolve()) + '/Postables')
-    else:
-        return os.listdir(str(pathlib.Path(__file__).parent.resolve()) + '\\Postables')
-
-
+# Set up the postables folder
 postables_folders_only = []
-for file in postables_pathfinder():
+for file in postables.postables_pathfinder():
     if '.' in str(file):
         pass
     else:
@@ -49,47 +30,48 @@ for file in postables_pathfinder():
 for folder in postables_folders_only:
     globals()[folder] = Postables.MemeFolder(folder.lower())
 
-# check in the terminal if connection has been established
+# Try to establish connection
 print('attempting to establish connection...')
-
 intents = discord.Intents.default()
 intents.message_content = True
-client = discord.Client(intents=intents)
-"""
+#client = discord.Client(intents=intents)
 flag = False
 while flag == False:
     try:
-        client = discord.Client()
+        client = discord.Client(intents=intents)
         flag = True
     except:
         flag = False
         print('   connection failed, trying again...')
         time.sleep(1)
-"""
 print('connection established!')
 
-# start the uptime count
-uptime.new_start()
 
-# when the bot is ready
+# Confirmation that pipes-bot is ready to go
 @client.event 
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
 
+# Start the uptime count
+uptime.new_start()
 
+# Start the event loop
 @client.event
 async def on_message(message):
     global msg_update
     global msg_info
     global main_directory
     
-    # say who and what the message sent was in terminal
+    # Say who and what the message sent was in terminal
     if message.author == client.user:
-        print(str('\t'+message.author) + ' sent: "' + str(message.content) + '"')
+        if str(message.content) == '':
+            print('  '+str(message.author) + ' sent content')
+        else:
+            print('  '+str(message.author) + ' sent: "' + str(message.content) + '"')
     else:
         print(str(message.author) + ' sent: "' + str(message.content) + '"')
 
-    # need to ensure bot does not reply to itself
+    # Need to ensure bot does not reply to itself
     if message.author == client.user:
         return
     
@@ -106,18 +88,22 @@ async def on_message(message):
         await message.channel.send(message.author)
         await message.channel.send(message.channel.id)
     
-    # uptime command
+    # Uptime command
     if message.content.startswith('$uptime'):
         uptime.new_end()
         await message.channel.send(f'Pipes Bot has been online for {uptime.display_time_difference()}.')
     
-    # pollen count command
+    # Pollen count command
     if message.content.startswith('$pollen'):
         try:
             int(pollen.getPollenCount())
             await message.channel.send('The pollen count in Atlanta for the day is ' + str(pollen.getPollenCount()))
         except:
             await message.channel.send(str(pollen.getPollenCount()))
+    
+    # Kanye is super Antisemetic. May remove this feature...
+    if '$kanye' in str(message.content).lower():
+        await message.channel.send('"' + KanyeREST.yeezy_quote() + '" - Kanye West')
     
     """
     if message.content.startswith('$hello'):
@@ -128,19 +114,19 @@ async def on_message(message):
         else:
             await message.channel.send('Hello, {0.author.mention}').format(message)
     """
-
-    for sub_folder in postables_folders_only:
+    # post from the postables folder
+    for sub_folder in postables.postables_folders_only:
         if sub_folder in str(message.content).lower():
             await message.channel.send(file=discord.File(globals()[sub_folder].return_path()))
-            
+    
+
     if 'FACTS' in str(message.content).upper():
         await message.channel.send('Factual statement detected^')
       
     if 'sheeee' in str(message.content).lower():
         await message.channel.send('Major sheesh detected^')
             
-    if '$kanye' in str(message.content).lower():
-        await message.channel.send('"' + KanyeREST.yeezy_quote() + '" - Kanye West')
+    
   
     if message.content.startswith('$spotify '):
         keyword = str(message.content).replace('$spotify ','')

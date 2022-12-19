@@ -1,0 +1,18 @@
+import pathlib
+import os
+import Postables
+
+postables_folders_only = []
+
+def mac_or_windows():
+    main_directory = str(pathlib.Path(__file__).parent.resolve())
+    if '/' in main_directory:
+        return 'MAC'
+    else:
+        return 'WIN'
+
+def postables_pathfinder():
+    if mac_or_windows() == 'MAC':
+        return os.listdir(str(pathlib.Path(__file__).parent.resolve()) + '/Postables')
+    else:
+        return os.listdir(str(pathlib.Path(__file__).parent.resolve()) + '\\Postables')

@@ -33,27 +33,8 @@ def look_for_playlists(keyword, num_searches_19):
     # returns 50 playlists containing the keyword, no idea how it selects the 50 but it is consistent
     for i in range(num_searches_19):
         results = sp.search(keyword, limit=50, offset=i*50, type='playlist', market=None)
-        """
-        playlist = results['playlists']
-        items = playlist['items']
-        for item in items:
-            list_of_playlist_uris.append(item['uri'])
-        """
         for result in results['playlists']['items']:
             list_of_playlist_uris.append(result['uri'])
-    """
-    try:
-        #tries to look for more in 50 playlist groups
-        for i in range(19):
-            results = sp.search(keyword, limit=50, offset=((i+1)*50), type='playlist', market='US')
-            playlist = results['playlists']
-            items = playlist['items']
-            for item in items:
-                list_of_playlist_uris.append(item['uri'])
-    except:
-        print('error occured looking for more playlists')
-    """
-    
     #list_of_playlist_uris = list(set(list_of_playlist_uris))
     num_playlists = len(list_of_playlist_uris)
     print(f'\n{num_playlists} playlists found for keyword {keyword}')
@@ -74,56 +55,35 @@ def popular_tracks_based_on_keyword(keyword, num_searches_19):
     t0 = time.time()
     # variables
     track_popularity = {}
-    all_tracks = []
 
     # get a list of playlist uri's
-    start_time = time.time()
     playlists = look_for_playlists(keyword, num_searches_19)
-    end_time = time.time()
-    uptime = display_time(end_time - start_time)
-    print(f'It took {uptime} to find all the playlists...')
 
     start_time = time.time()
     for ind, pl_uri in enumerate(playlists):
         # status printout
+        """
         if (ind+1)/len(playlists) == 0:
             pass
         elif ind%50 == 0:
             print(str(round((ind+1)/len(playlists)*100,1)) + '% complete...')
-
+        """
         # get a list of every track uri for each playlist (long part)
         track_uris = find_playlist_track_uris(pl_uri)
-        
         for track_uri in track_uris:
             if track_uri in track_popularity:
                 track_popularity[track_uri] = track_popularity[track_uri] + 1
             else:
                 track_popularity[track_uri] = 1
-        """
-        # alternate
-        all_tracks.extend(track_uris)
-        """
     end_time = time.time()
     uptime = display_time(end_time - start_time)
     print(f'It took {uptime} to make a dictionary of song occurances...')
 
     print(f'{len(track_popularity)} unique tracks found')
-    """
-    # alternate
-    all_tracks_once = list(set(all_tracks))
-    print(f'{len(all_tracks_once)} unique tracks found')
-    """
     
     # sort
     track_popularity_sorted = dict(sorted(track_popularity.items(), key=lambda item: item[1], reverse = True))
 
-    # alternate
-    """
-    my_dict = {}
-    for track in all_tracks_once:
-        my_dict[track] = all_tracks.count(track)
-    my_dict_sorted = dict(sorted(my_dict.items(), key=lambda item: item[1], reverse = True))
-    """
     # let's get the top results
     final = {}
 

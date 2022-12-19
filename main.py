@@ -23,25 +23,8 @@ import Pollen.pollen as pollen
 import Gas.gas as gas
 import Spotify.spotify_search as spotify_search
 import Messages.messages as messages
+import uptime
 
-INTERVALS = (
-    ('weeks', 604800),  # 60 * 60 * 24 * 7
-    ('days', 86400),    # 60 * 60 * 24
-    ('hours', 3600),    # 60 * 60
-    ('minutes', 60),
-    ('seconds', 1),
-)
-
-def display_time(seconds):
-    result = []
-    for name, count in INTERVALS:
-        value = seconds // count
-        if value:
-            seconds -= value * count
-            if value == 1:
-                name = name.rstrip('s')
-            result.append("{} {}".format(int(value), name))
-    return ', '.join(result)
 
 def mac_or_windows():
     main_directory = str(pathlib.Path(__file__).parent.resolve())
@@ -68,6 +51,11 @@ for folder in postables_folders_only:
 
 # check in the terminal if connection has been established
 print('attempting to establish connection...')
+
+intents = discord.Intents.default()
+intents.message_content = True
+client = discord.Client(intents=intents)
+"""
 flag = False
 while flag == False:
     try:
@@ -77,8 +65,11 @@ while flag == False:
         flag = False
         print('   connection failed, trying again...')
         time.sleep(1)
+"""
 print('connection established!')
-start = time.time()
+
+# start the uptime count
+uptime.new_start()
 
 # when the bot is ready
 @client.event 
@@ -92,13 +83,16 @@ async def on_message(message):
     global msg_info
     global main_directory
     
+    # say who and what the message sent was in terminal
+    if message.author == client.user:
+        print(str('\t'+message.author) + ' sent: "' + str(message.content) + '"')
+    else:
+        print(str(message.author) + ' sent: "' + str(message.content) + '"')
+
     # need to ensure bot does not reply to itself
     if message.author == client.user:
         return
     
-    # say who and what the message sent was
-    print(str(message.author.name) + ' sent: "' + str(message.content) + '"')
-
     if message.content.startswith('$info'):
         await message.channel.send(messages.msg_info)
         
@@ -110,20 +104,31 @@ async def on_message(message):
         
     if message.content.startswith('$test'):
         await message.channel.send(message.author)
-        
-    if message.content.startswith('$uptime'):
-        end = time.time()
-        uptime = display_time(end - start)
-        await message.channel.send(f'Pipes Bot has been online for {uptime}.')
+        await message.channel.send(message.channel.id)
     
+    # uptime command
+    if message.content.startswith('$uptime'):
+        uptime.new_end()
+        await message.channel.send(f'Pipes Bot has been online for {uptime.display_time_difference()}.')
+    
+    # pollen count command
+    if message.content.startswith('$pollen'):
+        try:
+            int(pollen.getPollenCount())
+            await message.channel.send('The pollen count in Atlanta for the day is ' + str(pollen.getPollenCount()))
+        except:
+            await message.channel.send(str(pollen.getPollenCount()))
+    
+    """
     if message.content.startswith('$hello'):
-        if message.author.name == 'pipeeeeees' or message.author.name == 'Guwop':
+        if message.author == 'pipeeeeees#3187' or message.author.name == 'Guwop':
             await message.channel.send('Hello, King!')
         elif message.author.name == 'steebon':
             await message.channel.send('Hello, Loser!')
         else:
             await message.channel.send('Hello, {0.author.mention}').format(message)
-    
+    """
+
     for sub_folder in postables_folders_only:
         if sub_folder in str(message.content).lower():
             await message.channel.send(file=discord.File(globals()[sub_folder].return_path()))
@@ -131,7 +136,7 @@ async def on_message(message):
     if 'FACTS' in str(message.content).upper():
         await message.channel.send('Factual statement detected^')
       
-    if 'sheeeee' in str(message.content).lower():
+    if 'sheeee' in str(message.content).lower():
         await message.channel.send('Major sheesh detected^')
             
     if '$kanye' in str(message.content).lower():
@@ -179,13 +184,7 @@ async def on_message(message):
         except:
             await message.channel.send('An error occurred. Syntax is wrong.')
   
-    if message.content.startswith('$pollen'):
-        try:
-            int(pollen.getPollenCount())
-            await message.channel.send('The pollen count in Atlanta for the day is ' + str(pollen.getPollenCount()))
-        except:
-            await message.channel.send(str(pollen.getPollenCount()))
-      
+    
     if message.content.startswith('$gas'):
         if len(str(message.content)) != 4:
             if len(str(message.content).replace('$gas ','')) == 2:
@@ -202,6 +201,7 @@ async def on_message(message):
         else:
             await message.channel.send(gas.get_gas_msg('GA'))
 
+    """
     if message.content.startswith('Wordle '):
         ind = str(message.content).find('/') - 1
         if int(str(message.content)[ind]) == 1:
@@ -210,6 +210,6 @@ async def on_message(message):
             await message.channel.send("Nerd Detected^")
         elif str(message.content)[ind] == 'X':
             await message.channel.send("Fuckin dumbass")
-            
+    """
 
 client.run(creds.pipesbot_key)

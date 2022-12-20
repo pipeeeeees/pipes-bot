@@ -19,6 +19,8 @@ import Spotify.spotify_search as spotify_search
 import messages
 import uptime
 import postables
+import station_db_handler
+import birthday_db_handler
 
 # Set up the postables folder
 postables_folders_only = postables.return_postables_folders()
@@ -45,7 +47,7 @@ print('connection established!')
 # Confirmation that pipes-bot is ready to go
 @client.event 
 async def on_ready():
-    print('We have logged in as {0.user}'.format(client))
+    print(f'We have logged in as {client}')
 
 # Start the uptime count
 uptime.new_start()
@@ -100,6 +102,85 @@ async def on_message(message):
     if '$kanye' in str(message.content).lower():
         await message.channel.send('"' + KanyeREST.yeezy_quote() + '" - Kanye West')
     
+    # Birthday
+    if '$birthday help' in str(message.content).lower():
+        await message.channel.send(messages.msg_birthday)
+    elif '$birthday' in str(message.content).lower():
+        try:
+            year, month, day = birthday_db_handler.return_birthday(str(message.author))
+            await message.channel.send(f"Your birthday is {month}-{day}-{year}.")
+        except:
+            await message.channel.send("Your birthday is not in the system.")
+    if '$add birthday' in str(message.content).lower():
+        try:
+            date_list = str(message.content).lower().replace('$add birthday ','').split('-')
+            month, day, year = int(date_list[0]), int(date_list[1]), int(date_list[2])
+            if month > 12 or month < 1:
+                raise Exception('Invalid Month')
+            if day > 31 or day < 1:
+                raise Exception('Invalid Day')
+            if year > 2022 or year < 1922:
+                raise Exception('Invalid Year')
+            await message.channel.send(birthday_db_handler.record_birthday(str(message.author), year, month, day))
+        except:
+            await message.channel.send("Unexpected error occured. Format the date as MONTH-DAY-YEAR")
+    if '$remove birthday' in str(message.content).lower():
+        try:
+            await message.channel.send(birthday_db_handler.remove_birthday(str(message.author)))
+        except:
+            await message.channel.send("Unexpected error occured.")
+    
+
+    # Gas Station DB commands
+    if '$gas help' in str(message.content).lower():
+        await message.channel.send("""Use the following commands to record gas stations to track:
+"$station add [gasbuddy station number]" : adds the station number to your username
+"$station remove [gasbuddy station number]" : removes the station number to your username
+"$gas stations" : returns the gas stations being tracked
+        """)
+    if '$station add' in str(message.content).lower():
+        try:
+            station_num = int(str(message.content).lower().replace('$station add ',''))
+            await message.channel.send(station_db_handler.record_station(str(message.author), station_num))
+        except:
+            await message.channel.send("Unexpected error occured")
+    if '$station remove' in str(message.content).lower():
+        try:
+            station_num = int(str(message.content).lower().replace('$station remove ',''))
+            await message.channel.send(station_db_handler.remove_station(str(message.author), station_num))
+        except:
+            await message.channel.send("Unexpected error occured")
+    if '$gas stations' in str(message.content).lower():
+        stations = station_db_handler.return_stations(str(message.author))
+        if len(stations) == 0:
+            await message.channel.send("You currently have no GasBuddy stations saved. Use '$gas help' to find out how.")
+        else:
+            msg = ''
+            for code in stations:
+                msg += (f"https://www.gasbuddy.com/station/{code}\n")
+            await message.channel.send(msg)
+
+    # Gas
+    #TODO: add a way to add favorite gas stations per user
+    #TODO: add a way to grab gas stations by zip code? 
+    #TODO: add a way to grab historicals
+    elif message.content.startswith('$gas'):
+        if len(str(message.content)) != 4:
+            if len(str(message.content).replace('$gas ','')) == 2:
+                initials = str((message.content).replace('$gas ','')).upper()
+                await message.channel.send(gas.get_gas_msg(initials))
+            else:
+                state_name = str((message.content).replace('$gas ','')).title()
+                await message.channel.send(gas.get_gas_msg(state_name))
+        # if these specific users call out $gas
+        elif message.author.name == 'Guwop' or message.author.name == 'yamoe':
+            await message.channel.send(gas.get_gas_msg('TX'))
+        elif message.author.name == 'mal-bon':
+            await message.channel.send(gas.get_gas_msg('NC'))
+        else:
+            await message.channel.send(gas.get_gas_msg('GA'))
+        
+
     """
     if message.content.startswith('$hello'):
         if message.author == 'pipeeeeees#3187' or message.author.name == 'Guwop':
@@ -167,25 +248,7 @@ async def on_message(message):
         except:
             await message.channel.send('An error occurred. Syntax is wrong.')
   
-    # Gas
-    #TODO: add a way to add favorite gas stations per user
-    #TODO: add a way to grab gas stations by zip code? 
-    #TODO: add a way to grab historicals
-    if message.content.startswith('$gas'):
-        if len(str(message.content)) != 4:
-            if len(str(message.content).replace('$gas ','')) == 2:
-                initials = str((message.content).replace('$gas ','')).upper()
-                await message.channel.send(gas.get_gas_msg(initials))
-            else:
-                state_name = str((message.content).replace('$gas ','')).title()
-                await message.channel.send(gas.get_gas_msg(state_name))
-        # if these specific users call out $gas
-        elif message.author.name == 'Guwop' or message.author.name == 'yamoe':
-            await message.channel.send(gas.get_gas_msg('TX'))
-        elif message.author.name == 'mal-bon':
-            await message.channel.send(gas.get_gas_msg('NC'))
-        else:
-            await message.channel.send(gas.get_gas_msg('GA'))
+    
 
     """
     if message.content.startswith('Wordle '):

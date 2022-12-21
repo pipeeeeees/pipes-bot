@@ -1,1 +1,0 @@
-from KanyeREST.main_ye import yeezy_quote

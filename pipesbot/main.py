@@ -6,9 +6,9 @@ import pickle
 import time
 import os
 import pathlib
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 # my packages
-import KanyeREST
 import Postables
 
 # modules
@@ -55,11 +55,8 @@ uptime.new_start()
 # Start the event loop
 @client.event
 async def on_message(message):
-    global msg_update
-    global msg_info
-    global main_directory
     
-    # Say who and what the message sent was in terminal
+    # Say who and what the message sent was in server terminal
     if message.author == client.user:
         if str(message.content) == '':
             print('  '+str(message.author) + ' sent content')
@@ -82,7 +79,7 @@ async def on_message(message):
         await message.channel.send(messages.msg_update)
         
     if message.content.startswith('$test'):
-        await message.channel.send(message.author)
+        await message.channel.send(message.author.id)
         await message.channel.send(message.channel.id)
     
     # Uptime command
@@ -98,22 +95,18 @@ async def on_message(message):
         except:
             await message.channel.send(str(pollen.getPollenCount()))
     
-    # Kanye is super Antisemetic. May remove this feature...
-    if '$kanye' in str(message.content).lower():
-        await message.channel.send('"' + KanyeREST.yeezy_quote() + '" - Kanye West')
-    
     # Birthday
     if '$birthday help' in str(message.content).lower():
         await message.channel.send(messages.msg_birthday)
     elif '$birthday' in str(message.content).lower():
         try:
-            year, month, day = birthday_db_handler.return_birthday(str(message.author))
+            year, month, day = birthday_db_handler.return_birthday(str(message.author.id))
             await message.channel.send(f"Your birthday is {month}-{day}-{year}.")
         except:
             await message.channel.send("Your birthday is not in the system.")
     if '$add birthday' in str(message.content).lower():
         try:
-            date_list = str(message.content).lower().replace('$add birthday ','').split('-')
+            date_list = str(message.content).lower().replace('$add birthday ','').replace('/','-').split('-')
             month, day, year = int(date_list[0]), int(date_list[1]), int(date_list[2])
             if month > 12 or month < 1:
                 raise Exception('Invalid Month')
@@ -121,23 +114,19 @@ async def on_message(message):
                 raise Exception('Invalid Day')
             if year > 2022 or year < 1922:
                 raise Exception('Invalid Year')
-            await message.channel.send(birthday_db_handler.record_birthday(str(message.author), year, month, day))
+            await message.channel.send(birthday_db_handler.record_birthday(str(message.author.id), str(message.author), year, month, day))
         except:
             await message.channel.send("Unexpected error occured. Format the date as MONTH-DAY-YEAR")
     if '$remove birthday' in str(message.content).lower():
         try:
-            await message.channel.send(birthday_db_handler.remove_birthday(str(message.author)))
+            await message.channel.send(birthday_db_handler.remove_birthday(str(message.author.id)))
         except:
             await message.channel.send("Unexpected error occured.")
     
 
     # Gas Station DB commands
     if '$gas help' in str(message.content).lower():
-        await message.channel.send("""Use the following commands to record gas stations to track:
-"$station add [gasbuddy station number]" : adds the station number to your username
-"$station remove [gasbuddy station number]" : removes the station number to your username
-"$gas stations" : returns the gas stations being tracked
-        """)
+        await message.channel.send(messages.msg_gas_help)
     if '$station add' in str(message.content).lower():
         try:
             station_num = int(str(message.content).lower().replace('$station add ',''))
@@ -247,18 +236,17 @@ async def on_message(message):
                 await message.channel.send('An error occurred. Please try again.')
         except:
             await message.channel.send('An error occurred. Syntax is wrong.')
-  
-    
 
-    """
-    if message.content.startswith('Wordle '):
-        ind = str(message.content).find('/') - 1
-        if int(str(message.content)[ind]) == 1:
-            await message.channel.send("Cheater Detected^ 🤡")
-        elif int(str(message.content)[ind]) == 2:
-            await message.channel.send("Nerd Detected^")
-        elif str(message.content)[ind] == 'X':
-            await message.channel.send("Fuckin dumbass")
-    """
+"""Happy Birthday Sender"""
+scheduler = AsyncIOScheduler()
+@scheduler.scheduled_job('cron', hour=21, minute=41)
+async def send_message():
+    global client
+    user_id = 326676188057567232  # Replace this with the user's actual Discord ID
+    await client.wait_until_ready()
+    user = client.fetch_user(user_id)
+    await client.wait_until_ready()
+    await user.send("Hello, user!")
+
 
 client.run(creds.pipesbot_key)

@@ -12,6 +12,7 @@ cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='birt
 # If the "birthday" table does not exist, create it
 if not cursor.fetchone():
     cursor.execute('''CREATE TABLE birthday (
+                      discord_id TEXT NOT NULL,
                       username TEXT NOT NULL,
                       year INTEGER NOT NULL,
                       month INTEGER NOT NULL,
@@ -23,25 +24,25 @@ if not cursor.fetchone():
 conn.commit()
 conn.close()
 
-def record_birthday(username, year, month, day):
+def record_birthday(discord_id, username, year, month, day):
     try:
         conn = sqlite3.connect('database.db')
         cursor = conn.cursor()
 
-        query = "INSERT INTO birthday (username, year, month, day) VALUES (?, ?, ?, ?)"
-        values = (username, year, month, day)
+        query = "INSERT INTO birthday (discord_id, username, year, month, day) VALUES (?, ?, ?, ?, ?)"
+        values = (discord_id, username, year, month, day)
 
         cursor.execute(query, values)
         conn.commit()
         conn.close()
-        return f"Birthday {month}-{day}-{year} has been saved successfully to user {username}."
+        return f"Birthday {month}-{day}-{year} has been saved successfully."
     except:
         conn.rollback()
-        return f"A birthday for {username} already exists."
+        year, month, day = return_birthday(username)
+        return f"A birthday for you already exists: {month}-{day}-{year}. To change, say '$remove birthday' and add again."
 
 
 def remove_birthday(username):
-
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
 

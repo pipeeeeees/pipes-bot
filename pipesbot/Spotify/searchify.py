@@ -56,13 +56,11 @@ class Track:
 
 class Playlist:
     def __init__(self, uri: str):
-        flag = False
-        while(not flag):
-            try:
-                self.api_data = sp.playlist(uri, fields=None, market=None, additional_types=('track', ))
-                flag = True
-            except:
-                print('Rate limited. Trying again')
+        self.api_data = sp.playlist(uri, fields=None, market=None, additional_types=('track', ))
+        while type(self.api_data) is None:
+            self.api_data = sp.playlist(uri, fields=None, market=None, additional_types=('track', ))
+        self.uri = uri
+        #self.tracks = self.get_track_uris()
 
     # construct without an API call
     # results['playlists']['items'][0] passed in, from the search call
@@ -90,8 +88,14 @@ class Playlist:
 
     def get_track_uris(self):
         track_list = []
+        #print(type(self.api_data))
         for data in self.api_data['tracks']['items']:
-            track_list.append(data['track']['uri'])
+            #print(data)
+            try:
+                track_list.append(data['track']['uri'])
+            except:
+                #print(data)
+                pass
         return track_list
 
 class Playlists_Search:
@@ -117,25 +121,77 @@ class Playlists_Search:
                     playlists.append(playlist)
                 except:
                     pass
-        
-            
-        
 
 
-
-
-def keyword_search(keyword):
-    results = sp.search(keyword, limit=1, offset=0, type='playlist', market='US')
-    print(results)
-    """
-    for result in results['playlists']['items']:
-        print(result['name'])
-        print(result['external_urls'])
-        print('\t' + str(result['owner']['display_name']))
-        print('\t' + str(result['owner']['uri']))
-        print(result)
-    """
+def keyword_search(keyword, count):
+    if count > 1000:
+        offsets = 20
+        remainder = 0
+    else:
+        offsets = int(count/50)
+        remainder = count%50
+    playlist_uris = []
+    call_counter = 0
+    pl_counter = 0
+    for i in range(offsets):
+        results = sp.search(keyword, limit=50, offset=i*50, type='playlist', market='US')
+        call_counter += 1
+        #print(results)
+        for result in results['playlists']['items']:
+            playlist_uris.append(result['uri'])
+            pl_counter += 1
+            #print(result['name'])
+            #print(result['uri'])
+            #print(result['external_urls'])
+            #print('\t' + str(result['owner']['display_name']))
+            #print('\t' + str(result['owner']['uri']))
+            #print(result)
+    if remainder > 0:
+        results = sp.search(keyword, limit=remainder, offset=offsets*50, type='playlist', market='US')
+        call_counter += 1
+        #print(results)
+        for result in results['playlists']['items']:
+            playlist_uris.append(result['uri'])
+            pl_counter += 1
+            #print(result['name'])
+            #print(result['uri'])
+            #print(result['external_urls'])
+            #print('\t' + str(result['owner']['display_name']))
+            #print('\t' + str(result['owner']['uri']))
+            #print(result)
+    unique_playlists = list(set(playlist_uris))
+    print(f'{count} playlists requested, {len(unique_playlists)} unique playlists found, {call_counter} API calls made')
+    return playlist_uris
     
+def pl_list_to_track_list(pl_list):
+    class_list = []
+    track_list = []
+    for ind, pl_uri in enumerate(pl_list):
+        instance = Playlist(pl_uri)
+        class_list.append(instance)
+        if ind%50 == 1:
+            print(f'{int(100*ind/len(pl_list))}% getting playlist tracks')
+    print('playlists converted')
+    for playlist in class_list:
+        track_list.extend(playlist.get_track_uris())
+    return track_list
+
+def sort_list(lst, limit):
+    # Create an empty dictionary
+    d = {}
+
+    # Iterate through the list and count the number of occurrences of each item
+    for item in lst:
+        if item in d:
+            d[item] += 1
+        else:
+            d[item] = 1
+
+    # Sort the dictionary by value in descending order
+    sorted_d = {k: v for k, v in sorted(d.items(), key=lambda item: item[1], reverse=True)}
+
+    # Return the first "limit" items in the sorted dictionary
+    return {k: sorted_d[k] for k in list(sorted_d)[:limit]}
 
 def main():
     """
@@ -159,7 +215,7 @@ def main():
     print(my_playlist.get_track_uris())
     """
 
-    keyword_search('frat')
+    print(sort_list(pl_list_to_track_list(keyword_search('ram ranch', 150)),10))
     pass
 
 

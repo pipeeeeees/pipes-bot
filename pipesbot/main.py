@@ -13,6 +13,7 @@ import Postables
 
 # modules
 import creds
+import chatgpt_handler
 import Pollen.pollen as pollen
 import Gas.gas as gas
 import Spotify.spotify_search as spotify_search
@@ -81,6 +82,10 @@ async def on_message(message):
     if message.content.startswith('$test'):
         await message.channel.send(message.author.id)
         await message.channel.send(message.channel.id)
+
+    if message.content.startswith('$pipesbot,'):
+        msg = message.content.replace('$pipesbot,','')
+        await message.channel.send(chatgpt_handler.requestz(msg))
     
     # Uptime command
     if message.content.startswith('$uptime'):

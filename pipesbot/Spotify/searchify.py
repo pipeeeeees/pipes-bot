@@ -94,29 +94,32 @@ class Playlist:
             track_list.append(data['track']['uri'])
         return track_list
 
+def create_playlist(name: str, uri):
+    playlist = Playlist(uri)
+    globals()[name] = playlist
+    return globals()[name]
+
 class Playlists_Search:
     def __init__(self, keyword):
         self.api_data_struct = sp.search(keyword, limit=50, offset=0, type='playlist', market='US')
-        self.pl_uris = self.get_playlists
+        self.pl_uris = self.get_playlists()
 
     def get_playlists(self):
         pl_uris = []
-        for i, item in enumerate(self.api_data_struct['playlists']['items']):
-            pl_uris.append(item[i]['uri'])
+        for item in self.api_data_struct['playlists']['items']:
+            pl_uris.append(item['uri'])
         return pl_uris
     
     def get_tracks(self):
         tracks = []
         playlists = []
         for pl_uri in self.pl_uris:
-            flag = False
-            while not flag:
-                try:
-                    playlist = Playlist(f"{pl_uri}_pl",pl_uri) #API call per instance
-                    flag = True
-                    playlists.append(playlist)
-                except:
-                    pass
+            playlist = create_playlist(f"{pl_uri}_pl",pl_uri) #API call per instance
+            print(playlist.get_name())
+            playlists.append(playlist)
+        for pl in playlists:
+            tracks.extend(pl.get_track_uris())
+        return tracks
         
             
         
@@ -147,19 +150,20 @@ def main():
     print(my_track.get_popularity())
     """
 
-    """
+    
     my_playlist = Playlist('spotify:playlist:62KyMH162xfRaNpoJnZV8g')
     print(my_playlist.get_name())
-    print(my_playlist.get_uri())
-    print(my_playlist.get_owner_name())
-    print(my_playlist.get_owner_uri())
-    print(my_playlist.get_owner_url())
-    print(my_playlist.get_followers_count())
+    #print(my_playlist.get_uri())
+    #print(my_playlist.get_owner_name())
+    #print(my_playlist.get_owner_uri())
+    #print(my_playlist.get_owner_url())
+    #print(my_playlist.get_followers_count())
     print(my_playlist.get_num_tracks())
     print(my_playlist.get_track_uris())
-    """
+    
 
-    keyword_search('frat')
+    test = Playlists_Search('2Chainz')
+    print(test.get_tracks())
     pass
 
 

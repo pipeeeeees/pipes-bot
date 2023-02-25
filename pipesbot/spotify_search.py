@@ -27,6 +27,46 @@ def display_time(seconds):
             result.append("{} {}".format(int(value), name))
     return ', '.join(result)
 
+
+
+# TRACK METHODS
+
+def track_uri_to_trackname(track_uri):
+    """
+    returns the trackname
+    """
+    global sp
+    return sp.track(track_uri, market=None)['name']
+
+def track_uri_to_artists_name(track_uri):
+    """
+    returns a list of artists names as strings
+    """
+    global sp
+    track_details = sp.track(track_uri, market=None)
+    artists = []
+    try:
+        for i in range(len(50)): #...because what track has more than 50 artists on it?
+            artists.append(track_details['artists'][i]['name']) #...add all artists until we fail
+    except:
+        pass 
+    return artists
+
+def track_uri_to_artists_uris(track_uri):
+    """
+    returns a list of artists names as strings
+    """
+    global sp
+    track_details = sp.track(track_uri, market=None)
+    artist_uris = []
+    try:
+        for i in range(len(50)): #...because what track has more than 50 artists on it?
+            artist_uris.append(track_details['artists'][i]['uri']) #...add all artists until we fail
+    except:
+        pass 
+    return artist_uris
+
+
 def look_for_playlists(keyword, num_searches_19):
     global sp
     global num_playlists
@@ -52,6 +92,14 @@ def find_playlist_track_uris(playlist_uri):
         except:
             continue
     return list_of_track_uris
+
+
+
+
+
+
+
+
 
 def popular_tracks_based_on_keyword(keyword, num_searches_19):
     t0 = time.time()
@@ -103,9 +151,7 @@ def popular_tracks_based_on_keyword(keyword, num_searches_19):
     print(t1-t0)
     return print_track_dict(final_sorted, keyword)
 
-def track_uri_to_trackname(track_uri):
-    global sp
-    return sp.track(track_uri, market=None)['name']
+
 
 def print_track_dict(track_popularity_dict, keyword):
     global num_playlists
@@ -118,8 +164,17 @@ def print_track_dict(track_popularity_dict, keyword):
     print(len(strang))
     return(strang)
 
+
+
+
+
+
+
+
 def main():
-    popular_tracks_based_on_keyword(input('What keyword should we search with?\n'), 19)
+    #popular_tracks_based_on_keyword(input('What keyword should we search with?\n'), 19)
+    popular_tracks_based_on_keyword('ram ranch', 19)
+    #find_playlist_track_uris('spotify:playlist:0UQlKJ6lwV0i3CFxAAZ2de')
 
 if __name__ == '__main__':
     main()

@@ -38,7 +38,7 @@ async def handler(client, message, scheduler):
         if str(message.content) == '':
             print(f'  {message.author} sent content to {channel}')
         else:
-            print(f'  {message.author} sent to {channel}: "{message.content}"')
+            print(f'  {message.author} sent to {channel}: "{str(message.content)}"')
     else:
         print(f"{message.author} sent: \"{message.content}\"")
     

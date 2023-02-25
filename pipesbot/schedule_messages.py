@@ -28,3 +28,9 @@ class MessageScheduler:
 
     async def stop(self):
         pass
+
+scheduler = None
+
+def scheduler_setup(client):
+    global scheduler
+    scheduler = MessageScheduler(client)

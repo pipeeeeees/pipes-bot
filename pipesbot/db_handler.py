@@ -1,5 +1,6 @@
 import sqlite3
 import datetime
+from pipesbot import schedule_messages
 import os
 
 class DatabaseHandler:
@@ -117,11 +118,19 @@ def clear_old_reminders():
             elif rmndr["month"] == month:
                 if rmndr["day"] < day:
                     db.remove_message(rmndr['user_id'], rmndr['channel_id'], rmndr['year'], rmndr['month'], rmndr['day'], rmndr['hour'], rmndr['minute'])
+                elif rmndr["day"] == day:
+                    if rmndr["hour"] < hour:
+                        db.remove_message(rmndr['user_id'], rmndr['channel_id'], rmndr['year'], rmndr['month'], rmndr['day'], rmndr['hour'], rmndr['minute'])
+                    elif rmndr["hour"] == hour:
+                        if rmndr["minute"] < minute:
+                            db.remove_message(rmndr['user_id'], rmndr['channel_id'], rmndr['year'], rmndr['month'], rmndr['day'], rmndr['hour'], rmndr['minute'])
+
+    
     db.close()
 
-def add_reminders_to_scheduler(scheduler):
+async def add_reminders_to_scheduler():
     # Get database instance, table instance, and all messages
-    db = DatabaseHandler('pipesbot/database/messages.db')
+    db = DatabaseHandler(r'pipesbot/database/messages.db')
     messages = db.get_all_instances()
 
     # add to scheduler
@@ -130,7 +139,7 @@ def add_reminders_to_scheduler(scheduler):
         time = datetime.time(int(rmndr['hour']), int(rmndr['minute']))
         channel_id = rmndr['channel_id']
         message = rmndr['message']
-        scheduler.schedule_message(channel_id, message, date, time)
+        await schedule_messages.scheduler.schedule_message(channel_id, message, date, time)
 
 
     db.close()

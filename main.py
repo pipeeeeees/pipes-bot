@@ -44,18 +44,18 @@ async def on_ready():
 uptime.new_start()
 
 # Initialize the MessageScheduler
-scheduler = schedule_messages.MessageScheduler(client)
+schedule_messages.scheduler_setup(client)
     
 # Start the event loop
 @client.event
 # Handle incoming message
 async def on_message(message):
-    await message_handler.handler(client, message, scheduler)
+    await message_handler.handler(client, message, schedule_messages.scheduler)
 
 # Start the MessageScheduler in a separate task
 async def start_scheduler():
-    await scheduler.start()
-    db_handler.add_reminders_to_scheduler(scheduler)
+    await db_handler.add_reminders_to_scheduler()
+    await schedule_messages.scheduler.start()
 
 # Define a signal handler for when the script is cancelled
 async def handle_sigint(signum, frame):

@@ -2,6 +2,7 @@ import discord
 import time
 import signal
 import asyncio
+import socket
 
 from pipesbot import uptime
 from pipesbot import creds
@@ -14,7 +15,12 @@ from pipesbot import PIPEEEEEES_DISCORD_ID
 # Try to establish connection
 print('attempting to establish connection...')
 intents = discord.Intents.default()
-intents.messages = True
+try:
+    # works for pipes-server, but not my PC... odd
+    intents.intents.messages = True
+except:
+    # works for my pc, but not pipes-server
+    intents.messages = True
 flag = True
 while flag:
     try:

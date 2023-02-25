@@ -17,3 +17,4 @@ postable_content/**/
 *.webp
 *.mov
 *.avif
+*.yml

@@ -117,7 +117,8 @@ async def handler(client, message, scheduler):
         db.add_message(author.id, channel_id, int(raw_date_split[2]), int(raw_date_split[0]), int(raw_date_split[1]), int(raw_time_split[0]), int(raw_time_split[1]), message)
         db.close()
         await send_message(client,channel.id, f"Ok. I will remind you on {date.strftime('%m-%d-%Y')} at {time.strftime('%H:%M')}.")
-
+        return
+    
     elif message.content.startswith('$db'):
         db = db_handler.DatabaseHandler(r'pipesbot/database/messages.db')
         if 'me' in str(message.content).lower():
@@ -140,6 +141,7 @@ async def handler(client, message, scheduler):
                 print("Nothing here, chief.")
             db.close()
         db.close()
+        return
     
     elif message.content.startswith('$sch'):
         messages = schedule_messages.scheduler.scheduled_messages
@@ -152,6 +154,7 @@ async def handler(client, message, scheduler):
                 print(f'channel: {m_channel}, time: {scheduled_time}, content: {content}')
         else:
             print("Nothing here, chief.")
+        return
     
     if 'FACTS' in str(message.content).upper():
         await message.channel.send('Factual statement detected^')

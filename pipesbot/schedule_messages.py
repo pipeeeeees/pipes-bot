@@ -24,7 +24,7 @@ class MessageScheduler:
     async def start(self):
         while True:
             await self.check_scheduled_messages()
-            await asyncio.sleep(5) # Check every minute
+            await asyncio.sleep(10) # Check every 10 seconds
 
     async def stop(self):
         pass

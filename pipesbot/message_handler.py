@@ -1,5 +1,6 @@
 from pipesbot import PIPEEEEEES_DISCORD_ID
 from pipesbot import schedule_messages
+from pipesbot import db_handler
 import datetime
 
 async def send_message(client, channel_id, message):
@@ -27,17 +28,38 @@ async def handler(client, message, scheduler):
     #print(attachments)
     #await send_message(client,channel.id, "yo")
 
-    # "LOL,2023,2,25,1,8,word"
-    if message.content.startswith('LOL,'):
-        msg = message.content.replace('LOL,','')
-        msg_list = msg.split(',')
 
-        date = datetime.date(int(msg_list[0]), int(msg_list[1]), int(msg_list[2]))
-        time = datetime.time(int(msg_list[3]), int(msg_list[4])) # 8:00 AM
-        channel_id =  channel.id # Replace with the actual channel ID
-        message = msg_list[5]
+
+    # Manual Schedule
+    """
+    Format: "$remindme, 9-23-1999, 14:20, get something for Stephen's birthday"
+    it will:
+       1. add this entry to the database (db_handler.py)
+       2. add the request to the scheduler (schedule_messages.py)
+    """
+    if message.content.startswith('$remindme,'):
+        # Parse the data
+        msg = message.content.replace('$remindme,','')
+        msg_list = msg.split(',')
+        raw_date = msg_list[0].replace(' ','')
+        raw_date_split = raw_date.split('-')
+        raw_time = msg_list[1].replace(' ','')
+        raw_time_split = raw_time.split(':')
+        joined_string = ','.join(msg_list[2:])
+
+        # Create the right DS's
+        date = datetime.date(int(raw_date_split[2]), int(raw_date_split[0]), int(raw_date_split[1]))
+        time = datetime.time(int(raw_time_split[0]), int(raw_time_split[1])) 
+        channel_id =  channel.id 
+        message = joined_string
+
+        # Upload to the scheduler
         await scheduler.schedule_message(channel_id, message, date, time)
 
+        # Upload to the database
+        db = db_handler.DatabaseHandler(r'pipesbot/database/messages.db')
+        db.add_message(author.id, channel_id, int(raw_date_split[2]), int(raw_date_split[0]), int(raw_date_split[1]), int(raw_time_split[0]), int(raw_time_split[1]), message)
+        db.close()
 
 """
 # Access Pipes Bot as a Member object

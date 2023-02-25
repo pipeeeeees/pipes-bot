@@ -7,6 +7,7 @@ from pipesbot import uptime
 from pipesbot import creds
 from pipesbot import message_handler
 from pipesbot import schedule_messages
+from pipesbot import db_handler
 from pipesbot import PIPEEEEEES_DISCORD_ID
 
 
@@ -54,6 +55,7 @@ async def on_message(message):
 # Start the MessageScheduler in a separate task
 async def start_scheduler():
     await scheduler.start()
+    db_handler.add_reminders_to_scheduler(scheduler)
 
 # Define a signal handler for when the script is cancelled
 async def handle_sigint(signum, frame):
@@ -69,7 +71,6 @@ async def handle_sigint(signum, frame):
         print(f"Failed to send message: {e}")
 
     # Log out of Discord and exit the script
-    # Wait 2 seconds before closing the client
     await client.close()
     exit(0)
 

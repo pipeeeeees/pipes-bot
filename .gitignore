@@ -16,3 +16,4 @@ postable_content/**/
 *.PNG
 *.webp
 *.mov
+*.avif

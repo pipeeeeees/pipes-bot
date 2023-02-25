@@ -36,11 +36,11 @@ async def handler(client, message, scheduler):
     # Say who and what the message sent was in server terminal
     if message.author == client.user:
         if str(message.content) == '':
-            print(f'  {message.author} sent content to {channel}')
+            print(f'  {str(message.author)} sent content to {channel}')
         else:
-            print(f'  {message.author} sent to {channel}: "{str(message.content)}"')
+            print(f'  {str(message.author)} sent to {channel}: "{str(message.content)}"')
     else:
-        print(f"{message.author} sent: \"{message.content}\"")
+        print(f"{str(message.author)} sent: \"{str(message.content)}\"")
     
     # Do not reply to yourself, Pipes Bot!
     if message.author == client.user:
@@ -119,7 +119,7 @@ async def handler(client, message, scheduler):
         await send_message(client,channel.id, f"Ok. I will remind you on {date.strftime('%m-%d-%Y')} at {time.strftime('%H:%M')}.")
         return
     
-    elif message.content.startswith('$db'):
+    if message.content.startswith('$db'):
         db = db_handler.DatabaseHandler(r'pipesbot/database/messages.db')
         if 'me' in str(message.content).lower():
             messages = db.get_all_by_user_id(author.id)
@@ -143,7 +143,7 @@ async def handler(client, message, scheduler):
         db.close()
         return
     
-    elif message.content.startswith('$sch'):
+    if message.content.startswith('$sch'):
         messages = schedule_messages.scheduler.scheduled_messages
         if len(messages) != 0:
             for message in messages:

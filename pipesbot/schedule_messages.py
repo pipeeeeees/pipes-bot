@@ -44,3 +44,5 @@ scheduler = None
 def scheduler_setup(client):
     global scheduler
     scheduler = MessageScheduler(client)
+    #db_handler.add_reminders_to_scheduler()
+    #scheduler.start()

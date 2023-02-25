@@ -37,6 +37,10 @@ async def on_ready():
     dm_channel = await user.create_dm()
     await dm_channel.send(f'{client.user} is now online.')
 
+    # Start the MessageScheduler, load messages from the database
+    await db_handler.add_reminders_to_scheduler()
+    await schedule_messages.scheduler.start()
+
     # Register the signal handler   
     signal.signal(signal.SIGINT, lambda s, f: asyncio.ensure_future(handle_sigint(s, f)))
 
@@ -49,9 +53,9 @@ async def on_message(message):
     await message_handler.handler(client, message, schedule_messages.scheduler)
 
 # Start the MessageScheduler, load messages from the database
-async def start_scheduler():
-    await db_handler.add_reminders_to_scheduler()
-    await schedule_messages.scheduler.start()
+#async def start_scheduler():
+    #await db_handler.add_reminders_to_scheduler()
+    #await schedule_messages.scheduler.start()
 
 # Define a signal handler for when the script is cancelled
 async def handle_sigint(signum, frame):
@@ -70,5 +74,5 @@ async def handle_sigint(signum, frame):
     await client.close()
     exit(0)
 
-client.loop.create_task(start_scheduler())
+#client.loop.create_task(start_scheduler())
 client.run(creds.pipesbot_key)

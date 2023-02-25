@@ -1,13 +1,19 @@
 import discord
 import time
-import creds
+import signal
+import asyncio
+
 from pipesbot import uptime
+from pipesbot import creds
+from pipesbot import message_handler
+from pipesbot import schedule_messages
+from pipesbot import PIPEEEEEES_DISCORD_ID
 
 
 # Try to establish connection
 print('attempting to establish connection...')
 intents = discord.Intents.default()
-intents.message_content = True
+#intents.message_content = True
 flag = True
 while flag:
     try:
@@ -18,49 +24,54 @@ while flag:
         time.sleep(1)
 print('connection established!')
 
-# Confirmation that pipes-bot is ready to go
+# Confirmation that pipes-bot is ready to go in terminal
 @client.event 
 async def on_ready():
-    print(f'We have logged in as {client}')
+    print(f'We have logged in as {client.user}')
+
+    # Fetch the user object
+    user = await client.fetch_user(PIPEEEEEES_DISCORD_ID)
+
+    # Send the initial message to the user
+    dm_channel = await user.create_dm()
+    await dm_channel.send(f'{client.user} is now online.')
+
+    # Register the signal handler   
+    signal.signal(signal.SIGINT, lambda s, f: asyncio.ensure_future(handle_sigint(s, f)))
 
 # Start the uptime count
 uptime.new_start()
 
+# Initialize the MessageScheduler
+scheduler = schedule_messages.MessageScheduler(client)
+    
 # Start the event loop
 @client.event
+# Handle incoming message
 async def on_message(message):
-    """
-    # Access Pipes Bot as a Member object
-    pbot = client.user
+    await message_handler.handler(client, message, scheduler)
 
-    # Access the content of the message
-    content = message.content
+# Start the MessageScheduler in a separate task
+async def start_scheduler():
+    await scheduler.start()
 
-    # Access the author of the message as a Member object
-    author = message.author
+# Define a signal handler for when the script is cancelled
+async def handle_sigint(signum, frame):
+    print("Received SIGINT signal, shutting down...")
+    # Fetch the user object
+    user = await client.fetch_user(PIPEEEEEES_DISCORD_ID)
 
-    # Access the channel where the message was sent as a TextChannel object
-    channel = message.channel
+    # Send a final message to the user
+    dm_channel = await user.create_dm()
+    try:
+        await dm_channel.send("Bot is shutting down. Goodbye!")
+    except discord.errors.HTTPException as e:
+        print(f"Failed to send message: {e}")
 
-    # Access the guild where the message was sent as a Guild object
-    guild = message.guild
+    # Log out of Discord and exit the script
+    # Wait 2 seconds before closing the client
+    await client.close()
+    exit(0)
 
-    # Access the list of Member objects that were mentioned in the message
-    mentions = message.mentions
-
-    # Access the list of Attachment objects that were attached to the message
-    attachments = message.attachments
-
-    # Access the list of Embed objects that were included in the message
-    embeds = message.embeds
-
-    # Access the timestamp of when the message was created as a datetime.datetime object
-    created_at = message.created_at
-
-    # Access the timestamp of when the message was last edited as a datetime.datetime object, or None if it was never edited
-    edited_at = message.edited_at
-    """
-    
-
-
+client.loop.create_task(start_scheduler())
 client.run(creds.pipesbot_key)

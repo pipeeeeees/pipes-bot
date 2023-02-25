@@ -1,6 +1,5 @@
 import pathlib
 import os
-import Postables
 
 postables_folders_only = []
 

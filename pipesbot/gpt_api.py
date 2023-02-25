@@ -1,11 +1,8 @@
-import creds
-import os
+from pipesbot import creds
 import openai
 
 def requestz(message):
-    #openai.organization = "YOUR_ORG_ID"
     openai.api_key = creds.openai_key
-
     model_engine = "text-davinci-003"
     prompt = message
 

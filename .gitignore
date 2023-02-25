@@ -6,7 +6,7 @@ creds.py
 *.pyc
 __pycache__/
 .cache
-Postables/**/
+postable_content/**/
 .cache
 *.BAT
 *.db

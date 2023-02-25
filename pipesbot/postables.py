@@ -12,9 +12,9 @@ def mac_or_windows():
 
 def postables_pathfinder():
     if mac_or_windows() == 'MAC':
-        return os.listdir(str(pathlib.Path(__file__).parent.resolve()) + '/Postables')
+        return os.listdir(str(pathlib.Path(__file__).parent.resolve()) + '/postable_content')
     else:
-        return os.listdir(str(pathlib.Path(__file__).parent.resolve()) + '\\Postables')
+        return os.listdir(str(pathlib.Path(__file__).parent.resolve()) + '\\postable_content')
 
 def return_postables_folders():
     postables_folders_only = []

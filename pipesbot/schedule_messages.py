@@ -1,5 +1,7 @@
 import asyncio
 import datetime
+import time
+from pipesbot import db_handler
 
 class MessageScheduler:
     def __init__(self, client):
@@ -22,9 +24,17 @@ class MessageScheduler:
                 self.scheduled_messages.remove((channel_id, message, scheduled_time))
 
     async def start(self):
+        counter = 0
+        time.sleep(2)
         while True:
             await self.check_scheduled_messages()
-            await asyncio.sleep(10) # Check every 10 seconds
+
+            # Check every 5 seconds
+            n = 5
+            await asyncio.sleep(n) 
+            counter += 1
+            if counter >= ((60*5/n) - 1):
+                db_handler.clear_old_reminders()
 
     async def stop(self):
         pass

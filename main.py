@@ -40,19 +40,15 @@ async def on_ready():
     # Register the signal handler   
     signal.signal(signal.SIGINT, lambda s, f: asyncio.ensure_future(handle_sigint(s, f)))
 
-# Start the uptime count
-uptime.new_start()
-
 # Initialize the MessageScheduler
 schedule_messages.scheduler_setup(client)
     
-# Start the event loop
+# Start the event loop to handle incoming message
 @client.event
-# Handle incoming message
 async def on_message(message):
     await message_handler.handler(client, message, schedule_messages.scheduler)
 
-# Start the MessageScheduler in a separate task
+# Start the MessageScheduler, load messages from the database
 async def start_scheduler():
     await db_handler.add_reminders_to_scheduler()
     await schedule_messages.scheduler.start()
@@ -66,7 +62,7 @@ async def handle_sigint(signum, frame):
     # Send a final message to the user
     dm_channel = await user.create_dm()
     try:
-        await dm_channel.send("Bot is shutting down. Goodbye!")
+        await dm_channel.send(f"Bot is shutting down. Online for {uptime.display_time_difference()}.")
     except discord.errors.HTTPException as e:
         print(f"Failed to send message: {e}")
 

@@ -1,7 +1,6 @@
 import sqlite3
 import datetime
 from pipesbot import schedule_messages
-import os
 
 class DatabaseHandler:
     def __init__(self, db_file):
@@ -140,9 +139,11 @@ async def add_reminders_to_scheduler():
         channel_id = rmndr['channel_id']
         message = rmndr['message']
         await schedule_messages.scheduler.schedule_message(channel_id, message, date, time)
+        #print('reminder successfully scheduled')
 
 
     db.close()
 
 clear_old_reminders()
+#add_reminders_to_scheduler()
 

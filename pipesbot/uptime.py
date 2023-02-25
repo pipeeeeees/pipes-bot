@@ -9,19 +9,16 @@ INTERVALS = (
 )
 
 start = time.time()
-end = time.time()
+end = None
 
 def new_start():
     global start
     start = time.time()
 
-def new_end():
-    global end
-    end = time.time()
-
 def display_time_difference():
     global start
     global end
+    end = time.time()
     seconds = end - start
     result = []
     for name, count in INTERVALS:

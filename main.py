@@ -50,7 +50,7 @@ schedule_messages.scheduler_setup(client)
 # Start the event loop to handle incoming message
 @client.event
 async def on_message(message):
-    await message_handler.handler(client, message, schedule_messages.scheduler)
+    await message_handler.handler(client, message)
 
 # Start the MessageScheduler, load messages from the database
 #async def start_scheduler():

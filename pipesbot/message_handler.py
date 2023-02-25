@@ -21,7 +21,7 @@ async def send_message(client, channel_id, message):
     channel = await client.fetch_channel(channel_id)
     await channel.send(message)
 
-async def handler(client, message, scheduler):
+async def handler(client, message):
     pbot = client.user
     content = message.content
     author = message.author
@@ -33,20 +33,7 @@ async def handler(client, message, scheduler):
     created_at = message.created_at
     edited_at = message.edited_at
 
-    print(pbot)
     print(content)
-    print(content)
-    print(content)
-    print(content)
-    print(content)
-    print(content)
-    print(guild)
-    print(mentions)
-    print(attachments)
-    print(embeds)
-    print(created_at)
-    print(edited_at)
-
 
     # Say who and what the message sent was in server terminal
     if message.author == client.user:
@@ -125,7 +112,7 @@ async def handler(client, message, scheduler):
         message = joined_string
 
         # Upload to the scheduler
-        await scheduler.schedule_message(channel_id, message, date, time)
+        await schedule_messages.scheduler.schedule_message(channel_id, message, date, time)
 
         # Upload to the database
         db = db_handler.DatabaseHandler(r'pipesbot/database/messages.db')

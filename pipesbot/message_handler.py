@@ -6,6 +6,7 @@ from pipesbot import uptime
 from pipesbot import pollen
 from pipesbot import postables
 from pipesbot import gas
+from pipesbot import spotify_search
 #from pipesbot import postable_content
 from pipesbot.postable_content import meme_selector
 import discord
@@ -151,6 +152,54 @@ async def handler(client, message, scheduler):
                 print(f'channel: {m_channel}, time: {scheduled_time}, content: {content}')
         else:
             print("Nothing here, chief.")
+    
+    if 'FACTS' in str(message.content).upper():
+        await message.channel.send('Factual statement detected^')
+      
+    if 'SHEEE' in str(message.content).upper():
+        await message.channel.send('Major sheesh detected^')
+
+    if message.content.startswith('$spotify '):
+        keyword = str(message.content).replace('$spotify ','')
+        
+        #try:
+        mystring = f"""You have requested to search Spotify for playlists containing the keyword '{keyword}'. I will return the top songs that appear the most in those playlists. Please wait while I retrieve that information...\n"""
+        await message.channel.send(mystring)
+        flag = False
+        for i in range(10):
+            try:
+                await message.channel.send(spotify_search.popular_tracks_based_on_keyword(keyword,19))
+                flag = True
+            except:
+                time.sleep(2)
+            if flag == True:
+                break
+        if flag == False:
+            await message.channel.send('An error occurred. Please try again.')
+    elif message.content.startswith('$spotify-'):
+        try:
+            numtimes = int(str(message.content).replace("$spotify-","").split(" ")[0])
+            if str(message.content)[9] == ' ':
+                keyword = str(message.content)[10:]
+            else:
+                keyword = str(message.content)[11:]
+            
+            #try:
+            mystring = f"""You have requested to search Spotify for playlists containing the keyword '{keyword}'. I will return the top songs that appear the most in those playlists. Please wait while I retrieve that information...\n"""
+            await message.channel.send(mystring)
+            flag = False
+            for i in range(10):
+                try:
+                    await message.channel.send(spotify_search.popular_tracks_based_on_keyword(keyword,numtimes))
+                    flag = True
+                except:
+                    time.sleep(2)
+                if flag == True:
+                    break
+            if flag == False:
+                await message.channel.send('An error occurred. Please try again.')
+        except:
+            await message.channel.send('An error occurred. Syntax is wrong.')
 
 """
 # Access Pipes Bot as a Member object

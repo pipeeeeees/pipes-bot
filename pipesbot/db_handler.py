@@ -96,7 +96,7 @@ class DatabaseHandler:
 
 def clear_old_reminders():
     # Get database instance, table instance, and all messages
-    db = DatabaseHandler(r'pipesbot/database/messages.db')
+    db = DatabaseHandler(r'pipesbot\database\messages.db')
     messages = db.get_all_instances()
 
     # Grab current time

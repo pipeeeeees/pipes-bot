@@ -3,7 +3,6 @@ import time
 from pipesbot import creds
 from spotipy.oauth2 import SpotifyClientCredentials
 
-#sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
 client_credentials_manager = SpotifyClientCredentials(client_id=creds.SPOTIPY_CLIENT_ID, client_secret=creds.SPOTIPY_CLIENT_SECRET)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 

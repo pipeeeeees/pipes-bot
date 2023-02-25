@@ -5,6 +5,7 @@ from pipesbot import gpt_api
 from pipesbot import uptime
 from pipesbot import pollen
 from pipesbot import postables
+from pipesbot import gas
 #from pipesbot import postable_content
 from pipesbot.postable_content import meme_selector
 import discord
@@ -66,12 +67,23 @@ async def handler(client, message, scheduler):
     for sub_folder in postables_folders_only:
         if sub_folder in str(message.content).lower():
             await message.channel.send(file=discord.File(globals()[sub_folder].return_path()))
-    """
-    #print(author)
-    #print(channel)
-    #print(attachments)
-    #await send_message(client,channel.id, "yo")
-    """
+
+
+    if message.content.startswith('$gas'):
+        if len(str(message.content)) != 4:
+            if len(str(message.content).replace('$gas ','')) == 2:
+                initials = str((message.content).replace('$gas ','')).upper()
+                await message.channel.send(gas.get_gas_msg(initials))
+            else:
+                state_name = str((message.content).replace('$gas ','')).title()
+                await message.channel.send(gas.get_gas_msg(state_name))
+        # if these specific users call out $gas
+        elif message.author.name == 'Guwop' or message.author.name == 'yamoe':
+            await message.channel.send(gas.get_gas_msg('TX'))
+        elif message.author.name == 'mal-bon':
+            await message.channel.send(gas.get_gas_msg('NC'))
+        else:
+            await message.channel.send(gas.get_gas_msg('GA'))
 
     # Manual Schedule
     """
@@ -170,4 +182,11 @@ created_at = message.created_at
 
 # Access the timestamp of when the message was last edited as a datetime.datetime object, or None if it was never edited
 edited_at = message.edited_at
+"""
+
+"""
+#print(author)
+#print(channel)
+#print(attachments)
+#await send_message(client,channel.id, "yo")
 """

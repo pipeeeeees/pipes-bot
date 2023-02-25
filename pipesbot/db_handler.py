@@ -121,7 +121,7 @@ def clear_old_reminders():
 
 def add_reminders_to_scheduler(scheduler):
     # Get database instance, table instance, and all messages
-    db = DatabaseHandler('database/messages.db')
+    db = DatabaseHandler('pipesbot/database/messages.db')
     messages = db.get_all_instances()
 
     # add to scheduler

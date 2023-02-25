@@ -33,8 +33,6 @@ async def handler(client, message):
     created_at = message.created_at
     edited_at = message.edited_at
 
-    print(content)
-
     # Say who and what the message sent was in server terminal
     if message.author == client.user:
         if str(message.content) == '':

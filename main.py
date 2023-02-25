@@ -14,7 +14,7 @@ from pipesbot import PIPEEEEEES_DISCORD_ID
 # Try to establish connection
 print('attempting to establish connection...')
 intents = discord.Intents.default()
-intents.message_content = True
+intents.messages = True
 flag = True
 while flag:
     try:

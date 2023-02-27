@@ -19,7 +19,7 @@ The bot runs permanently on my home server. Chat with it by messaging **'Pipes B
 - **'$uptime'**: to get bot uptime 
 - **'dennys'**: surprise classic
 - **'$birthday [mm-dd-yyyy]'**: Pipes Bot will remember your birthday and wish you a happy birthday on your birthday
-- **'$remindme, 3-23-2025, 13:30, [reminder]'**: Pipes Bot will remind you on a specified date and time of your reminder
+- **'$remindme, [mm-dd-yyyy], [hh-mm], [reminder]'**: Pipes Bot will remind you on a specified date and time of your reminder
 - **'$reminders'**: will return all reminders numbered 1-N
 - **'$reminders delete [num]'**: will delete a reminder when passed in the reminder number (1-N)
 

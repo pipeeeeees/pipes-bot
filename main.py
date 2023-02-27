@@ -2,7 +2,6 @@ import discord
 import time
 import signal
 import asyncio
-import socket
 
 from pipesbot import uptime
 from pipesbot import creds
@@ -57,11 +56,6 @@ schedule_messages.scheduler_setup(client)
 @client.event
 async def on_message(message):
     await message_handler.handler(client, message)
-
-# Start the MessageScheduler, load messages from the database
-#async def start_scheduler():
-    #await db_handler.add_reminders_to_scheduler()
-    #await schedule_messages.scheduler.start()
 
 # Define a signal handler for when the script is cancelled
 async def handle_sigint(signum, frame):

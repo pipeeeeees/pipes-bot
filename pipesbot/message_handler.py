@@ -7,7 +7,6 @@ from pipesbot import pollen
 from pipesbot import postables
 from pipesbot import gas
 from pipesbot import spotify_search
-#from pipesbot import postable_content
 from pipesbot.postable_content import meme_selector
 import discord
 import datetime

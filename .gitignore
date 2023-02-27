@@ -6,14 +6,13 @@ creds.py
 *.pyc
 __pycache__/
 .cache
-postable_content/**/
+postable_content/
 .cache
 *.BAT
 *.db
 *.JPG
 *.mp4
 *.gif
-*.PNG
 *.webp
 *.mov
 *.avif

@@ -1,11 +1,5 @@
 PIPEEEEEES_DISCORD_ID = 326676188057567232
-"""
-from . import uptime
-from . import postables
-#from . import gpt_api
-from . import message_handler
-#from . import spotify_search
-from . import db_handler
-from . import schedule_messages
-from . import creds
-"""
+STEEBON_DISCORD_ID = 431121754568523796
+PIPES_SERVER_GENERAL_ID = 924430810227019786
+STEEBON_GENERAL_ID = 790804246806790168
+STEEBON_ATL_STATION_ID = 1079612189175988264

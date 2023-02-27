@@ -58,7 +58,7 @@ async def handler(client, message):
     
     if message.content.startswith('$pollen'):
         try:
-            int(pollen.getPollenCount())
+            int(pollen.get_atl_pollen_count())
             await message.channel.send('The pollen count in Atlanta for the day is ' + str(pollen.getPollenCount()))
         except:
             await message.channel.send(str(pollen.get_atl_pollen_count()))
@@ -235,7 +235,7 @@ async def handler(client, message):
                 keyword = str(message.content)[11:]
             
             #try:
-            mystring = f"""You have requested to search Spotify for playlists containing the keyword '{keyword}'. I will return the top songs that appear the most in those playlists. Please wait while I retrieve that information...\n"""
+            mystring = f"""You have requested to search Spotify for playlists containing the keyword '{keyword}'. I will return ranked list of the songs that appear the most in those playlists. Please wait while I retrieve that information...\n"""
             await message.channel.send(mystring)
             flag = False
             for i in range(10):

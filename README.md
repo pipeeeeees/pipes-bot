@@ -10,6 +10,10 @@ Pipes Bot is a Discord bot I created originally as a fun hobby project, but has 
 - wishing people happy birthday
 - various fun responses to group chat messages
 
+![pipes bot profile picture](./doc/images/pfp_small.PNG)
+<br />
+**Pipes Bot's Profile**
+
 ## Usage
 The bot runs permanently on my home server. Chat with it by messaging **'Pipes Bot#8120'** on Discord (ID 924431531777359943). Try the following commands:
 - **'$pollen'**: to see Atlanta's pollen count
@@ -25,3 +29,21 @@ The bot runs permanently on my home server. Chat with it by messaging **'Pipes B
 
 ## Navigation
 All of my most recent developments happen on the dev branch. I will merge to main on large releases. Pipes Bot usually runs off of the latest dev commit. Look at **main.py** to see the orchestration of the bot, in **root/pipesbot/** you will find all of my modules. Important modules include **message_handler.py** which processes incoming messages, **schedule_messages.py** which handles monitoring the time and accesses the **SQLite** database, and **db_handler.py** which is a custom python wrap for the database. 
+
+## Screenshots
+
+**Uptime Command**
+<br />
+![alt text](./doc/images/uptime.PNG)
+
+**Gas Price Command**
+<br />
+![alt text](./doc/images/gas.PNG)
+
+**Davinci GPT-3 (ChatGPT) Implmentation (For the record, I am not geometrically challenged 😉)**
+<br />
+![alt text](./doc/images/davinci_gpt.PNG)
+
+**Pipes Bot occasionally reacts to random text in group chats. ('SHEEEEESH' is said more than you'd think)**
+<br />
+![alt text](./doc/images/sheeesh.PNG)

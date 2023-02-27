@@ -68,7 +68,6 @@ class DatabaseHandler:
                 "message": row[7]
             }
             messages.append(message)
-            
         return messages
 
     def get_all_by_user_id(self, user_id):
@@ -91,8 +90,41 @@ class DatabaseHandler:
                 "message": row[7]
             }
             messages.append(message)
-
         return messages
+    
+    def delete_messages_with_string(self, user_id, string):
+        self.cursor.execute('''
+            DELETE FROM messages
+            WHERE user_id = ? AND message LIKE ?
+        ''', (user_id, f'%{string}%'))
+        self.conn.commit()
+
+    def get_numbered_messages(self, user_id):
+        messages = self.get_all_by_user_id(user_id)
+        numbered_messages = ''
+        for i, message in enumerate(messages, 1):
+            post_date = datetime.date(message['year'], message['month'], message['day'])
+            numbered_messages += f'{i}. {post_date.strftime("%m-%d-%Y")}: {message["message"]}\n'
+        return numbered_messages
+    
+    def delete_message_by_number(self, user_id, number):
+        messages = self.get_all_by_user_id(user_id)
+        try:
+            message = messages[number-1]
+        except IndexError:
+            return f'No message found with number {number}'
+        self.remove_message(user_id, message['channel_id'], message['year'], message['month'], message['day'], message['hour'], message['minute'])
+        return f'Deleted message {number}: {message["message"]}'
+    
+    def message_contains_substring(self, user_id, substring):
+        query = "SELECT message FROM messages WHERE user_id = ?"
+        self.cursor.execute(query, (user_id))
+        rows = self.cursor.fetchall()
+        for row in rows:
+            if substring in row[0]:
+                return True
+        return False
+    
 
 def clear_old_reminders():
     # Get database instance, table instance, and all messages

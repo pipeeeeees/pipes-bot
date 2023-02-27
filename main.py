@@ -14,7 +14,12 @@ from pipesbot import PIPEEEEEES_DISCORD_ID
 # Try to establish connection
 print('attempting to establish connection...')
 intents = discord.Intents.default()
-intents.message_content = True
+try:
+    # works for pipes-server, but not my PC... odd
+    intents.intents.messages = True
+except:
+    # works for my pc, but not pipes-server
+    intents.messages = True
 flag = True
 while flag:
     try:
@@ -51,11 +56,6 @@ schedule_messages.scheduler_setup(client)
 @client.event
 async def on_message(message):
     await message_handler.handler(client, message)
-
-# Start the MessageScheduler, load messages from the database
-#async def start_scheduler():
-    #await db_handler.add_reminders_to_scheduler()
-    #await schedule_messages.scheduler.start()
 
 # Define a signal handler for when the script is cancelled
 async def handle_sigint(signum, frame):

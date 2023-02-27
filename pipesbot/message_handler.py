@@ -7,7 +7,6 @@ from pipesbot import pollen
 from pipesbot import postables
 from pipesbot import gas
 from pipesbot import spotify_search
-#from pipesbot import postable_content
 from pipesbot.postable_content import meme_selector
 import discord
 import datetime
@@ -87,12 +86,7 @@ async def handler(client, message):
             await message.channel.send(gas.get_gas_msg('GA'))
 
     # Manual Schedule
-    """
-    Format: "$remindme, 9-23-1999, 14:20, get something for Stephen's birthday"
-    it will:
-       1. add this entry to the database (db_handler.py)
-       2. add the request to the scheduler (schedule_messages.py)
-    """
+    # Format: "$remindme, 9-23-1999, 14:20, get something for Stephen's birthday"
     if message.content.startswith('$remindme,'):
         # Parse the data
         msg = message.content.replace('$remindme,','')
@@ -119,6 +113,59 @@ async def handler(client, message):
         await send_message(client,channel.id, f"Ok. I will remind you on {date.strftime('%m-%d-%Y')} at {time.strftime('%H:%M')}.")
         return
     
+    # Birthday Input
+    # TODO: if birthdays exist
+    if message.content.startswith('$birthday'):
+        # Parse the data
+        msg = message.content.replace('$birthday','')
+        msg_split = msg.split('-')
+        month = int(msg_split[0])
+        day = int(msg_split[1])
+        year = int(msg_split[2])
+
+        # See if bday has passed yet
+        now = datetime.datetime.now()
+        r_year = now.year
+        r_month = now.month
+        r_day = now.day
+        if r_month < month:
+            scheduled = r_year
+        elif r_month == month:
+            if r_day < day:
+                scheduled = r_year
+            else:
+                scheduled = r_year + 1
+        else:
+            scheduled = r_year + 1
+
+        # Create the right DS's
+        date = datetime.date(scheduled, month, day)
+        time = datetime.time(8, 0) 
+        channel_id =  channel.id 
+        message = f"HAPPY BIRTHDAY, {author.mention}"
+
+        # Upload to the scheduler
+        await schedule_messages.scheduler.schedule_message(channel_id, message, date, time)
+
+        # Upload to the database
+        db = db_handler.DatabaseHandler(r'pipesbot/database/messages.db')
+        db.delete_messages_with_string(author.id, f"HAPPY BIRTHDAY, {author.mention}")
+        db.add_message(author.id, channel_id, scheduled, month, day, 8, 0, message)
+        db.close()
+        await send_message(client,channel.id, f"I will wish you a happy birthday on {date.strftime('%m-%d-%Y')}.")
+        return
+    
+    # Look at remindme's
+    if message.content.startswith('$reminders'):
+        db = db_handler.DatabaseHandler(r'pipesbot/database/messages.db')
+        if 'delete' in message.content:
+            num = int(message.content.replace('$reminders delete',''))
+            await send_message(client,channel.id, db.delete_message_by_number(author.id, num))
+        else:
+            await send_message(client,channel.id, db.get_numbered_messages(author.id))
+        db.close()
+        return
+
     if message.content.startswith('$db'):
         db = db_handler.DatabaseHandler(r'pipesbot/database/messages.db')
         if 'me' in str(message.content).lower():

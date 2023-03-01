@@ -44,7 +44,7 @@ class MessageScheduler:
         if message_string != '':
             channel = await self.client.fetch_channel(STEEBON_ATL_STATION_ID)
             await channel.send(message_string)
-            time.sleep(60)
+            await asyncio.sleep(60) 
 
 
     async def start(self):

@@ -57,11 +57,7 @@ async def handler(client, message):
         await message.channel.send(f'Pipes Bot has been online for {uptime.display_time_difference()}.')
     
     if message.content.startswith('$pollen'):
-        try:
-            int(pollen.get_atl_pollen_count())
-            await message.channel.send('The pollen count in Atlanta for the day is ' + str(pollen.getPollenCount()))
-        except:
-            await message.channel.send(str(pollen.get_atl_pollen_count()))
+        await message.channel.send(pollen.result_handler())
 
     # post from the postables folder
     for sub_folder in postables_folders_only:
@@ -92,7 +88,10 @@ async def handler(client, message):
         msg = message.content.replace('$remindme,','')
         msg_list = msg.split(',')
         raw_date = msg_list[0].replace(' ','')
-        raw_date_split = raw_date.split('-')
+        if '-' in raw_date:
+            raw_date_split = raw_date.split('-')
+        elif '/' in raw_date:
+            raw_date_split = raw_date.split('/')
         raw_time = msg_list[1].replace(' ','')
         raw_time_split = raw_time.split(':')
         joined_string = ','.join(msg_list[2:])

@@ -35,7 +35,8 @@ class MessageScheduler:
         if datetime.date.today().weekday() < 5:
             message_string = message_string + f'Good morning! Time for an Atlanta morning report:\n'
             pollen_cnt = pollen.get_atl_pollen_count()
-            message_string = message_string + f' - The pollen count in Atlanta for today is {pollen_cnt}\n'
+            if type(pollen_cnt) == int:
+                message_string = message_string + f' - The pollen count in Atlanta for today is {pollen_cnt}\n'
             reg,mid,prem,die = gas.get_gas('GA')
             message_string = message_string + f' - In Georgia, the state-wide average gas prices are:\n\t\tRegular: {reg}\n\t\tMidgrade: {mid}\n\t\tPremium: {prem}'
 
@@ -43,6 +44,7 @@ class MessageScheduler:
         if message_string != '':
             channel = await self.client.fetch_channel(STEEBON_ATL_STATION_ID)
             await channel.send(message_string)
+            time.sleep(60)
 
 
     async def start(self):
@@ -60,8 +62,8 @@ class MessageScheduler:
                 min_flag = True
                 await self.morning_report()
 
-            # Check every 5 seconds
-            n = 5
+            # check every n seconds
+            n = 30
             await asyncio.sleep(n) 
             counter += 1
 

@@ -58,7 +58,7 @@ class MessageScheduler:
             await self.check_scheduled_messages()
 
             # every day at 9:00 AM
-            if now.hour == 9 and now.minute == 0 and min_flag == False:
+            if now.hour == 10 and now.minute == 0 and min_flag == False:
                 min_flag = True
                 await self.morning_report()
 

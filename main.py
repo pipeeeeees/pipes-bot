@@ -14,8 +14,10 @@ from pipesbot import PIPEEEEEES_DISCORD_ID
 
 # Try to establish connection
 print('attempting to establish connection...')
-intents = discord.Intents.default()
+intents = discord.Intents.all()
 hostname = socket.gethostname()
+#intents.message_content = True
+"""
 if hostname == 'pipes-server':
     try:
         # works for pipes-server, but not my PC or macbook... odd
@@ -25,6 +27,7 @@ if hostname == 'pipes-server':
 else:
     # works for other PC's
     intents.messages = True
+"""
 flag = True
 while flag:
     try:

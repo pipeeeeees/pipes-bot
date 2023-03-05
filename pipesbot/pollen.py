@@ -2,7 +2,7 @@ from pipesbot import webscraper as ws
 
 def get_atl_pollen_count():
     mylist = ws.chunk_parser(ws.scrape('https://www.atlantaallergy.com/pollen_counts'),
-                                      'class="pollen-num"').split(' ')
+                                       'class="pollen-num"').split(' ')
     if len(mylist) > 0:
         for i in mylist:
             try:

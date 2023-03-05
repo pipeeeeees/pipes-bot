@@ -48,22 +48,26 @@ async def handler(client, message):
     if message.content.startswith('$test'):
         await message.channel.send(message.author.id)
         await message.channel.send(message.channel.id)
+        return
 
     if message.content.startswith('$pipesbot,'):
         msg = message.content.replace('$pipesbot,','')
         await message.channel.send(gpt_api.requestz(msg))
-
+        return
+    
     if message.content.startswith('$uptime'):
         await message.channel.send(f'Pipes Bot has been online for {uptime.display_time_difference()}.')
+        return
     
     if message.content.startswith('$pollen'):
         await message.channel.send(pollen.result_handler())
+        return
 
     # post from the postables folder
     for sub_folder in postables_folders_only:
         if sub_folder in str(message.content).lower():
             await message.channel.send(file=discord.File(globals()[sub_folder].return_path()))
-
+        return
 
     if message.content.startswith('$gas'):
         if len(str(message.content)) != 4:
@@ -80,6 +84,7 @@ async def handler(client, message):
             await message.channel.send(gas.get_gas_msg('NC'))
         else:
             await message.channel.send(gas.get_gas_msg('GA'))
+        return
 
     # Manual Schedule
     # Format: "$remindme, 9-23-1999, 14:20, get something for Stephen's birthday"
@@ -204,9 +209,11 @@ async def handler(client, message):
     
     if 'FACTS' in str(message.content).upper():
         await message.channel.send('Factual statement detected^')
+        return
       
     if 'SHEEE' in str(message.content).upper():
         await message.channel.send('Major sheesh detected^')
+        return
 
     if message.content.startswith('$spotify '):
         keyword = str(message.content).replace('$spotify ','')
@@ -249,7 +256,7 @@ async def handler(client, message):
                 await message.channel.send('An error occurred. Please try again.')
         except:
             await message.channel.send('An error occurred. Syntax is wrong.')
-
+    return
 """
 # Access Pipes Bot as a Member object
 pbot = client.user

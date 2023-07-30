@@ -1,6 +1,8 @@
 # Pipes Bot 🤖
 
-Pipes Bot is a Discord bot I created originally as a fun hobby project, but has now turned into a means to exercise my python development by adding features and appending **.py** modules I make in other hobby projects. Features include:
+Pipes Bot is a Discord bot created as a hobby project, but has now turned into conglomeration of python modules that I can run via commands over Discord. It is deployed on a local home server in my apartment.
+
+Key features include:
 - a spotify keyword search for finding relevant music
 - gpt-3 implementation
 - gas price reporting
@@ -42,6 +44,7 @@ All of my most recent developments happen on the dev branch. I will merge to mai
 
 **Pipes Bot occasionally reacts to random text in group chats. ('SHEEEEESH' is said more than you'd think)**
 <br />
+
 ![sheeesh](./doc/images/sheeesh.PNG)
 
 **Gas Price Command**
@@ -51,3 +54,4 @@ All of my most recent developments happen on the dev branch. I will merge to mai
 **Uptime Command**
 <br />
 ![uptime](./doc/images/uptime.PNG)
+

@@ -31,12 +31,14 @@ class MessageScheduler:
     async def morning_report(self):
         message_string = ''
 
-        # On weekdays only
-        if datetime.date.today().weekday() < 5:
+        # Compose the message
+        if datetime.date.today().weekday() < 7:#< 5: # 5 for weekdays
             message_string = message_string + f'Good morning! Time for an Atlanta morning report:\n'
             pollen_cnt = pollen.get_atl_pollen_count()
             if type(pollen_cnt) == int:
                 message_string = message_string + f' - The pollen count in Atlanta for today is {pollen_cnt}\n'
+
+            
             reg,mid,prem,die = gas.get_gas('GA')
             message_string = message_string + f' - In Georgia, the state-wide average gas prices are:\n\t\tRegular: {reg}\n\t\tMidgrade: {mid}\n\t\tPremium: {prem}'
 

@@ -49,25 +49,24 @@ async def handler(client, message):
         await message.channel.send(message.author.id)
         await message.channel.send(message.channel.id)
 
+
     if message.content.startswith('$pipesbot,'):
         msg = message.content.replace('$pipesbot,','')
         await message.channel.send(gpt_api.requestz(msg))
 
+    
     if message.content.startswith('$uptime'):
         await message.channel.send(f'Pipes Bot has been online for {uptime.display_time_difference()}.')
+
     
     if message.content.startswith('$pollen'):
-        try:
-            int(pollen.get_atl_pollen_count())
-            await message.channel.send('The pollen count in Atlanta for the day is ' + str(pollen.getPollenCount()))
-        except:
-            await message.channel.send(str(pollen.get_atl_pollen_count()))
+        await message.channel.send(pollen.result_handler())
+
 
     # post from the postables folder
     for sub_folder in postables_folders_only:
         if sub_folder in str(message.content).lower():
             await message.channel.send(file=discord.File(globals()[sub_folder].return_path()))
-
 
     if message.content.startswith('$gas'):
         if len(str(message.content)) != 4:
@@ -84,6 +83,7 @@ async def handler(client, message):
             await message.channel.send(gas.get_gas_msg('NC'))
         else:
             await message.channel.send(gas.get_gas_msg('GA'))
+        return
 
     # Manual Schedule
     # Format: "$remindme, 9-23-1999, 14:20, get something for Stephen's birthday"
@@ -92,7 +92,10 @@ async def handler(client, message):
         msg = message.content.replace('$remindme,','')
         msg_list = msg.split(',')
         raw_date = msg_list[0].replace(' ','')
-        raw_date_split = raw_date.split('-')
+        if '-' in raw_date:
+            raw_date_split = raw_date.split('-')
+        elif '/' in raw_date:
+            raw_date_split = raw_date.split('/')
         raw_time = msg_list[1].replace(' ','')
         raw_time_split = raw_time.split(':')
         joined_string = ','.join(msg_list[2:])
@@ -114,7 +117,6 @@ async def handler(client, message):
         return
     
     # Birthday Input
-    # TODO: if birthdays exist
     if message.content.startswith('$birthday'):
         # Parse the data
         msg = message.content.replace('$birthday','')
@@ -166,6 +168,7 @@ async def handler(client, message):
         db.close()
         return
 
+    # Database checker command
     if message.content.startswith('$db'):
         db = db_handler.DatabaseHandler(r'pipesbot/database/messages.db')
         if 'me' in str(message.content).lower():
@@ -190,6 +193,7 @@ async def handler(client, message):
         db.close()
         return
     
+    # Scheduler Check Command
     if message.content.startswith('$sch'):
         messages = schedule_messages.scheduler.scheduled_messages
         if len(messages) != 0:
@@ -205,10 +209,13 @@ async def handler(client, message):
     
     if 'FACTS' in str(message.content).upper():
         await message.channel.send('Factual statement detected^')
+        return
       
     if 'SHEEE' in str(message.content).upper():
         await message.channel.send('Major sheesh detected^')
+        return
 
+    # Spotify keyword search
     if message.content.startswith('$spotify '):
         keyword = str(message.content).replace('$spotify ','')
         
@@ -250,7 +257,7 @@ async def handler(client, message):
                 await message.channel.send('An error occurred. Please try again.')
         except:
             await message.channel.send('An error occurred. Syntax is wrong.')
-
+    return
 """
 # Access Pipes Bot as a Member object
 pbot = client.user

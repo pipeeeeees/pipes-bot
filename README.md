@@ -34,18 +34,24 @@ All of my most recent developments happen on the dev branch. I will merge to mai
 
 ## Screenshots
 
-**Uptime Command**
+**Scheduled Reports**
 <br />
-![alt text](./doc/images/uptime.PNG)
-
-**Gas Price Command**
-<br />
-![alt text](./doc/images/gas.PNG)
+![morning report](./doc/images/morning_report.PNG)
 
 **Davinci GPT-3 (ChatGPT) Implmentation (For the record, I am not geometrically challenged 😉)**
 <br />
-![alt text](./doc/images/davinci_gpt.PNG)
+![gpt-3](./doc/images/davinci_gpt.PNG)
 
 **Pipes Bot occasionally reacts to random text in group chats. ('SHEEEEESH' is said more than you'd think)**
 <br />
-![alt text](./doc/images/sheeesh.PNG)
+
+![sheeesh](./doc/images/sheeesh.PNG)
+
+**Gas Price Command**
+<br />
+![gas prices](./doc/images/gas.PNG)
+
+**Uptime Command**
+<br />
+![uptime](./doc/images/uptime.PNG)
+

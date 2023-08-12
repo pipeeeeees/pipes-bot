@@ -17,7 +17,9 @@ print('attempting to establish connection...')
 intents = discord.Intents.all()
 hostname = socket.gethostname()
 #intents.message_content = True
+
 """
+# weirdness with inetnets on different devices
 if hostname == 'pipes-server':
     try:
         # works for pipes-server, but not my PC or macbook... odd
@@ -28,6 +30,7 @@ else:
     # works for other PC's
     intents.messages = True
 """
+
 flag = True
 while flag:
     try:
@@ -37,6 +40,7 @@ while flag:
         print('connection failed, trying again...')
         time.sleep(1)
 print('connection established!')
+
 
 # Confirmation that pipes-bot is ready to go in terminal
 @client.event 

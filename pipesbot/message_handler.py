@@ -33,7 +33,7 @@ async def handler(client, message):
     edited_at = message.edited_at
 
     # Say who and what the message sent was in server terminal
-    if message.author == client.user:
+    if message.author == pbot:
         if str(message.content) == '':
             print(f'  {str(message.author)} sent content to {channel}')
         else:
@@ -42,32 +42,38 @@ async def handler(client, message):
         print(f"{str(message.author)} sent: \"{str(message.content)}\"")
     
     # Do not reply to yourself, Pipes Bot!
-    if message.author == client.user:
+    if message.author == pbot:
         return
 
+    # Test case
     if message.content.startswith('$test'):
-        await message.channel.send(message.author.id)
-        await message.channel.send(message.channel.id)
+        await message.channel.send(f'Your author id is {message.author.id}')
+        await message.channel.send(f'This channel id is {message.channel.id}')
+        return
 
-
+    # AI reply
     if message.content.startswith('$pipesbot,'):
         msg = message.content.replace('$pipesbot,','')
         await message.channel.send(gpt_api.requestz(msg))
+        return
 
-    
+    # current bot uptime metrics
     if message.content.startswith('$uptime'):
         await message.channel.send(f'Pipes Bot has been online for {uptime.display_time_difference()}.')
+        return
 
-    
+    # get ATL pollen count
     if message.content.startswith('$pollen'):
         await message.channel.send(pollen.result_handler())
-
+        return
 
     # post from the postables folder
     for sub_folder in postables_folders_only:
         if sub_folder in str(message.content).lower():
             await message.channel.send(file=discord.File(globals()[sub_folder].return_path()))
-
+            #return
+        
+    # gas price report
     if message.content.startswith('$gas'):
         if len(str(message.content)) != 4:
             if len(str(message.content).replace('$gas ','')) == 2:
@@ -76,9 +82,12 @@ async def handler(client, message):
             else:
                 state_name = str((message.content).replace('$gas ','')).title()
                 await message.channel.send(gas.get_gas_msg(state_name))
+
         # if these specific users call out $gas
-        elif message.author.name == 'Guwop' or message.author.name == 'yamoe':
+        elif message.author.name == 'yamoe':
             await message.channel.send(gas.get_gas_msg('TX'))
+        elif message.author.name == 'Guwop':
+            await message.channel.send(gas.get_gas_msg('FL'))
         elif message.author.name == 'mal-bon':
             await message.channel.send(gas.get_gas_msg('NC'))
         else:
@@ -116,7 +125,7 @@ async def handler(client, message):
         await send_message(client,channel.id, f"Ok. I will remind you on {date.strftime('%m-%d-%Y')} at {time.strftime('%H:%M')}.")
         return
     
-    # Birthday Input
+    # Birthday Input (format: '$birthday )
     if message.content.startswith('$birthday'):
         # Parse the data
         msg = message.content.replace('$birthday','')
@@ -208,11 +217,15 @@ async def handler(client, message):
         return
     
     if 'FACTS' in str(message.content).upper():
-        await message.channel.send('Factual statement detected^')
+        msg = "make a robotic message that a robot would say if a factual statement was detected and validated. Start the message with 'Factual statement detected.'"
+        await message.channel.send(gpt_api.requestz(msg))
+        #await message.channel.send('Factual statement detected^')
         return
       
-    if 'SHEEE' in str(message.content).upper():
-        await message.channel.send('Major sheesh detected^')
+    if 'SHEEEEE' in str(message.content).upper() and 'EEEEESH' in str(message.content).upper():
+        msg = "make a short robotic message that a robot would say if a MAJOR SHEEEEESH statement was detected and validated. Start the message with 'Major sheeeeesh detected.'. No emojies"
+        await message.channel.send(gpt_api.requestz(msg))
+        #await message.channel.send('Major sheesh detected^')
         return
 
     # Spotify keyword search
@@ -258,41 +271,3 @@ async def handler(client, message):
         except:
             await message.channel.send('An error occurred. Syntax is wrong.')
     return
-"""
-# Access Pipes Bot as a Member object
-pbot = client.user
-
-# Access the content of the message
-content = message.content
-
-# Access the author of the message as a Member object
-author = message.author
-
-# Access the channel where the message was sent as a TextChannel object
-channel = message.channel
-
-# Access the guild where the message was sent as a Guild object
-guild = message.guild
-
-# Access the list of Member objects that were mentioned in the message
-mentions = message.mentions
-
-# Access the list of Attachment objects that were attached to the message
-attachments = message.attachments
-
-# Access the list of Embed objects that were included in the message
-embeds = message.embeds
-
-# Access the timestamp of when the message was created as a datetime.datetime object
-created_at = message.created_at
-
-# Access the timestamp of when the message was last edited as a datetime.datetime object, or None if it was never edited
-edited_at = message.edited_at
-"""
-
-"""
-#print(author)
-#print(channel)
-#print(attachments)
-#await send_message(client,channel.id, "yo")
-"""

@@ -218,13 +218,13 @@ async def handler(client, message):
     
     if 'FACTS' in str(message.content).upper():
         msg = "make a robotic message that a robot would say if a factual statement was detected and validated. Start the message with 'Factual statement detected.'"
-        await message.channel.send(gpt_api.requestz(msg))
+        await message.channel.send(gpt_api.requestz(msg).replace('"',''))
         #await message.channel.send('Factual statement detected^')
         return
       
     if 'SHEEEEE' in str(message.content).upper() and 'EEEEESH' in str(message.content).upper():
         msg = "make a short robotic message that a robot would say if a MAJOR SHEEEEESH statement was detected and validated. Start the message with 'Major sheeeeesh detected.'. No emojies"
-        await message.channel.send(gpt_api.requestz(msg))
+        await message.channel.send(gpt_api.requestz(msg).replace('"',''))
         #await message.channel.send('Major sheesh detected^')
         return
 

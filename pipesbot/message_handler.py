@@ -97,7 +97,7 @@ async def handler(client, message):
     # Manual Schedule
     # Format: "$remindme, 9-23-1999, 14:20, get something for Stephen's birthday"
     if message.content == '$remindme':
-        msg = 'To set a reminder, compose a message with the following format (24 hour time):\n $remindme, `mm-dd-yyyy`, `hh:mm`, `message` \n\nExample: "$remindme, 9-23-1999, 14:00, tell Steebon Happy Birthday"'
+        msg = 'To set a reminder, compose a message with the following format (24 hour time):\n\n$remindme, `mm-dd-yyyy`, `hh:mm`, `message` \n\nExample: `$remindme, 9-23-1999, 14:00, tell Steebon Happy Birthday`\n\nSend `$reminders` to see your currently scheduled reminders.'
         await message.channel.send(msg)
         return
     

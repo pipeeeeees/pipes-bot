@@ -40,9 +40,9 @@ class MessageScheduler:
             message_string = message_string + f'Good morning! Time for an Atlanta morning report:'
             pollen_cnt = pollen.get_atl_pollen_count()
             if type(pollen_cnt) == int:
-                message_string = message_string + f'- The pollen count in Atlanta for today is {pollen_cnt}\n'
+                message_string = message_string + f'\n- The pollen count in Atlanta for today is {pollen_cnt}'
             reg,mid,prem,die = gas.get_gas('GA')
-            message_string = message_string + f'- In Georgia, the state-wide average gas prices are:\n\t\tRegular: {reg}\n\t\tMidgrade: {mid}\n\t\tPremium: {prem}'
+            message_string = message_string + f'\n- In Georgia, the state-wide average gas prices are:\n\t\tRegular: {reg}\n\t\tMidgrade: {mid}\n\t\tPremium: {prem}'
 
         # Send checker
         if message_string != '':

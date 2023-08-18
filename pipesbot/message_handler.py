@@ -32,6 +32,8 @@ async def handler(client, message):
     created_at = message.created_at
     edited_at = message.edited_at
 
+    print(message.author.name)
+
     # Say who and what the message sent was in server terminal
     if message.author == pbot:
         if str(message.content) == '':

@@ -32,8 +32,6 @@ async def handler(client, message):
     created_at = message.created_at
     edited_at = message.edited_at
 
-    print(message.author.name)
-
     # Say who and what the message sent was in server terminal
     if message.author == pbot:
         if str(message.content) == '':
@@ -283,4 +281,7 @@ async def handler(client, message):
                 await message.channel.send('An error occurred. Please try again.')
         except:
             await message.channel.send('An error occurred. Syntax is wrong.')
+    
+    if message.author.name == 'GitHub':
+        print(message.content)
     return

@@ -283,5 +283,7 @@ async def handler(client, message):
             await message.channel.send('An error occurred. Syntax is wrong.')
     
     if message.author.name == 'GitHub':
+        print(message.embeds)
+        print(message.attachments)
         print(message.content)
     return

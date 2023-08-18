@@ -14,6 +14,7 @@ Key features include:
 
 ![pipes bot profile picture](./doc/images/pfp_small.PNG)
 <br />
+
 **Pipes Bot's Profile**
 
 ## Usage

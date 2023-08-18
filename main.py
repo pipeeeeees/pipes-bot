@@ -1,44 +1,31 @@
-import discord
-import time
-import signal
 import asyncio
+import discord
+import os
+import signal
 import socket
+import time
 
 from pipesbot import uptime
 from pipesbot import creds
+from pipesbot import commit_id_getter
 from pipesbot import message_handler
 from pipesbot import schedule_messages
 from pipesbot import db_handler
 from pipesbot import PIPEEEEEES_DISCORD_ID
 
-
-# Try to establish connection
+# Establish a connection
 print('attempting to establish connection...')
 intents = discord.Intents.all()
 hostname = socket.gethostname()
-#intents.message_content = True
-
-"""
-# weirdness with inetnets on different devices
-if hostname == 'pipes-server':
-    try:
-        # works for pipes-server, but not my PC or macbook... odd
-        intents.message_content = True
-    except:
-        exit(0)
-else:
-    # works for other PC's
-    intents.messages = True
-"""
-
 flag = True
+# continue trying to establish a connection forever
 while flag:
     try:
         client = discord.Client(intents=intents)
         flag = False
     except:
         print('connection failed, trying again...')
-        time.sleep(1)
+        time.sleep(2)
 print('connection established!')
 
 
@@ -52,7 +39,7 @@ async def on_ready():
 
     # Send the initial message to the user
     dm_channel = await user.create_dm()
-    await dm_channel.send(f'{client.user} is now online.')
+    await dm_channel.send(f'{client.user} is now online on commit ID {commit_id_getter.get_git_commit_id(os.getcwd())}.')
 
     # Start the MessageScheduler, load messages from the database
     await db_handler.add_reminders_to_scheduler()

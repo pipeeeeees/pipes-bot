@@ -257,6 +257,7 @@ async def handler(client, message):
                 break
         if flag == False:
             await message.channel.send('An error occurred. Please try again.')
+        return
     elif message.content.startswith('$spotify-'):
         try:
             numtimes = int(str(message.content).replace("$spotify-","").split(" ")[0])
@@ -281,6 +282,7 @@ async def handler(client, message):
                 await message.channel.send('An error occurred. Please try again.')
         except:
             await message.channel.send('An error occurred. Syntax is wrong.')
+        return
     
     # pull and reboot on github push webhook
     if message.author.name == 'GitHub':

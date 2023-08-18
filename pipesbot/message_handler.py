@@ -286,22 +286,11 @@ async def handler(client, message):
         for embed in message.embeds:
             # Extract information from the embed
             embed_title = embed.title
-            embed_description = embed.description
-            embed_color = embed.color
-            embed_author = embed.author
-            embed_fields = embed.fields
-            embed_thumbnail = embed.thumbnail
-            embed_image = embed.image
-            embed_footer = embed.footer
-            
-            # Process or display the extracted information as needed
-            print("Embed Title:", embed_title)
-            print("Embed Description:", embed_description)
-            print("Embed Color:", embed_color)
-            print("Embed Author:", embed_author)
-            print("Embed Fields:", embed_fields)
-            print("Embed Thumbnail:", embed_thumbnail)
-            print("Embed Image:", embed_image)
-            print("Embed Footer:", embed_footer)
+            if 'star added' in embed_title:#if 'new commit' in embed_title:
+                import subprocess
+                git_pull_command = ["git", "pull"]
+                subprocess.run(git_pull_command, cwd="/home/compulab/pipes-bot/pipes-bot", check=True)
 
+                reboot_command = ["sudo", "reboot"]
+                subprocess.run(reboot_command, check=True)
     return

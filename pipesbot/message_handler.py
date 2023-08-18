@@ -283,10 +283,25 @@ async def handler(client, message):
             await message.channel.send('An error occurred. Syntax is wrong.')
     
     if message.author.name == 'GitHub':
-        print(message.embeds.title)
-        print(message.embeds.description)
-        print(message.embeds.author)
-        print(message.embeds.fields)
-        print(message.embeds.footer)
+        for embed in message.embeds:
+            # Extract information from the embed
+            embed_title = embed.title
+            embed_description = embed.description
+            embed_color = embed.color
+            embed_author = embed.author
+            embed_fields = embed.fields
+            embed_thumbnail = embed.thumbnail
+            embed_image = embed.image
+            embed_footer = embed.footer
+            
+            # Process or display the extracted information as needed
+            print("Embed Title:", embed_title)
+            print("Embed Description:", embed_description)
+            print("Embed Color:", embed_color)
+            print("Embed Author:", embed_author)
+            print("Embed Fields:", embed_fields)
+            print("Embed Thumbnail:", embed_thumbnail)
+            print("Embed Image:", embed_image)
+            print("Embed Footer:", embed_footer)
 
     return

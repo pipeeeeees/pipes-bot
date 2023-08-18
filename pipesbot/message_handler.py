@@ -294,6 +294,10 @@ async def handler(client, message):
                 git_pull_command = ["git", "pull"]
                 subprocess.run(git_pull_command, cwd="/home/compulab/pipes-bot/pipes-bot", check=True)
 
+                user = await client.fetch_user(PIPEEEEEES_DISCORD_ID)
+                dm_channel = await user.create_dm()
+                await dm_channel.send(f'New commit detected. Rebooting...')
+
                 reboot_command = ["sudo", "/sbin/reboot"]
                 subprocess.run(reboot_command, check=True)
     return

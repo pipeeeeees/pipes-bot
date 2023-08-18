@@ -282,11 +282,12 @@ async def handler(client, message):
         except:
             await message.channel.send('An error occurred. Syntax is wrong.')
     
+    # pull and reboot on github push webhook
     if message.author.name == 'GitHub':
         for embed in message.embeds:
             # Extract information from the embed
             embed_title = embed.title
-            if 'star added' in embed_title:#if 'new commit' in embed_title:
+            if 'new commit' in embed_title:
                 import subprocess
                 git_pull_command = ["git", "pull"]
                 subprocess.run(git_pull_command, cwd="/home/compulab/pipes-bot/pipes-bot", check=True)

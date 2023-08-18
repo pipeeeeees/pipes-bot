@@ -291,6 +291,6 @@ async def handler(client, message):
                 git_pull_command = ["git", "pull"]
                 subprocess.run(git_pull_command, cwd="/home/compulab/pipes-bot/pipes-bot", check=True)
 
-                reboot_command = ["sudo", "reboot"]
+                reboot_command = ["sudo", "/sbin/reboot"]
                 subprocess.run(reboot_command, check=True)
     return

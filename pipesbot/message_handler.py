@@ -52,10 +52,16 @@ async def handler(client, message):
         return
 
     # AI reply
-    if message.content.startswith('$pipesbot,'):
+    if message.content.startswith('pipesbot,'):
+        msg = message.content.replace('pipesbot,','')
+        await message.channel.send(gpt_api.requestz(msg))
+        return
+    elif message.content.startswith('$pipesbot,'):
         msg = message.content.replace('$pipesbot,','')
         await message.channel.send(gpt_api.requestz(msg))
         return
+    
+    #TODO: allow tagging for a response
 
     # current bot uptime metrics
     if message.content.startswith('$uptime'):

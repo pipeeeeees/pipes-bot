@@ -4,8 +4,8 @@ import time
 from pipesbot import db_handler
 from pipesbot import pollen
 from pipesbot import gas
-from pipesbot import PIPEEEEEES_DISCORD_ID
-from pipesbot import PIPES_SERVER_GENERAL_ID
+#from pipesbot import PIPEEEEEES_DISCORD_ID
+#from pipesbot import PIPES_SERVER_GENERAL_ID
 from pipesbot import STEEBON_ATL_STATION_ID
 
 class MessageScheduler:

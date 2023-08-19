@@ -228,13 +228,25 @@ async def handler(client, message):
         return
     
     if 'FACTS' in str(message.content).upper():
-        msg = "make a robotic message that a robot would say if a factual statement was detected and validated. Start the message with 'Factual statement detected.'"
+        msg = "make a robotic message in a few sentences that a robot would say if a factual statement was detected and confirmed. Start the message with 'Factual statement confirmed.'"
+        await message.channel.send(gpt_api.requestz(msg).replace('"',''))
+        #await message.channel.send('Factual statement detected^')
+        return
+    
+    if message.content == 'false':
+        msg = "make a robotic message in a few sentences that a robot would say if a false statement was detected and confirmed false. Start the message with 'False statement confirmed.'"
         await message.channel.send(gpt_api.requestz(msg).replace('"',''))
         #await message.channel.send('Factual statement detected^')
         return
       
     if 'SHEEEEE' in str(message.content).upper() and 'EEEEESH' in str(message.content).upper():
         msg = "make a short robotic message that a robot would say if a MAJOR SHEEEEESH statement was detected and validated. Start the message with 'Major sheeeeesh detected.'. No emojies"
+        await message.channel.send(gpt_api.requestz(msg).replace('"',''))
+        #await message.channel.send('Major sheesh detected^')
+        return
+    
+    if 'SHEE' in str(message.content).upper() and 'EESH' in str(message.content).upper():
+        msg = "make a short robotic message that a robot would say if a Minor SHEEEEESH statement was detected and validated. Start the message with 'Minor sheeeeesh detected.'. No emojies"
         await message.channel.send(gpt_api.requestz(msg).replace('"',''))
         #await message.channel.send('Major sheesh detected^')
         return
@@ -286,8 +298,8 @@ async def handler(client, message):
     
     # pull and reboot on github push webhook
     if message.author.name == 'GitHub':
-        for embed in message.embeds:
-            # Extract information from the embed
+        for embed in embeds:
+            # extract information from the embed
             embed_title = embed.title
             if 'new commit' in embed_title:
                 import subprocess

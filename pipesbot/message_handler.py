@@ -12,6 +12,7 @@ from pipesbot.postable_content import meme_selector
 import os
 import discord
 import datetime
+import subprocess
 
 postables_folders_only = postables.return_postables_folders()
 # Create the variables using globals()
@@ -308,7 +309,6 @@ async def handler(client, message):
             # extract information from the embed
             embed_title = embed.title
             if 'new commit' in embed_title:
-                import subprocess
                 git_pull_command = ["git", "pull"]
                 subprocess.run(git_pull_command, cwd="/home/compulab/pipes-bot/pipes-bot", check=True)
 
@@ -318,4 +318,11 @@ async def handler(client, message):
 
                 reboot_command = ["sudo", "/sbin/reboot"]
                 subprocess.run(reboot_command, check=True)
+
+    if message.author.name == 'pipeeeeees' and message.content == '$reboot':
+        await dm_channel.send(f'Rebooting server. Hold on...')
+
+        reboot_command = ["sudo", "/sbin/reboot"]
+        subprocess.run(reboot_command, check=True)
+
     return

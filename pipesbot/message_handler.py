@@ -127,7 +127,7 @@ async def handler(client, message):
         message = joined_string
 
         # Upload to the scheduler
-        await schedule_messages.scheduler.schedule_message(channel_id, message, date, time)
+        await schedule_messages.scheduler.schedule_message(channel_id, str(author.mention) + '' + message, date, time)
 
         # Upload to the database
         db = db_handler.DatabaseHandler(r'pipesbot/database/messages.db')

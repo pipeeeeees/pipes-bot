@@ -7,7 +7,9 @@ from pipesbot import pollen
 from pipesbot import postables
 from pipesbot import gas
 from pipesbot import spotify_search
+from pipesbot import commit_id_getter
 from pipesbot.postable_content import meme_selector
+import os
 import discord
 import datetime
 
@@ -62,6 +64,10 @@ async def handler(client, message):
         return
     
     #TODO: allow tagging for a response
+
+    if message.content.startswith('$commitid'):
+        await message.channel.send(f'The commit id I am running on is {commit_id_getter.get_git_commit_id(os.getcwd())}')
+        return
 
     # current bot uptime metrics
     if message.content.startswith('$uptime'):

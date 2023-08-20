@@ -253,7 +253,7 @@ async def handler(client, message):
         return
     
     if 'SHEE' in str(message.content).upper() and 'EESH' in str(message.content).upper():
-        msg = "make a short robotic message that a robot would say if a Minor SHEEEEESH statement was detected and validated. Start the message with 'Minor sheeeeesh detected.'. No emojies"
+        msg = "make a short robotic message that a robot would say if a Minor SHEESH statement was detected and to encourage having major sheeeshes only. Start the message with 'Minor sheesh detected.'. No emojies"
         await message.channel.send(gpt_api.requestz(msg).replace('"',''))
         #await message.channel.send('Major sheesh detected^')
         return

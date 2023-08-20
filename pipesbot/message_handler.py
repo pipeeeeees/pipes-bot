@@ -319,7 +319,7 @@ async def handler(client, message):
                 reboot_command = ["sudo", "/sbin/reboot"]
                 subprocess.run(reboot_command, check=True)
 
-    if message.content == '$reboot':
+    if message.content.startswith('$reboot') and message.author.name == 'pipeeeeees':
         await dm_channel.send(f'Rebooting server. Hold on...')
 
         reboot_command = ["sudo", "/sbin/reboot"]

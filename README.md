@@ -1,5 +1,5 @@
 # Pipes Bot
-
+ 
 Discord bot hobby project turned into useful online assistant. Permanently deployed on a low-power arm-based SBC in my home lab. 
 
 Key features include:

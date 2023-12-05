@@ -47,20 +47,18 @@ async def handler(client, message):
     # Do not reply to yourself, Pipes Bot!
     if message.author == pbot:
         return
-
-    # Test case
+    if message.content.startswith('$reboot'):
+        await dm_channel.send(f'Rebooting server. Hold on...')
+        reboot_command = ["sudo", "/sbin/reboot"]
+        subprocess.run(reboot_command, check=True)
     if message.content.startswith('$test'):
         await message.channel.send(f'Your author id is {message.author.id}')
         await message.channel.send(f'This channel id is {message.channel.id}')
         return
-    
-    # if the message starts with $dave, then return the computer host local ip address of the machine and machine name
     if message.content.startswith('$dave'):
         await message.channel.send(f'Computer name: {os.uname()[1]}\nLocal IP address: {os.popen("hostname -I").read()}')
         return
-
-    # AI reply
-    if message.content.startswith('pipesbot,'):
+    if message.content.startswith('pipesbot,'): #GPT reply
         msg = message.content.replace('pipesbot,','')
         await message.channel.send(gpt_api.requestz(msg))
         return
@@ -68,30 +66,19 @@ async def handler(client, message):
         msg = message.content.replace('$pipesbot,','')
         await message.channel.send(gpt_api.requestz(msg))
         return
-    
-    #TODO: allow tagging for a response
-
     if message.content.startswith('$commitid'):
         await message.channel.send(f'The commit id I am running on is {commit_id_getter.get_git_commit_id(os.getcwd())}')
         return
-
-    # current bot uptime metrics
     if message.content.startswith('$uptime'):
         await message.channel.send(f'Pipes Bot has been online for {uptime.display_time_difference()}.')
         return
-
-    # get ATL pollen count
     if message.content.startswith('$pollen'):
         await message.channel.send(pollen.result_handler())
         return
-
-    # post from the postables folder
     for sub_folder in postables_folders_only:
         if sub_folder in str(message.content).lower():
             await message.channel.send(file=discord.File(globals()[sub_folder].return_path()))
             #return
-        
-    # gas price report
     if message.content.startswith('$gas'):
         if len(str(message.content)) != 4:
             if len(str(message.content).replace('$gas ','')) == 2:
@@ -100,8 +87,6 @@ async def handler(client, message):
             else:
                 state_name = str((message.content).replace('$gas ','')).title()
                 await message.channel.send(gas.get_gas_msg(state_name))
-
-        # if these specific users call out $gas
         elif message.author.name == 'yamoe':
             await message.channel.send(gas.get_gas_msg('TX'))
         elif message.author.name == 'Guwop':
@@ -112,13 +97,11 @@ async def handler(client, message):
             await message.channel.send(gas.get_gas_msg('GA'))
         return
 
-    # Manual Schedule
-    # Format: "$remindme, 9-23-1999, 14:20, get something for Stephen's birthday"
+    # Remindme Input (format: '$remindme, 9-23-1999, 14:20, get something for Stephen's birthday')
     if message.content == '$remindme':
         msg = 'To set a reminder, compose a message with the following format (24 hour time):\n\n$remindme, `mm-dd-yyyy`, `hh:mm`, `message` \n\nExample: `$remindme, 9-23-1999, 14:00, tell Steebon Happy Birthday`\n\nSend `$reminders` to see your currently scheduled reminders.'
         await message.channel.send(msg)
         return
-    
     if message.content.startswith('$remindme,'):
         # Parse the data
         msg = message.content.replace('$remindme,','')
@@ -148,9 +131,7 @@ async def handler(client, message):
         await send_message(client,channel.id, f"Ok. I will remind you on {date.strftime('%m-%d-%Y')} at {time.strftime('%H:%M')}.")
         return
     
-    # Birthday Input (format: '$birthday )
     if message.content.startswith('$birthday'):
-        # Parse the data
         msg = message.content.replace('$birthday','')
         msg_split = msg.split('-')
         month = int(msg_split[0])
@@ -191,8 +172,6 @@ async def handler(client, message):
         db.close()
         await send_message(client,channel.id, f"I will wish you a happy birthday on {date.strftime('%m-%d-%Y')}.")
         return
-    
-    # Look at remindme's
     if message.content.startswith('$reminders'):
         db = db_handler.DatabaseHandler(r'pipesbot/database/messages.db')
         if 'delete' in message.content:
@@ -202,8 +181,6 @@ async def handler(client, message):
             await send_message(client,channel.id, db.get_numbered_messages(author.id))
         db.close()
         return
-
-    # Database checker command
     if message.content.startswith('$db'):
         db = db_handler.DatabaseHandler(r'pipesbot/database/messages.db')
         if 'me' in str(message.content).lower():
@@ -227,8 +204,6 @@ async def handler(client, message):
             db.close()
         db.close()
         return
-    
-    # Scheduler Check Command
     if message.content.startswith('$sch'):
         messages = schedule_messages.scheduler.scheduled_messages
         if len(messages) != 0:
@@ -253,7 +228,7 @@ async def handler(client, message):
         await message.channel.send(gpt_api.requestz(msg).replace('"',''))
         #await message.channel.send('Factual statement detected^')
         return
-      
+    """
     if 'SHEEEEE' in str(message.content).upper() and 'EEEEESH' in str(message.content).upper():
         msg = "make a short robotic message that a robot would say if a MAJOR SHEEEEESH statement was detected and validated. Start the message with 'Major sheeeeesh detected.'. No emojies"
         await message.channel.send(gpt_api.requestz(msg).replace('"',''))
@@ -265,6 +240,7 @@ async def handler(client, message):
         await message.channel.send(gpt_api.requestz(msg).replace('"',''))
         #await message.channel.send('Major sheesh detected^')
         return
+    """
 
     # Spotify keyword search
     if message.content.startswith('$spotify '):
@@ -311,7 +287,6 @@ async def handler(client, message):
             await message.channel.send('An error occurred. Syntax is wrong.')
         return
     
-    # pull and reboot on github push webhook
     if message.author.name == 'GitHub':
         for embed in embeds:
             # extract information from the embed
@@ -326,11 +301,4 @@ async def handler(client, message):
 
                 reboot_command = ["sudo", "/sbin/reboot"]
                 subprocess.run(reboot_command, check=True)
-
-    if message.content.startswith('$reboot'):
-        await dm_channel.send(f'Rebooting server. Hold on...')
-
-        reboot_command = ["sudo", "/sbin/reboot"]
-        subprocess.run(reboot_command, check=True)
-
     return

@@ -185,6 +185,9 @@ async def handler(client, message):
         db = db_handler.DatabaseHandler(r'pipesbot/database/messages.db')
         db.delete_messages_with_string(author.id, f"HAPPY BIRTHDAY, {author.mention}")
         db.add_message(author.id, channel_id, scheduled, month, day, 8, 0, message)
+        # add it for the same day every year for the next 99 years
+        for i in range(1,99):
+            db.add_message(author.id, channel_id, scheduled + i, month, day, 8, 0, message)
         db.close()
         await send_message(client,channel.id, f"I will wish you a happy birthday on {date.strftime('%m-%d-%Y')}.")
         return

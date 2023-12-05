@@ -53,6 +53,11 @@ async def handler(client, message):
         await message.channel.send(f'Your author id is {message.author.id}')
         await message.channel.send(f'This channel id is {message.channel.id}')
         return
+    
+    # if the message starts with $dave, then return the computer host local ip address of the machine and machine name
+    if message.content.startswith('$dave'):
+        await message.channel.send(f'Computer name: {os.uname()[1]}\nLocal IP address: {os.popen("hostname -I").read()}')
+        return
 
     # AI reply
     if message.content.startswith('pipesbot,'):

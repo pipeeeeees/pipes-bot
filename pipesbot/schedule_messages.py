@@ -39,11 +39,14 @@ class MessageScheduler:
     async def morning_report(self, channel_id=STEEBON_ATL_STATION_ID):
         message_string = ''
 
-        # Compose the message
-        if datetime.date.today().weekday() < 7:#< 5: # 5 for weekdays
-            # the morning report for mm-dd-yyyy 
+
+        if datetime.date.today().weekday() < 7:
+
+            # ensure no leftover plots remain
             if os.path.exists(r'pipesbot\plots\forecasted_rain.png'):
                 os.remove(r'pipesbot\plots\forecasted_rain.png')
+            
+            # compose the message
             message_string = message_string + morning_report_message()
 
             # store gas prices in a pandas dataframe indexed by datetime and store in a pickle file
@@ -57,7 +60,6 @@ class MessageScheduler:
                 # save the dataframe
                 gas_prices.to_pickle(r'pipesbot\gas_prices_ga.pkl')
                 await pipeeeeees_channel.send(f'successfully updated gas_prices_ga.pkl')
-
             else:
                 # if it doesn't, create a new dataframe and save it
                 reg,mid,prem,die = gas.get_gas('GA')
@@ -78,6 +80,8 @@ class MessageScheduler:
             if os.path.exists(r'pipesbot\plots\forecasted_rain.png'):
                 try:
                     await channel.send(file=discord.File(r'pipesbot\plots\forecasted_rain.png'))
+                    time.sleep(1)
+                    await channel.send(file=discord.File(r'pipesbot\images]its-gon-rain.jpg'))
                 except:
                     pass
                 # delete the plot
@@ -126,12 +130,48 @@ def scheduler_setup(client):
 
 def morning_report_message(plot=False):
     message_string = ''
-    message_string = message_string + f"The Atlanta Morning Report for {datetime.date.today().strftime('%m-%d-%Y')}:"
-    message_string = message_string + weather.real_time_weather_report(plot=True)
+    message_string = message_string + f"Good morning! Here is your Atlanta Morning Report for {datetime.datetime.now().strftime('%B %d, %Y')}:"
+    
     pollen_cnt = pollen.get_atl_pollen_count()
     if type(pollen_cnt) == int:
-        message_string = message_string + f'\n- The pollen count for today is {pollen_cnt}'
-    message_string = message_string + f'\n- In Georgia, the state-wide average gas prices are:\n\t\tRegular: {reg}\n\t\tMidgrade: {mid}\n\t\tPremium: {prem}'
+        message_string = message_string + f'\n- The pollen count for today is {pollen_cnt} ' + chr(0x1F333)
+
+    # gas
+    reg, mid, prem, die = gas.get_gas('GA')
+    diff_reg = 0
+    diff_mid = 0
+    diff_prem = 0
+    if os.path.exists(r'pipesbot\gas_prices_ga.pkl'):
+        gas_prices = pd.read_pickle(r'pipesbot\gas_prices_ga.pkl')
+        if len(gas_prices) > 1:
+            diff_reg = reg - gas_prices['Regular'].iloc[-1]
+            diff_mid = mid - gas_prices['Midgrade'].iloc[-1]
+            diff_prem = prem - gas_prices['Premium'].iloc[-1]
+            message_string = message_string + f'\n- In Georgia, the state-wide average gas prices are:'
+            if diff_reg > 0:
+                message_string = message_string + f'\n\t\tRegular: {reg}' + chr(0x2197)
+            elif diff_reg < 0:
+                message_string = message_string + f'\n\t\tRegular: {reg}' + chr(0x2198)
+            else:
+                message_string = message_string + f'\n\t\tRegular: {reg}' + chr(0x2192)
+            if diff_mid > 0:
+                message_string = message_string + f'\n\t\tMidgrade: {mid}' + chr(0x2197)
+            elif diff_mid < 0:
+                message_string = message_string + f'\n\t\tMidgrade: {mid}' + chr(0x2198)
+            else:
+                message_string = message_string + f'\n\t\tMidgrade: {mid}' + chr(0x2192)
+            if diff_prem > 0:
+                message_string = message_string + f'\n\t\tPremium: {prem}' + chr(0x2197)
+            elif diff_prem < 0:
+                message_string = message_string + f'\n\t\tPremium: {prem}' + chr(0x2198)
+            else:
+                message_string = message_string + f'\n\t\tPremium: {prem}' + chr(0x2192)
+        else:
+            message_string = message_string + f'\n- In Georgia, the state-wide average gas prices are:\n\t\tRegular: {reg}\n\t\tMidgrade: {mid}\n\t\tPremium: {prem}'
+    else:
+        message_string = message_string + f'\n- In Georgia, the state-wide average gas prices are:\n\t\tRegular: {reg}\n\t\tMidgrade: {mid}\n\t\tPremium: {prem}'
+
+    message_string = message_string + weather.real_time_weather_report(plot=True)
     message_string = message_string + f'\n- NOTE: The weather feature is in beta and may not be accurate yet. Please report any issues.'
 
     return message_string

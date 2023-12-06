@@ -64,29 +64,27 @@ def real_time_weather_report(verbose = False, plot = False):
     # compose the message
     message_string = f''
     if temperature <= 32.0:
-        message_string = message_string + f'- It is cold as ice outside with a temp of {int(temperature)}°F \U0001F9CA\U0001F976'
+        message_string = message_string + f'\n- It is cold as ice outside with a temp of {int(temperature)}°F \U0001F9CA\U0001F976'
         message_string = message_string + f'\n- The high for today is {int(temp_max)} °F and the low is {int(temp_min)}°F'
-        message_string = message_string + f'\n- With windchill it feels like {int(feels_like)}°F'
+        message_string = message_string + f'\n- With windchill it feels like {int(feels_like)}°F ' + chr(0x1F976)
     elif temperature >= 90.0:
-        message_string = message_string + f'- It is hot as balls outside with a temp of {int(temperature)}°F \U0001F975\U0001F525'
+        message_string = message_string + f'\n- It is hot as balls outside with a temp of {int(temperature)}°F \U0001F975\U0001F525'
         message_string = message_string + f'\n- The high for today is {int(temp_max)} °F and the low is {int(temp_min)}°F'
-        message_string = message_string + f'\n- With heat index it feels like {int(feels_like)}°F'
+        message_string = message_string + f'\n- With heat index it feels like {int(feels_like)}°F ' + chr(0x1F525)
     else:
-        message_string = message_string + f'- It is {int(temperature)}°F outside with a high of {int(temp_max)}°F and a low of {int(temp_min)} °F'
+        message_string = message_string + f'\n- It is {int(temperature)}°F outside with a high of {int(temp_max)}°F and a low of {int(temp_min)} °F'
     #message_string = message_string + f'\n- You can expect {weather_description} today'
     message_string = message_string + daily_rain_report()
     if humidity >= 80:
-        message_string = message_string + f'\n- The humidity is {humidity}%. It is very humid!'
+        message_string = message_string + f'\n- The humidity is {humidity}%. It is very humid! ' + chr(0x1F4A7)
     elif humidity <= 20:
-        message_string = message_string + f'\n- The humidity is {humidity}%. It is very dry!'
-    else:
-        message_string = message_string + f'\n- The humidity is at {humidity}%'
+        message_string = message_string + f'\n- The humidity is {humidity}%. It is very dry! ' + chr(0x1F3DC)
+
     if wind_speed >= 21:
-        message_string = message_string + f'\n- The wind speed is {wind_speed} mph. It is very windy today!'
-    else:
-        message_string = message_string + f'\n- The wind speed is {wind_speed} mph'
+        message_string = message_string + f'\n- The wind speed is {wind_speed} mph. It is very windy today! ' + chr(0x1F4A8)
+
     if cloudiness >= 80:
-        message_string = message_string + f'\n- The sky is {cloudiness}% cloudy today'
+        message_string = message_string + f'\n- The sky is {cloudiness}% cloudy today ' + chr(0x2601)
     
     if verbose:
         print(message_string)
@@ -201,7 +199,6 @@ def rain(days = 1):
         print("Failed to retrieve forecast data.")
 
 def daily_rain_report(verbose = False, plot = False):
-    # get forecasted weather information
     forecast_list = forecast_24hours()
 
     # compose the message to share if it will rain today or not, and if so when it will start and the highest probability of rain. if the probability is 100% for more than 3 hours of the day, then print 'It gone rain.'
@@ -226,56 +223,63 @@ def daily_rain_report(verbose = False, plot = False):
 
     if rain_flag or verbose:
         # plot the forecasted rain for the day 
-        import matplotlib.pyplot as plt
-        import numpy as np
-        import datetime
-        from matplotlib.dates import date2num
-
-        # get the forecasted rain for the day
-        forecasted_rain = []
-        forecasted_times = []
-        for forecast in forecast_list:
-            forecast_time = forecast['dt_txt']
-            forecast_temp = forecast['main']['temp']
-            forecast_description = forecast['weather'][0]['description']
-            
-            chance_of_rain = 0
-            if 'rain' in forecast:
-                chance_of_rain = forecast['rain']['3h']
-            
-            forecasted_rain.append(chance_of_rain)
-            forecasted_times.append(forecast_time)
-
-        # convert the forecasted times to datetime objects
-        forecasted_times = [datetime.datetime.strptime(time, '%Y-%m-%d %H:%M:%S') for time in forecasted_times]
-
-        # convert to hours only
-        forecasted_times = [time.strftime('%H:%M') for time in forecasted_times]
-
-        # convert mm to inches
-        forecasted_rain = [rain * 0.0393701 for rain in forecasted_rain]
-
-        # plot the forecasted rain for the day
-        fig, ax = plt.subplots()
-        ax.plot(forecasted_times, forecasted_rain)
-        ax.set(xlabel='Time', ylabel='Rain (inches)', title=f'Forecasted Rain for {datetime.date.today().strftime("%m-%d-%Y")} (Beta Feature)')
-        ax.grid()
-        plt.xticks(rotation=45)
-        plt.tight_layout()
-        plt.savefig(r'pipesbot\plots\forecasted_rain.png')
-        if verbose:
-            plt.show()
-        plt.close()
+        plot_rain()
+        
     
     return message_string
-    
+
+def plot_rain(verbose = False):
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import datetime
+    from matplotlib.dates import date2num
+
+    # get the forecasted rain for the day
+    forecast_list = forecast_24hours()
+    forecasted_rain = []
+    forecasted_times = []
+    for forecast in forecast_list:
+        forecast_time = forecast['dt_txt']
+        forecast_temp = forecast['main']['temp']
+        forecast_description = forecast['weather'][0]['description']
+        
+        chance_of_rain = 0
+        if 'rain' in forecast:
+            chance_of_rain = forecast['rain']['3h']
+        
+        forecasted_rain.append(chance_of_rain)
+        forecasted_times.append(forecast_time)
+
+    # convert the forecasted times to datetime objects
+    forecasted_times = [datetime.datetime.strptime(time, '%Y-%m-%d %H:%M:%S') for time in forecasted_times]
+
+    # convert to hours only
+    forecasted_times = [time.strftime('%H:%M') for time in forecasted_times]
+
+    # convert mm to inches
+    forecasted_rain = [rain * 0.0393701 for rain in forecasted_rain]
+
+    # plot the forecasted rain for the day
+    fig, ax = plt.subplots()
+    ax.plot(forecasted_times, forecasted_rain)
+    ax.set(xlabel='Time', ylabel='Rain (inches)', title=f'Forecasted Rain for {datetime.date.today().strftime("%m-%d-%Y")} (Beta Feature)')
+    ax.grid()
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    # limit y axis to be greater than 0
+    plt.ylim(bottom=0)
+    plt.savefig(r'pipesbot\plots\forecasted_rain.png')
     if verbose:
-        print(message_string)
-    return message_string
+        plt.show()
+    plt.close()
+
 
 if __name__ == '__main__':
     #real_time_weather()
     #forecast_24hours()
-    print(daily_rain_report(verbose=True))
+    #print(daily_rain_report(verbose=True))
     #print(real_time_weather_report(plot=True))
     #print('\U0001F975\U0001F525')
+    print(chr(0x2197))
+    print(chr(0x2198))
+    print(chr(0x1F525))

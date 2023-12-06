@@ -10,7 +10,6 @@ postable_content/
 .cache
 *.BAT
 *.db
-*.JPG
 *.mp4
 *.gif
 *.webp

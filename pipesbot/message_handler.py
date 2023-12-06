@@ -8,6 +8,7 @@ from pipesbot import postables
 from pipesbot import gas
 from pipesbot import spotify_search
 from pipesbot import commit_id_getter
+from pipesbot import weather
 from pipesbot.postable_content import meme_selector
 import os
 import discord
@@ -56,6 +57,10 @@ async def handler(client, message):
         await message.channel.send(f'Your author id is {message.author.id}')
         await message.channel.send(f'This channel id is {message.channel.id}')
         await message.channel.send(schedule_messages.morning_report_message())
+        weather.plot_rain()
+        await message.channel.send(file=discord.File(r'pipesbot\plots\forecasted_rain.png'))
+        # delete the plot
+        os.remove(r'pipesbot\plots\forecasted_rain.png')
         return
     if message.content.startswith('pipesbot,'): #GPT reply
         msg = message.content.replace('pipesbot,','')

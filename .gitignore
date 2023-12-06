@@ -17,3 +17,4 @@ postable_content/
 *.mov
 *.avif
 *.yml
+pipesbot\plots\forecasted_rain.png

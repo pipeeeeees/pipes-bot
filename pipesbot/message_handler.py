@@ -48,15 +48,14 @@ async def handler(client, message):
     if message.author == pbot:
         return
     if message.content.startswith('$reboot'):
-        await dm_channel.send(f'Rebooting server. Hold on...')
+        await message.channel.send(f'Rebooting server. Hold on...')
         reboot_command = ["sudo", "/sbin/reboot"]
         subprocess.run(reboot_command, check=True)
-    if message.content.startswith('$test'):
+    if message.content.startswith('$test') and message.author.name == 'pipeeeeees':
+        await message.channel.send(f'Computer name: {os.uname()[1]}\nLocal IP address: {os.popen("hostname -I").read()}')
         await message.channel.send(f'Your author id is {message.author.id}')
         await message.channel.send(f'This channel id is {message.channel.id}')
-        return
-    if message.content.startswith('$dave'):
-        await message.channel.send(f'Computer name: {os.uname()[1]}\nLocal IP address: {os.popen("hostname -I").read()}')
+        await message.channel.send(schedule_messages.morning_report_message())
         return
     if message.content.startswith('pipesbot,'): #GPT reply
         msg = message.content.replace('pipesbot,','')

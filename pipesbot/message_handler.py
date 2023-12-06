@@ -59,8 +59,16 @@ async def handler(client, message):
         await message.channel.send(schedule_messages.morning_report_message())
         weather.plot_rain()
         await message.channel.send(file=discord.File(r'pipesbot\plots\forecasted_rain.png'))
-        # delete the plot
         os.remove(r'pipesbot\plots\forecasted_rain.png')
+        db = db_handler.DatabaseHandler(r'pipesbot/database/messages.db')
+        instances = db.get_all_instances()
+        if len(instances) != 0:
+            for instance in instances:
+                m_user = await client.fetch_user(instance['user_id'])
+                m_channel = client.get_channel(instance['channel_id'])
+                await message.channel.send(f'user_id:{m_user.name}, channel_id:{m_channel}, date:{instance["month"]}-{instance["day"]}-{instance["year"]}, time:{instance["hour"]}:{instance["minute"]}, message:{instance["message"]}')
+        else:
+            await message.channel.send("Nothing here, chief.")
         return
     if message.content.startswith('pipesbot,'): #GPT reply
         msg = message.content.replace('pipesbot,','')
@@ -295,7 +303,8 @@ async def handler(client, message):
         for embed in embeds:
             # extract information from the embed
             embed_title = embed.title
-            if 'new commit' in embed_title:
+            # check that its running on the right computer (cl-debian)
+            if 'new commit' in embed_title and os.uname()[1] == 'cl-debian':
                 git_pull_command = ["git", "pull"]
                 subprocess.run(git_pull_command, cwd="/home/compulab/pipes-bot/pipes-bot", check=True)
 

@@ -50,7 +50,8 @@ class MessageScheduler:
             message_string = message_string + morning_report_message()
 
             # store gas prices in a pandas dataframe indexed by datetime and store in a pickle file
-            pipeeeeees_channel = await self.client.fetch_channel(PIPEEEEEES_DISCORD_ID)
+            user = await self.client.fetch_user(PIPEEEEEES_DISCORD_ID)
+            dm_channel = await user.create_dm()
             if os.path.exists(r'pipesbot\gas_prices_ga.pkl'):
                 # if it does, load the dataframe
                 gas_prices = pd.read_pickle(r'pipesbot\gas_prices_ga.pkl')
@@ -59,15 +60,15 @@ class MessageScheduler:
                 gas_prices.loc[datetime.datetime.now()] = [reg,mid,prem,die]
                 # save the dataframe
                 gas_prices.to_pickle(r'pipesbot\gas_prices_ga.pkl')
-                await pipeeeeees_channel.send(f'successfully updated gas_prices_ga.pkl')
+                await dm_channel.send(f'successfully updated gas_prices_ga.pkl')
             else:
                 # if it doesn't, create a new dataframe and save it
                 reg,mid,prem,die = gas.get_gas('GA')
                 gas_prices = pd.DataFrame([[reg,mid,prem,die]],columns=['Regular','Midgrade','Premium','Diesel'],index=[datetime.datetime.now()])
                 gas_prices.to_pickle(r'pipesbot\gas_prices_ga.pkl')
-                await pipeeeeees_channel.send(f'successfully created gas_prices_ga.pkl')
+                await dm_channel.send(f'successfully created gas_prices_ga.pkl')
             
-            await pipeeeeees_channel.send(f'```{gas_prices}```')
+            await dm_channel.send(f'```{gas_prices}```')
 
 
             
@@ -102,7 +103,7 @@ class MessageScheduler:
             await self.check_scheduled_messages()
 
             # every day at 9:00 AM
-            if now.hour == 9 and now.minute == 0 and min_flag == False:
+            if now.hour == 9 and now.minute == 00 and min_flag == False:
                 min_flag = True
                 await self.morning_report()
 

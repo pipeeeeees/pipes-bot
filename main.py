@@ -36,8 +36,6 @@ async def on_ready():
 
     # Fetch the user object
     user = await client.fetch_user(PIPEEEEEES_DISCORD_ID)
-
-    # Send the initial message to the user
     dm_channel = await user.create_dm()
     await dm_channel.send(f'{client.user} is now online on commit ID {commit_id_getter.get_git_commit_id(os.getcwd())}.')
 

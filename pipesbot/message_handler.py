@@ -69,6 +69,11 @@ async def handler(client, message):
                 await message.channel.send(f'user_id:{m_user.name}, channel_id:{m_channel}, date:{instance["month"]}-{instance["day"]}-{instance["year"]}, time:{instance["hour"]}:{instance["minute"]}, message:{instance["message"]}')
         else:
             await message.channel.send("Nothing here, chief.")
+        user = await client.fetch_user(PIPEEEEEES_DISCORD_ID)
+        dm_channel = await user.create_dm()
+        # write a test message to pipeeeeees_channel
+        await dm_channel.send(f'YO!')
+
         return
     if message.content.startswith('pipesbot,'): #GPT reply
         msg = message.content.replace('pipesbot,','')

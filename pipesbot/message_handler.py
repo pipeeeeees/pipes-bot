@@ -85,7 +85,7 @@ async def handler(client, message):
             except:
                 await dm_channel.send(f'No gas prices pickle file exists.')
                 # send us a list of files and directories within pipesbot/ in the cwd
-                list_of_files = os.listdir(os.getcwd() + '/pipesbot/pickles/gas_prices_ga.pkl')
+                list_of_files = os.listdir(os.getcwd() + '/pipesbot/pickles')
                 await dm_channel.send(f'```{list_of_files}```')
         return
     if message.content.startswith('pipesbot,'): #GPT reply

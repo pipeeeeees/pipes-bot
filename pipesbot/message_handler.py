@@ -51,10 +51,8 @@ async def handler(client, message):
         return
     if message.content.startswith('$reboot'):
         await message.channel.send(f'Rebooting server. Hold on...')
-        restart_command = ["cd /home/pipeeeeees/pipes-bot"]
-        subprocess.run(restart_command, check=True)
-        restart_command = ["python3 main.py"]
-        subprocess.run(restart_command, check=True)
+        restart_command = "cd /home/pipeeeeees/pipes-bot && python3 main.py"
+        subprocess.run(restart_command, shell=True, check=True)
         exit(0)
     if message.content.startswith('$test') and message.author.name == 'pipeeeeees':
         await message.channel.send(f'Computer name: {os.uname()[1]}')
@@ -327,9 +325,7 @@ async def handler(client, message):
                 dm_channel = await user.create_dm()
                 await dm_channel.send(f'New commit detected. Rebooting...')
 
-                restart_command = ["cd /home/pipeeeeees/pipes-bot"]
-                subprocess.run(restart_command, check=True)
-                restart_command = ["python3 main.py"]
-                subprocess.run(restart_command, check=True)
+                restart_command = "cd /home/pipeeeeees/pipes-bot && python3 main.py"
+                subprocess.run(restart_command, shell=True, check=True)
                 exit(0)
     return

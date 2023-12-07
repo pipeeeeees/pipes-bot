@@ -75,7 +75,7 @@ async def handler(client, message):
         dm_channel = await user.create_dm()
         await dm_channel.send(f'YO!')
         # print the pickle dataframe for gas as a dm to user
-        if os.path.exists(r'pipesbot\pickles\gas_prices_ga.pkl'):
+        if os.path.exists(os.getcwd() + '/pipesbot/pickles\gas_prices_ga.pkl'):
             gas_prices = pd.read_pickle(r'pipesbot\pickles\gas_prices_ga.pkl')
             await dm_channel.send(f'```{gas_prices}```')
         else:

@@ -315,7 +315,7 @@ async def handler(client, message):
             embed_title = embed.title
             if 'new commit' in embed_title and os.uname()[1] == 'bytespeed':
                 git_pull_command = ["git", "pull"]
-                subprocess.run(git_pull_command, cwd="/home/pipeeeeees/pipes-bot/pipes-bot", check=True)
+                subprocess.run(git_pull_command, cwd="/home/pipeeeeees/pipes-bot", check=True)
 
                 user = await client.fetch_user(PIPEEEEEES_DISCORD_ID)
                 dm_channel = await user.create_dm()

@@ -79,6 +79,8 @@ async def handler(client, message):
             await dm_channel.send(f'```{gas_prices}```')
         else:
             await dm_channel.send(f'No gas prices pickle file exists.')
+            # send cwd
+            await dm_channel.send(f'cwd: {os.getcwd()}')
         return
     if message.content.startswith('pipesbot,'): #GPT reply
         msg = message.content.replace('pipesbot,','')

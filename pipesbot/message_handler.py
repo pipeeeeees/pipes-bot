@@ -56,8 +56,6 @@ async def handler(client, message):
         exit(0)
     if message.content.startswith('$test') and message.author.name == 'pipeeeeees':
         await message.channel.send(f'Computer name: {os.uname()[1]}')
-        await message.channel.send(f'Your author id is {message.author.id}')
-        await message.channel.send(f'This channel id is {message.channel.id}')
         await message.channel.send(schedule_messages.morning_report_message())
         weather.plot_rain()
         await message.channel.send(file=discord.File(r'pipesbot\plots\forecasted_rain.png'))
@@ -76,8 +74,12 @@ async def handler(client, message):
         await dm_channel.send(f'YO!')
         # print the pickle dataframe for gas as a dm to user
         if os.path.exists(os.getcwd() + '/pipesbot/pickles/gas_prices_ga.pkl'):
-            gas_prices = pd.read_pickle(r'pipesbot\pickles\gas_prices_ga.pkl')
-            await dm_channel.send(f'```{gas_prices}```')
+            try:
+                gas_prices = pd.read_pickle(r'pipesbot\pickles\gas_prices_ga.pkl')
+                await dm_channel.send(f'```{gas_prices}```')
+            # print out the error to the dm_channel
+            except Exception as e:
+                await dm_channel.send(f'```{e}```')
         else:
             try:
                 gas_prices = pd.read_pickle(r'pipesbot\pickles\gas_prices_ga.pkl')

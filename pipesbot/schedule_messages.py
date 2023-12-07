@@ -41,37 +41,36 @@ class MessageScheduler:
 
 
         if datetime.date.today().weekday() < 7:
-
-            # ensure no leftover plots remain
-            if os.path.exists(r'pipesbot\plots\forecasted_rain.png'):
-                os.remove(r'pipesbot\plots\forecasted_rain.png')
-            
-            # compose the message
-            message_string = message_string + morning_report_message()
-
-            # store gas prices in a pandas dataframe indexed by datetime and store in a pickle file
             user = await self.client.fetch_user(PIPEEEEEES_DISCORD_ID)
             dm_channel = await user.create_dm()
-            if os.path.exists(r'pipesbot\pickles\gas_prices_ga.pkl'):
-                # if it does, load the dataframe
-                gas_prices = pd.read_pickle(r'pipesbot\pickles\gas_prices_ga.pkl')
-                # append the new data
-                reg,mid,prem,die = gas.get_gas('GA')
-                gas_prices.loc[datetime.datetime.now()] = [reg,mid,prem,die]
-                # save the dataframe
-                gas_prices.to_pickle(r'pipesbot\pickles\gas_prices_ga.pkl')
-                await dm_channel.send(f'successfully updated gas_prices_ga.pkl')
-            else:
-                # if it doesn't, create a new dataframe and save it
-                reg,mid,prem,die = gas.get_gas('GA')
-                gas_prices = pd.DataFrame([[reg,mid,prem,die]],columns=['Regular','Midgrade','Premium','Diesel'],index=[datetime.datetime.now()])
-                gas_prices.to_pickle(r'pipesbot\pickles\gas_prices_ga.pkl')
-                await dm_channel.send(f'successfully created gas_prices_ga.pkl')
-            
-            await dm_channel.send(f'```{gas_prices}```')
+            try:
+                # ensure no leftover plots remain
+                if os.path.exists(r'pipesbot\plots\forecasted_rain.png'):
+                    os.remove(r'pipesbot\plots\forecasted_rain.png')
+                
+                # compose the message
+                message_string = message_string + morning_report_message()
 
+                # store gas prices in a pandas dataframe indexed by datetime and store in a pickle file
+                if os.path.exists(r'pipesbot\pickles\gas_prices_ga.pkl'):
+                    # if it does, load the dataframe
+                    gas_prices = pd.read_pickle(r'pipesbot\pickles\gas_prices_ga.pkl')
+                    # append the new data
+                    reg,mid,prem,die = gas.get_gas('GA')
+                    gas_prices.loc[datetime.datetime.now()] = [reg,mid,prem,die]
+                    # save the dataframe
+                    gas_prices.to_pickle(r'pipesbot\pickles\gas_prices_ga.pkl')
+                    await dm_channel.send(f'successfully updated gas_prices_ga.pkl')
+                else:
+                    # if it doesn't, create a new dataframe and save it
+                    reg,mid,prem,die = gas.get_gas('GA')
+                    gas_prices = pd.DataFrame([[reg,mid,prem,die]],columns=['Regular','Midgrade','Premium','Diesel'],index=[datetime.datetime.now()])
+                    gas_prices.to_pickle(r'pipesbot\pickles\gas_prices_ga.pkl')
+                    await dm_channel.send(f'successfully created gas_prices_ga.pkl')
+                await dm_channel.send(f'```{gas_prices}```')
+            except Exception as e:
+                await dm_channel.send(f'```{e}```')
 
-            
         # Send checker
         if message_string != '':
             channel = await self.client.fetch_channel(channel_id)
@@ -81,7 +80,7 @@ class MessageScheduler:
             if os.path.exists(r'pipesbot\plots\forecasted_rain.png'):
                 try:
                     await channel.send(file=discord.File(r'pipesbot\plots\forecasted_rain.png'))
-                    time.sleep(1)
+                    time.sleep(15)
                     await channel.send(file=discord.File(r'pipesbot\images]its-gon-rain.jpg'))
                 except:
                     pass
@@ -89,8 +88,6 @@ class MessageScheduler:
                 os.remove(r'pipesbot\plots\forecasted_rain.png')
             await asyncio.sleep(60) 
         
-        
-
     # Start the scheduler loop
     async def start(self):
         counter = 0

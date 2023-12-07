@@ -51,8 +51,10 @@ async def handler(client, message):
         return
     if message.content.startswith('$reboot'):
         await message.channel.send(f'Rebooting server. Hold on...')
-        reboot_command = ["sudo", "/sbin/reboot"]
-        subprocess.run(reboot_command, check=True)
+        restart_command = ["cd", "/home/pipeeeeees/pipes-bot"]
+        subprocess.run(restart_command, check=True)
+        restart_command = ["python3", "main.py"]
+        subprocess.run(restart_command, check=True)
     if message.content.startswith('$test') and message.author.name == 'pipeeeeees':
         await message.channel.send(f'Computer name: {os.uname()[1]}')
         await message.channel.send(f'Your author id is {message.author.id}')
@@ -325,8 +327,8 @@ async def handler(client, message):
                 await dm_channel.send(f'New commit detected. Rebooting...')
 
                 # run /usr/bin/python3 /home/pipeeeeees/pipes-bot/main.py on ubuntu and then exit(0) here
-                reboot_command = ["cd", "/home/pipeeeeees/pipes-bot"]
-                subprocess.run(reboot_command, check=True)
-                reboot_command = ["python3", "main.py"]
-                subprocess.run(reboot_command, check=True)
+                restart_command = ["cd", "/home/pipeeeeees/pipes-bot"]
+                subprocess.run(restart_command, check=True)
+                restart_command = ["python3", "main.py"]
+                subprocess.run(restart_command, check=True)
     return

@@ -75,14 +75,14 @@ async def handler(client, message):
         # print the pickle dataframe for gas as a dm to user
         if os.path.exists(os.getcwd() + '/pipesbot/pickles/gas_prices_ga.pkl'):
             try:
-                gas_prices = pd.read_pickle(r'pipesbot\pickles\gas_prices_ga.pkl')
+                gas_prices = pd.read_pickle(os.getcwd() + '/pipesbot/pickles/gas_prices_ga.pkl')
                 await dm_channel.send(f'```{gas_prices}```')
             # print out the error to the dm_channel
             except Exception as e:
                 await dm_channel.send(f'```{e}```')
         else:
             try:
-                gas_prices = pd.read_pickle(r'pipesbot\pickles\gas_prices_ga.pkl')
+                gas_prices = pd.read_pickle(os.getcwd() + '/pipesbot/pickles/gas_prices_ga.pkl')
                 await dm_channel.send(f'```{gas_prices}```')
             except:
                 await dm_channel.send(f"os.getcwd() + '/pipesbot/pickles/gas_prices_ga.pkl' does not exist")

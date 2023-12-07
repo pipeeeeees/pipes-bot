@@ -324,6 +324,9 @@ async def handler(client, message):
                 dm_channel = await user.create_dm()
                 await dm_channel.send(f'New commit detected. Rebooting...')
 
-                reboot_command = ["sudo", "/sbin/reboot"]
+                # run /usr/bin/python3 /home/pipeeeeees/pipes-bot/main.py on ubuntu and then exit(0) here
+                reboot_command = ["cd", "/home/pipeeeeees/pipes-bot"]
+                subprocess.run(reboot_command, check=True)
+                reboot_command = ["python3", "main.py"]
                 subprocess.run(reboot_command, check=True)
     return

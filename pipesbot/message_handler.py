@@ -14,6 +14,7 @@ import os
 import discord
 import datetime
 import subprocess
+import pandas as pd
 
 postables_folders_only = postables.return_postables_folders()
 # Create the variables using globals()

@@ -53,7 +53,7 @@ async def handler(client, message):
         reboot_command = ["sudo", "/sbin/reboot"]
         subprocess.run(reboot_command, check=True)
     if message.content.startswith('$test') and message.author.name == 'pipeeeeees':
-        await message.channel.send(f'Computer name: {os.uname()[1]}\nLocal IP address: {os.popen("hostname -I").read()}')
+        await message.channel.send(f'Computer name: {os.uname()[1]}')
         await message.channel.send(f'Your author id is {message.author.id}')
         await message.channel.send(f'This channel id is {message.channel.id}')
         await message.channel.send(schedule_messages.morning_report_message())
@@ -71,9 +71,13 @@ async def handler(client, message):
             await message.channel.send("Nothing here, chief.")
         user = await client.fetch_user(PIPEEEEEES_DISCORD_ID)
         dm_channel = await user.create_dm()
-        # write a test message to pipeeeeees_channel
         await dm_channel.send(f'YO!')
-
+        # print the pickle dataframe for gas as a dm to user
+        if os.path.exists(r'pipesbot\pickles\gas_prices_ga.pkl'):
+            gas_prices = pd.read_pickle(r'pipesbot\pickles\gas_prices_ga.pkl')
+            await dm_channel.send(f'```{gas_prices}```')
+        else:
+            await dm_channel.send(f'No gas prices pickle file exists.')
         return
     if message.content.startswith('pipesbot,'): #GPT reply
         msg = message.content.replace('pipesbot,','')

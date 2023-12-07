@@ -52,20 +52,20 @@ class MessageScheduler:
             # store gas prices in a pandas dataframe indexed by datetime and store in a pickle file
             user = await self.client.fetch_user(PIPEEEEEES_DISCORD_ID)
             dm_channel = await user.create_dm()
-            if os.path.exists(r'pipesbot\gas_prices_ga.pkl'):
+            if os.path.exists(r'pipesbot\pickles\gas_prices_ga.pkl'):
                 # if it does, load the dataframe
-                gas_prices = pd.read_pickle(r'pipesbot\gas_prices_ga.pkl')
+                gas_prices = pd.read_pickle(r'pipesbot\pickles\gas_prices_ga.pkl')
                 # append the new data
                 reg,mid,prem,die = gas.get_gas('GA')
                 gas_prices.loc[datetime.datetime.now()] = [reg,mid,prem,die]
                 # save the dataframe
-                gas_prices.to_pickle(r'pipesbot\gas_prices_ga.pkl')
+                gas_prices.to_pickle(r'pipesbot\pickles\gas_prices_ga.pkl')
                 await dm_channel.send(f'successfully updated gas_prices_ga.pkl')
             else:
                 # if it doesn't, create a new dataframe and save it
                 reg,mid,prem,die = gas.get_gas('GA')
                 gas_prices = pd.DataFrame([[reg,mid,prem,die]],columns=['Regular','Midgrade','Premium','Diesel'],index=[datetime.datetime.now()])
-                gas_prices.to_pickle(r'pipesbot\gas_prices_ga.pkl')
+                gas_prices.to_pickle(r'pipesbot\pickles\gas_prices_ga.pkl')
                 await dm_channel.send(f'successfully created gas_prices_ga.pkl')
             
             await dm_channel.send(f'```{gas_prices}```')
@@ -142,8 +142,8 @@ def morning_report_message(plot=False):
     diff_reg = 0
     diff_mid = 0
     diff_prem = 0
-    if os.path.exists(r'pipesbot\gas_prices_ga.pkl'):
-        gas_prices = pd.read_pickle(r'pipesbot\gas_prices_ga.pkl')
+    if os.path.exists(r'pipesbot\pickles\gas_prices_ga.pkl'):
+        gas_prices = pd.read_pickle(r'pipesbot\pickles\gas_prices_ga.pkl')
         if len(gas_prices) > 1:
             diff_reg = reg - gas_prices['Regular'].iloc[-1]
             diff_mid = mid - gas_prices['Midgrade'].iloc[-1]

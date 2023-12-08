@@ -175,4 +175,4 @@ def morning_report_message(plot=False):
     return message_string
 
 if __name__ == '__main__':
-    print(morning_report_message(True))
+    print(morning_report_message())

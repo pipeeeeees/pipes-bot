@@ -18,3 +18,4 @@ postable_content/
 *.yml
 pipesbot\plots\forecasted_rain.png
 *.pkl
+pipesbot/plots/forecasted_rain.png

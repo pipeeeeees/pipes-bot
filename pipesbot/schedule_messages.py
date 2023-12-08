@@ -81,7 +81,7 @@ class MessageScheduler:
                 try:
                     await channel.send(file=discord.File(r'pipesbot\plots\forecasted_rain.png'))
                     time.sleep(15)
-                    await channel.send(file=discord.File(r'pipesbot\images]its-gon-rain.jpg'))
+                    await channel.send(file=discord.File(r'pipesbot\images\its-gon-rain.jpg'))
                 except:
                     pass
                 # delete the plot

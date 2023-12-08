@@ -57,7 +57,7 @@ async def handler(client, message):
     if message.content.startswith('$test') and message.author.name == 'pipeeeeees':
         try:
             await message.channel.send(f'Computer name: {os.uname()[1]}')
-            await message.channel.send(schedule_messages.morning_report_message())
+            #await message.channel.send(schedule_messages.morning_report_message())
             weather.plot_rain()
             await message.channel.send(file=discord.File(r'pipesbot\plots\forecasted_rain.png'))
             os.remove(r'pipesbot\plots\forecasted_rain.png')

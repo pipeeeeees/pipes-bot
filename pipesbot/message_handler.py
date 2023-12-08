@@ -55,40 +55,43 @@ async def handler(client, message):
         subprocess.run(restart_command, shell=True, check=True)
         exit(0)
     if message.content.startswith('$test') and message.author.name == 'pipeeeeees':
-        await message.channel.send(f'Computer name: {os.uname()[1]}')
-        await message.channel.send(schedule_messages.morning_report_message())
-        weather.plot_rain()
-        await message.channel.send(file=discord.File(r'pipesbot\plots\forecasted_rain.png'))
-        os.remove(r'pipesbot\plots\forecasted_rain.png')
-        db = db_handler.DatabaseHandler(r'pipesbot/database/messages.db')
-        instances = db.get_all_instances()
-        if len(instances) != 0:
-            for instance in instances:
-                m_user = await client.fetch_user(instance['user_id'])
-                m_channel = client.get_channel(instance['channel_id'])
-                await message.channel.send(f'user_id:{m_user.name}, channel_id:{m_channel}, date:{instance["month"]}-{instance["day"]}-{instance["year"]}, time:{instance["hour"]}:{instance["minute"]}, message:{instance["message"]}')
-        else:
-            await message.channel.send("Nothing here, chief.")
-        user = await client.fetch_user(PIPEEEEEES_DISCORD_ID)
-        dm_channel = await user.create_dm()
-        await dm_channel.send(f'YO!')
-        # print the pickle dataframe for gas as a dm to user
-        if os.path.exists(os.getcwd() + '/pipesbot/pickles/gas_prices_ga.pkl'):
-            try:
-                gas_prices = pd.read_pickle(os.getcwd() + '/pipesbot/pickles/gas_prices_ga.pkl')
-                await dm_channel.send(f'```{gas_prices}```')
-            # print out the error to the dm_channel
-            except Exception as e:
-                await dm_channel.send(f'```{e}```')
-        else:
-            try:
-                gas_prices = pd.read_pickle(os.getcwd() + '/pipesbot/pickles/gas_prices_ga.pkl')
-                await dm_channel.send(f'```{gas_prices}```')
-            except:
-                await dm_channel.send(f"os.getcwd() + '/pipesbot/pickles/gas_prices_ga.pkl' does not exist")
-                # send us a list of files and directories within pipesbot/ in the cwd
-                list_of_files = os.listdir(os.getcwd() + '/pipesbot/pickles')
-                await dm_channel.send(f'```{list_of_files}```')
+        try:
+            await message.channel.send(f'Computer name: {os.uname()[1]}')
+            await message.channel.send(schedule_messages.morning_report_message())
+            weather.plot_rain()
+            await message.channel.send(file=discord.File(r'pipesbot\plots\forecasted_rain.png'))
+            os.remove(r'pipesbot\plots\forecasted_rain.png')
+            db = db_handler.DatabaseHandler(r'pipesbot/database/messages.db')
+            instances = db.get_all_instances()
+            if len(instances) != 0:
+                for instance in instances:
+                    m_user = await client.fetch_user(instance['user_id'])
+                    m_channel = client.get_channel(instance['channel_id'])
+                    await message.channel.send(f'user_id:{m_user.name}, channel_id:{m_channel}, date:{instance["month"]}-{instance["day"]}-{instance["year"]}, time:{instance["hour"]}:{instance["minute"]}, message:{instance["message"]}')
+            else:
+                await message.channel.send("Nothing here, chief.")
+            user = await client.fetch_user(PIPEEEEEES_DISCORD_ID)
+            dm_channel = await user.create_dm()
+            await dm_channel.send(f'YO!')
+            # print the pickle dataframe for gas as a dm to user
+            if os.path.exists(os.getcwd() + '/pipesbot/pickles/gas_prices_ga.pkl'):
+                try:
+                    gas_prices = pd.read_pickle(os.getcwd() + '/pipesbot/pickles/gas_prices_ga.pkl')
+                    await dm_channel.send(f'```{gas_prices}```')
+                # print out the error to the dm_channel
+                except Exception as e:
+                    await dm_channel.send(f'```{e}```')
+            else:
+                try:
+                    gas_prices = pd.read_pickle(os.getcwd() + '/pipesbot/pickles/gas_prices_ga.pkl')
+                    await dm_channel.send(f'```{gas_prices}```')
+                except:
+                    await dm_channel.send(f"os.getcwd() + '/pipesbot/pickles/gas_prices_ga.pkl' does not exist")
+                    # send us a list of files and directories within pipesbot/ in the cwd
+                    list_of_files = os.listdir(os.getcwd() + '/pipesbot/pickles')
+                    await dm_channel.send(f'```{list_of_files}```')
+        except Exception as e:
+            await message.channel.send(f'```{e}```')
         return
     if message.content.startswith('pipesbot,'): #GPT reply
         msg = message.content.replace('pipesbot,','')

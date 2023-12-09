@@ -1,4 +1,5 @@
 from pipesbot import PIPEEEEEES_DISCORD_ID
+from pipesbot import STEEBON_ATL_STATION_ID
 from pipesbot import schedule_messages
 from pipesbot import db_handler
 from pipesbot import gpt_api
@@ -15,6 +16,7 @@ import discord
 import datetime
 import subprocess
 import pandas as pd
+import traceback
 
 postables_folders_only = postables.return_postables_folders()
 # Create the variables using globals()
@@ -68,13 +70,19 @@ async def handler(client, message):
         subprocess.run(restart_command, shell=True, check=True)
         exit(0)
     if message.content.startswith('$test') and message.author.name == 'pipeeeeees':
+        user = await client.fetch_user(PIPEEEEEES_DISCORD_ID)
+        dm_channel = await user.create_dm()
         try:
+            # 1 print the computer name pipes-bot is running on
             await message.channel.send(f'Computer name: {os.uname()[1]}')
-            #await message.channel.send(schedule_messages.morning_report_message())
+            # 2 check that the morning report message is working
+            schedule_messages.morning_report_command()
+            # 3 check that the rain plot is working
             weather.plot_rain()
             await message.channel.send(file=discord.File(r'pipesbot\plots\forecasted_rain.png'))
-            os.remove(r'pipesbot\plots\forecasted_rain.png')
+            schedule_messages.clear_rain_plot()
             db = db_handler.DatabaseHandler(r'pipesbot/database/messages.db')
+            # 4 check that the database is working, print all instances
             instances = db.get_all_instances()
             if len(instances) != 0:
                 for instance in instances:
@@ -83,28 +91,27 @@ async def handler(client, message):
                     await message.channel.send(f'user_id:{m_user.name}, channel_id:{m_channel}, date:{instance["month"]}-{instance["day"]}-{instance["year"]}, time:{instance["hour"]}:{instance["minute"]}, message:{instance["message"]}')
             else:
                 await message.channel.send("Nothing here, chief.")
-            user = await client.fetch_user(PIPEEEEEES_DISCORD_ID)
-            dm_channel = await user.create_dm()
-            # print the pickle dataframe for gas as a dm to user
-            if os.path.exists(os.getcwd() + '/pipesbot/pickles/gas_prices_ga.pkl'):
-                try:
-                    gas_prices = pd.read_pickle(os.getcwd() + '/pipesbot/pickles/gas_prices_ga.pkl')
-                    await dm_channel.send(f'```{gas_prices}```')
-                # print out the error to the dm_channel
-                except Exception as e:
-                    await dm_channel.send(f'```{e}```')
+            # 5 print the pickle files in pipesbot/pickles
+            if schedule_messages.check_gas_prices_historical():
+                await dm_channel.send(f'Found gas_prices_ga.pkl....')
+                schedule_messages.daily_update_gas_prices()
+                gas_prices = schedule_messages.get_gas_prices_historical()
+                await dm_channel.send(f'```{gas_prices}```')
             else:
-                try:
-                    gas_prices = pd.read_pickle(os.getcwd() + '/pipesbot/pickles/gas_prices_ga.pkl')
-                    await dm_channel.send(f'```{gas_prices}```')
-                except:
-                    await dm_channel.send(f"os.getcwd() + '/pipesbot/pickles/gas_prices_ga.pkl' does not exist")
-                    # send us a list of files and directories within pipesbot/ in the cwd
-                    list_of_files = os.listdir(os.getcwd() + '/pipesbot/pickles')
-                    await dm_channel.send(f'```{list_of_files}```')
+                await dm_channel.send(f'No gas prices found.')
+                schedule_messages.create_gas_prices_historical()
+                await dm_channel.send(f'Created gas_prices_ga.pkl....')
+                reg,mid,prem,die = gas.get_gas('GA')
+                schedule_messages.append_gas_prices_historical(reg,mid,prem,die,datetime.datetime.now())
+                await dm_channel.send(f'Updated gas_prices_ga.pkl....')
+                gas_prices = schedule_messages.get_gas_prices_historical()
+                await dm_channel.send(f'```{gas_prices}```')
         except Exception as e:
-            await message.channel.send(f'```{e}```')
+            exception_traceback = traceback.format_exc()
+            await dm_channel.send(f'```{e}```\n```{exception_traceback}```')
         return
+    if message.content == '$report' and message.author.name == 'pipeeeeees':
+        schedule_messages.morning_report_command(channel_id=STEEBON_ATL_STATION_ID)
     if message.content.startswith('pipesbot,'): #GPT reply
         msg = message.content.replace('pipesbot,','')
         await message.channel.send(gpt_api.requestz(msg))

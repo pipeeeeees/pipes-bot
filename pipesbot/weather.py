@@ -213,13 +213,15 @@ def daily_rain_report(verbose = False, plot = False):
         chance_of_rain = 0
         if 'rain' in forecast:
             chance_of_rain = forecast['rain']['3h']
+            # convert mm to inches
+            chance_of_rain = chance_of_rain * 0.0393701
         
         if chance_of_rain > 0:
             rain_flag = True
-            message_string = message_string + f'\n- It will rain today. The highest chance of rain is {chance_of_rain} mm at {forecast_time}'
+            message_string = message_string + f'\n- It will rain today \U0001F327'
             break
     if not rain_flag:
-        message_string = message_string + f'\n- It will not rain today'
+        message_string = message_string + f'\n- It will not rain today \U00002600'
 
     if rain_flag or verbose:
         # plot the forecasted rain for the day 
@@ -280,6 +282,7 @@ if __name__ == '__main__':
     #print(daily_rain_report(verbose=True))
     #print(real_time_weather_report(plot=True))
     #print('\U0001F975\U0001F525')
-    print(chr(0x2197))
-    print(chr(0x2198))
-    print(chr(0x1F525))
+    print('\U0001F327')
+    print('\U0001F64C')
+    # sun unicode: \U00002600
+    print('\U00002600')

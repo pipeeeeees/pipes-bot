@@ -15,8 +15,14 @@ import traceback
 
 pipesbot_dir = 'pipesbot'
 pickle_subdir = 'pickles'
+images_subdir = 'images'
+plots_subdir = 'plots'
+its_gone_rain_file = 'its-gon-rain.jpg'
 pickle_file = 'gas_prices_ga.pkl'
+forecasted_rain_plot_file = 'forecasted_rain.png'
 
+forecasted_rain_plot_file_path = os.path.join(pipesbot_dir, plots_subdir, forecasted_rain_plot_file)
+its_gone_rain_file_path = os.path.join(pipesbot_dir, images_subdir, its_gone_rain_file)
 ga_gas_pickle_path = os.path.join(pipesbot_dir, pickle_subdir, pickle_file)
 
 class MessageScheduler:
@@ -61,9 +67,9 @@ class MessageScheduler:
             # send a rain plot if one was generated
             if check_rain_plot():
                 try:
-                    await channel.send(file=discord.File(r'pipesbot\plots\forecasted_rain.png'))
+                    await channel.send(file=discord.File(forecasted_rain_plot_file_path))
                     time.sleep(15)
-                    await channel.send(file=discord.File(r'pipesbot\images\its-gon-rain.jpg'))
+                    await channel.send(file=discord.File(its_gone_rain_file_path))
                 except:
                     pass
                 clear_rain_plot()
@@ -135,23 +141,23 @@ def morning_report_message(plot=False):
                 diff_prem = prem - float(gas_prices['Premium'].iloc[-1].removeprefix('$'))
                 message_string = message_string + f'\n- In Georgia, the state-wide average gas prices are:'
                 if diff_reg > 0:
-                    message_string = message_string + f'\n\t\tRegular: {reg}' + chr(0x2197)
+                    message_string = message_string + f'\n\t\tRegular: {reg} ' + chr(0x2197)
                 elif diff_reg < 0:
-                    message_string = message_string + f'\n\t\tRegular: {reg}' + chr(0x2198)
+                    message_string = message_string + f'\n\t\tRegular: {reg} ' + chr(0x2198)
                 else:
-                    message_string = message_string + f'\n\t\tRegular: {reg}' + chr(0x2192)
+                    message_string = message_string + f'\n\t\tRegular: {reg} ' + chr(0x2192)
                 if diff_mid > 0:
-                    message_string = message_string + f'\n\t\tMidgrade: {mid}' + chr(0x2197)
+                    message_string = message_string + f'\n\t\tMidgrade: {mid} ' + chr(0x2197)
                 elif diff_mid < 0:
-                    message_string = message_string + f'\n\t\tMidgrade: {mid}' + chr(0x2198)
+                    message_string = message_string + f'\n\t\tMidgrade: {mid} ' + chr(0x2198)
                 else:
-                    message_string = message_string + f'\n\t\tMidgrade: {mid}' + chr(0x2192)
+                    message_string = message_string + f'\n\t\tMidgrade: {mid} ' + chr(0x2192)
                 if diff_prem > 0:
-                    message_string = message_string + f'\n\t\tPremium: {prem}' + chr(0x2197)
+                    message_string = message_string + f'\n\t\tPremium: {prem} ' + chr(0x2197)
                 elif diff_prem < 0:
-                    message_string = message_string + f'\n\t\tPremium: {prem}' + chr(0x2198)
+                    message_string = message_string + f'\n\t\tPremium: {prem} ' + chr(0x2198)
                 else:
-                    message_string = message_string + f'\n\t\tPremium: {prem}' + chr(0x2192)
+                    message_string = message_string + f'\n\t\tPremium: {prem} ' + chr(0x2192)
             else:
                 message_string = message_string + f'\n- In Georgia, the state-wide average gas prices are:\n\t\tRegular: {reg}\n\t\tMidgrade: {mid}\n\t\tPremium: {prem}'
         else:
@@ -173,7 +179,7 @@ def morning_report_command(channel_id=PIPEEEEEES_DISCORD_ID):
 
 def clear_rain_plot():
     if check_rain_plot():
-        os.remove(r'pipesbot\plots\forecasted_rain.png')
+        os.remove(forecasted_rain_plot_file_path)
         return True
     else:
         return False
@@ -193,7 +199,7 @@ def create_gas_prices_historical():
         return False
 
 def check_rain_plot():
-    if os.path.exists(r'pipesbot\plots\forecasted_rain.png'):
+    if os.path.exists(forecasted_rain_plot_file_path):
         return True
     else:
         return False

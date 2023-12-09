@@ -78,9 +78,9 @@ async def handler(client, message):
             # 2 check that the morning report message is working
             schedule_messages.morning_report_command()
             # 3 check that the rain plot is working
-            weather.plot_rain()
-            await message.channel.send(file=discord.File(r'pipesbot\plots\forecasted_rain.png'))
-            schedule_messages.clear_rain_plot()
+            #weather.plot_rain()
+            #await message.channel.send(file=discord.File(r'pipesbot\plots\forecasted_rain.png'))
+            #schedule_messages.clear_rain_plot()
             db = db_handler.DatabaseHandler(r'pipesbot/database/messages.db')
             # 4 check that the database is working, print all instances
             instances = db.get_all_instances()

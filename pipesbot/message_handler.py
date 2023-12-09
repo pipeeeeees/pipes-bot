@@ -21,6 +21,8 @@ postables_folders_only = postables.return_postables_folders()
 for folder in postables_folders_only:
     globals()[folder] = meme_selector.MemeFolder(folder.lower())
 
+shutup = False
+
 async def send_message(client, channel_id, message):
     channel = await client.fetch_channel(channel_id)
     await channel.send(message)
@@ -48,6 +50,17 @@ async def handler(client, message):
     
     # Do not reply to yourself, Pipes Bot!
     if message.author == pbot:
+        return
+    if message.author.name == 'pipeeeeees' and message.content.startswith('$shutup'):
+        global shutup
+        if shutup == False:
+            shutup = True
+            await message.channel.send('Shutting up.')
+        else:
+            shutup = False
+            await message.channel.send('I am no longer shutting up.')
+        return
+    if shutup == True:
         return
     if message.content.startswith('$reboot'):
         await message.channel.send(f'Rebooting server. Hold on...')

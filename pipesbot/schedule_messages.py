@@ -163,7 +163,7 @@ def morning_report_message(plot=False):
         else:
             message_string = message_string + f'\n- In Georgia, the state-wide average gas prices are:\n\t\tRegular: {reg}\n\t\tMidgrade: {mid}\n\t\tPremium: {prem}'
 
-        message_string = message_string + weather.real_time_weather_report(plot=True)
+        #message_string = message_string + weather.real_time_weather_report(plot=True)
         message_string = message_string + f'\n- NOTE: The weather feature is in beta and may not be accurate yet. Please report any issues.'
 
     except Exception as e:

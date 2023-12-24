@@ -136,21 +136,21 @@ def morning_report_message(plot=False):
         if check_gas_prices_historical():
             gas_prices = get_gas_prices_historical()
             if len(gas_prices) > 1:
-                last_reg_price = float(gas_prices['Regular'].iloc[-1].removeprefix('$'))
+                last_reg_price = float(gas_prices['Regular'].iloc[-2].removeprefix('$'))
                 diff_reg = reg - last_reg_price
                 message_string = message_string + f'{reg} - {type(reg)}'
                 message_string = message_string + f'{last_reg_price} - {type(last_reg_price)}'
 
-                last_mid_price = float(gas_prices['Midgrade'].iloc[-1].removeprefix('$'))
+                last_mid_price = float(gas_prices['Midgrade'].iloc[-2].removeprefix('$'))
                 diff_mid = mid - last_mid_price
                 message_string = message_string + f'{mid} - {type(mid)}'
                 message_string = message_string + f'{last_mid_price} - {type(last_mid_price)}'
 
-                last_prem_price = float(gas_prices['Premium'].iloc[-1].removeprefix('$'))
+                last_prem_price = float(gas_prices['Premium'].iloc[-2].removeprefix('$'))
                 diff_prem = prem - last_prem_price
                 message_string = message_string + f'{prem} - {type(prem)}'
                 message_string = message_string + f'{last_prem_price} - {type(last_prem_price)}'
-                
+
                 message_string = message_string + f'\n- In Georgia, the state-wide average gas prices are:'
                 if diff_reg > 0:
                     message_string = message_string + f'\n\t\tRegular: {reg} ' + chr(0x2197)

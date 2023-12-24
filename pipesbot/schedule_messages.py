@@ -138,19 +138,20 @@ def morning_report_message(plot=False):
             if len(gas_prices) > 1:
                 last_reg_price = float(gas_prices['Regular'].iloc[-2].removeprefix('$'))
                 diff_reg = reg - last_reg_price
-                message_string = message_string + f'{reg} - {type(reg)}'
-                message_string = message_string + f'{last_reg_price} - {type(last_reg_price)}'
+                #message_string = message_string + f'{reg} - {type(reg)}'
+                #message_string = message_string + f'{last_reg_price} - {type(last_reg_price)}'
 
                 last_mid_price = float(gas_prices['Midgrade'].iloc[-2].removeprefix('$'))
                 diff_mid = mid - last_mid_price
-                message_string = message_string + f'{mid} - {type(mid)}'
-                message_string = message_string + f'{last_mid_price} - {type(last_mid_price)}'
+                #message_string = message_string + f'{mid} - {type(mid)}'
+                #message_string = message_string + f'{last_mid_price} - {type(last_mid_price)}'
 
                 last_prem_price = float(gas_prices['Premium'].iloc[-2].removeprefix('$'))
                 diff_prem = prem - last_prem_price
-                message_string = message_string + f'{prem} - {type(prem)}'
-                message_string = message_string + f'{last_prem_price} - {type(last_prem_price)}'
-
+                #message_string = message_string + f'{prem} - {type(prem)}'
+                #message_string = message_string + f'{last_prem_price} - {type(last_prem_price)}'
+                
+                # GAS PRICES
                 message_string = message_string + f'\n- In Georgia, the state-wide average gas prices are:'
                 if diff_reg > 0:
                     message_string = message_string + f'\n\t\tRegular: {reg} ' + chr(0x2197)
@@ -175,8 +176,14 @@ def morning_report_message(plot=False):
         else:
             message_string = message_string + f'\n- In Georgia, the state-wide average gas prices are:\n\t\tRegular: {reg}\n\t\tMidgrade: {mid}\n\t\tPremium: {prem}'
 
-        #message_string = message_string + weather.real_time_weather_report(plot=True)
-        message_string = message_string + f'\n- NOTE: The weather feature is in beta and may not be accurate yet. Please report any issues.'
+        # WEATHER
+        short_message_string = message_string
+        message_string = message_string + weather.real_time_weather_report(plot=True)
+        # if message string is 2000 chars or more, send the short version
+        if len(message_string) >= 2000:
+            message_string = short_message_string
+        message_string = message_string + weather.real_time_weather_report(plot=False)
+        
 
     except Exception as e:
         exception_traceback = traceback.format_exc()

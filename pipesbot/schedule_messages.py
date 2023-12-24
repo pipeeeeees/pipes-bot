@@ -182,9 +182,7 @@ def morning_report_message(plot=False):
         # if message string is 2000 chars or more, send the short version
         if len(message_string) >= 2000:
             message_string = short_message_string
-        message_string = message_string + weather.real_time_weather_report(plot=False)
         
-
     except Exception as e:
         exception_traceback = traceback.format_exc()
         message_string = f'An error occurred while trying to compose the morning report.\n'

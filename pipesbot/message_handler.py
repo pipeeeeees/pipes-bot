@@ -139,7 +139,7 @@ async def handler(client, message):
 
     # `$report` command
     if message.content == '$report':
-        schedule_messages.morning_report_command(channel_id=STEEBON_ATL_STATION_ID)
+        schedule_messages.morning_report_command(channel_id=channel.id)
     
     # `pipesbot, blah blah blah` command
     if message.content.startswith('pipesbot,'): #GPT reply

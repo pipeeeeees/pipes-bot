@@ -168,6 +168,13 @@ async def handler(client, message):
             if outcome:
                 await message.channel.send(file=discord.File(schedule_messages.ga_gas_historical_plot_path))
                 schedule_messages.clear_gas_prices_historical_plot()
+        return
+    
+    if message.content.startswith('$gas data'):
+        schedule_messages.daily_update_gas_prices()
+        gas_prices = schedule_messages.get_gas_prices_historical()
+        await message.channel.send(f'```{gas_prices}```')
+        return
     
     # `$commitid` command
     if message.content.startswith('$commitid'):

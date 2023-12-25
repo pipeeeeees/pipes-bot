@@ -164,7 +164,7 @@ async def handler(client, message):
                 else:
                     await message.channel.send(f'Something went wrong... :(')
         except:
-            outcome = schedule_messages.plot_gas_prices_historical(30)
+            outcome = schedule_messages.plot_gas_prices_historical(9999)
             if outcome:
                 await message.channel.send(file=discord.File(schedule_messages.ga_gas_historical_plot_path))
                 schedule_messages.clear_gas_prices_historical_plot()

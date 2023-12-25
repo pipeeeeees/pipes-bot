@@ -153,6 +153,22 @@ async def handler(client, message):
         await message.channel.send(gpt_api.requestz(msg))
         return
     
+    if message.content.startswith('$gas historical'):
+        try:
+            num = int(message.content.replace('$gas historical ',''))
+            if num > 0 and num < 100:
+                outcome = schedule_messages.plot_gas_prices_historical(num)
+                if outcome:
+                    await message.channel.send(file=discord.File(schedule_messages.ga_gas_historical_plot_path))
+                    schedule_messages.clear_gas_prices_historical_plot()
+                else:
+                    await message.channel.send(f'Something went wrong... :(')
+        except:
+            outcome = schedule_messages.plot_gas_prices_historical(30)
+            if outcome:
+                await message.channel.send(file=discord.File(schedule_messages.ga_gas_historical_plot_path))
+                schedule_messages.clear_gas_prices_historical_plot()
+    
     # `$commitid` command
     if message.content.startswith('$commitid'):
         await message.channel.send(f'The commit id I am running on is {commit_id_getter.get_git_commit_id(os.getcwd())}')

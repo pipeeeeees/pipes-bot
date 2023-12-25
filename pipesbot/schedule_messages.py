@@ -76,6 +76,21 @@ class MessageScheduler:
                 except:
                     pass
                 clear_rain_plot()
+
+            # if the day is monday, send the gas prices historical plot
+            if datetime.datetime.now().weekday() == 0:
+                outcome = plot_gas_prices_historical(14)
+                if outcome:
+                    await channel.send(file=discord.File(ga_gas_historical_plot_path))
+                    clear_gas_prices_historical_plot()
+            
+            # if the day is the first of the month, send the gas prices historical plot with 60 days
+            if datetime.datetime.now().day == 1:
+                outcome = plot_gas_prices_historical(60)
+                if outcome:
+                    await channel.send(file=discord.File(ga_gas_historical_plot_path))
+                    clear_gas_prices_historical_plot()
+
             await asyncio.sleep(60) 
         
     # Start the scheduler loop

@@ -4,6 +4,7 @@ import datetime
 import discord
 import time
 import pandas as pd
+import matplotlib.pyplot as plt
 from pipesbot import db_handler
 from pipesbot import pollen
 from pipesbot import gas
@@ -20,10 +21,12 @@ plots_subdir = 'plots'
 its_gone_rain_file = 'its-gon-rain.jpg'
 pickle_file = 'gas_prices_ga.pkl'
 forecasted_rain_plot_file = 'forecasted_rain.png'
+gas_historical_plot_file = 'gas_historical.png'
 
 forecasted_rain_plot_file_path = os.path.join(pipesbot_dir, plots_subdir, forecasted_rain_plot_file)
 its_gone_rain_file_path = os.path.join(pipesbot_dir, images_subdir, its_gone_rain_file)
 ga_gas_pickle_path = os.path.join(pipesbot_dir, pickle_subdir, pickle_file)
+ga_gas_historical_plot_path = os.path.join(pipesbot_dir, plots_subdir, gas_historical_plot_file)
 
 class MessageScheduler:
     def __init__(self, client):
@@ -258,6 +261,17 @@ def get_string_gas_prices_historical():
         return f'```{gas_prices}```'
     else:
         return None
+    
+# plot the last 7 entries of gas prices
+def plot_gas_prices_historical():
+    if check_gas_prices_historical():
+        gas_prices = pd.read_pickle(ga_gas_pickle_path)
+        gas_prices = gas_prices.tail(7)
+        gas_prices.plot()
+        plt.savefig(ga_gas_historical_plot_path)
+        return True
+    else:
+        return False
 
 if __name__ == '__main__':
     print(morning_report_message())

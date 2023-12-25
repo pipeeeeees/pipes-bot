@@ -41,7 +41,6 @@ async def handler(client, message):
     created_at = message.created_at
     edited_at = message.edited_at
 
-    # Say who and what the message sent was in server terminal
     if message.author == pbot:
         if str(message.content) == '':
             print(f'  {str(message.author)} sent content to {channel}')
@@ -53,6 +52,8 @@ async def handler(client, message):
     # Do not reply to yourself, Pipes Bot!
     if message.author == pbot:
         return
+    
+    # `$shutup` command (only for pipeeeeees)
     if message.author.name == 'pipeeeeees' and message.content.startswith('$shutup'):
         global shutup
         if shutup == False:
@@ -64,11 +65,15 @@ async def handler(client, message):
         return
     if shutup == True:
         return
+    
+    # `$reboot` command
     if message.content.startswith('$reboot'):
         await message.channel.send(f'Rebooting server. Hold on...')
         restart_command = "cd /home/pipeeeeees/pipes-bot && python3 main.py"
         subprocess.run(restart_command, shell=True, check=True)
         exit(0)
+
+    # `$test` command
     if message.content.startswith('$test') and message.author.name == 'pipeeeeees':
         user = await client.fetch_user(PIPEEEEEES_DISCORD_ID)
         dm_channel = await user.create_dm()
@@ -91,12 +96,15 @@ async def handler(client, message):
                     await message.channel.send(f'user_id:{m_user.name}, channel_id:{m_channel}, date:{instance["month"]}-{instance["day"]}-{instance["year"]}, time:{instance["hour"]}:{instance["minute"]}, message:{instance["message"]}')
             else:
                 await message.channel.send("Nothing here, chief.")
+
+
+
             # 5 print the pickle files in pipesbot/pickles
             if schedule_messages.check_gas_prices_historical():
                 await dm_channel.send(f'Found gas_prices_ga.pkl....')
-                schedule_messages.daily_update_gas_prices()
-                gas_prices = schedule_messages.get_gas_prices_historical()
-                await dm_channel.send(f'```{gas_prices}```')
+                #schedule_messages.daily_update_gas_prices()
+                #gas_prices = schedule_messages.get_gas_prices_historical()
+                #await dm_channel.send(f'```{gas_prices}```')
             else:
                 await dm_channel.send(f'No gas prices found.')
                 schedule_messages.create_gas_prices_historical()
@@ -106,33 +114,58 @@ async def handler(client, message):
                 await dm_channel.send(f'Updated gas_prices_ga.pkl....')
                 gas_prices = schedule_messages.get_gas_prices_historical()
                 await dm_channel.send(f'```{gas_prices}```')
+
+            # send plot for gas prices
+            schedule_messages.plot_gas_prices_historical()
+            await dm_channel.send(file=discord.File(r'pipesbot\plots\gas_prices_historical.png'))
+            schedule_messages.clear_gas_prices_historical()
+
+            
+
         except Exception as e:
             exception_traceback = traceback.format_exc()
             await dm_channel.send(f'```{e}```\n```{exception_traceback}```')
         return
+    
+
+    # `$report` command
     if message.content == '$report' and message.author.name == 'pipeeeeees':
         schedule_messages.morning_report_command(channel_id=STEEBON_ATL_STATION_ID)
+    
+    # `pipesbot, blah blah blah` command
     if message.content.startswith('pipesbot,'): #GPT reply
         msg = message.content.replace('pipesbot,','')
         await message.channel.send(gpt_api.requestz(msg))
         return
+    
+    # `$pipesbot, blah blah blah` command
     elif message.content.startswith('$pipesbot,'):
         msg = message.content.replace('$pipesbot,','')
         await message.channel.send(gpt_api.requestz(msg))
         return
+    
+    # `$commitid` command
     if message.content.startswith('$commitid'):
         await message.channel.send(f'The commit id I am running on is {commit_id_getter.get_git_commit_id(os.getcwd())}')
         return
+    
+    # `$uptime` command
     if message.content.startswith('$uptime'):
         await message.channel.send(f'Pipes Bot has been online for {uptime.display_time_difference()}.')
         return
+    
+    # `$pollen` command
     if message.content.startswith('$pollen'):
         await message.channel.send(pollen.result_handler())
         return
+    
+    # postables
     for sub_folder in postables_folders_only:
         if sub_folder in str(message.content).lower():
             await message.channel.send(file=discord.File(globals()[sub_folder].return_path()))
             #return
+
+    # `$gas` command   
     if message.content.startswith('$gas'):
         if len(str(message.content)) != 4:
             if len(str(message.content).replace('$gas ','')) == 2:
@@ -156,6 +189,8 @@ async def handler(client, message):
         msg = 'To set a reminder, compose a message with the following format (24 hour time):\n\n$remindme, `mm-dd-yyyy`, `hh:mm`, `message` \n\nExample: `$remindme, 9-23-1999, 14:00, tell Steebon Happy Birthday`\n\nSend `$reminders` to see your currently scheduled reminders.'
         await message.channel.send(msg)
         return
+    
+
     if message.content.startswith('$remindme,'):
         # Parse the data
         msg = message.content.replace('$remindme,','')
@@ -185,6 +220,7 @@ async def handler(client, message):
         await send_message(client,channel.id, f"Ok. I will remind you on {date.strftime('%m-%d-%Y')} at {time.strftime('%H:%M')}.")
         return
     
+    # 
     if message.content.startswith('$birthday'):
         msg = message.content.replace('$birthday','')
         msg_split = msg.split('-')

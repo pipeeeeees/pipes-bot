@@ -91,7 +91,7 @@ class MessageScheduler:
                     await channel.send(file=discord.File(ga_gas_historical_plot_path))
                     clear_gas_prices_historical_plot()
 
-            await asyncio.sleep(60) 
+            await asyncio.sleep(65) 
         
     # Start the scheduler loop
     async def start(self):

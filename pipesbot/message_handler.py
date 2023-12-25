@@ -80,14 +80,21 @@ async def handler(client, message):
         try:
             # 1 print the computer name pipes-bot is running on
             await message.channel.send(f'Computer name: {os.uname()[1]}')
+
+
             # 2 check that the morning report message is working
             schedule_messages.morning_report_command()
+
+
             # 3 check that the rain plot is working
             #weather.plot_rain()
             #await message.channel.send(file=discord.File(r'pipesbot\plots\forecasted_rain.png'))
             #schedule_messages.clear_rain_plot()
-            db = db_handler.DatabaseHandler(r'pipesbot/database/messages.db')
+            #db = db_handler.DatabaseHandler(r'pipesbot/database/messages.db')
+
+
             # 4 check that the database is working, print all instances
+            """
             instances = db.get_all_instances()
             if len(instances) != 0:
                 for instance in instances:
@@ -96,7 +103,7 @@ async def handler(client, message):
                     await message.channel.send(f'user_id:{m_user.name}, channel_id:{m_channel}, date:{instance["month"]}-{instance["day"]}-{instance["year"]}, time:{instance["hour"]}:{instance["minute"]}, message:{instance["message"]}')
             else:
                 await message.channel.send("Nothing here, chief.")
-
+            """
 
 
             # 5 print the pickle files in pipesbot/pickles

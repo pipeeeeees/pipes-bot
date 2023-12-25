@@ -263,12 +263,58 @@ def get_string_gas_prices_historical():
         return None
     
 # plot the last 7 entries of gas prices
-def plot_gas_prices_historical():
+def plot_gas_prices_historical(number_of_days=7):
     if check_gas_prices_historical():
         gas_prices = pd.read_pickle(ga_gas_pickle_path)
-        gas_prices = gas_prices.tail(7)
-        gas_prices.plot()
-        plt.savefig(ga_gas_historical_plot_path)
+
+        # if number of entries is less than number_of_days, set number_of_days to the number of entries
+        if len(gas_prices) < number_of_days:
+            number_of_days = len(gas_prices)
+
+        gas_prices_reg = gas_prices['Regular']
+        gas_prices_reg = gas_prices_reg.iloc[-number_of_days:]
+        gas_prices_reg = gas_prices_reg.str.replace('$','')
+        gas_prices_reg = gas_prices_reg.astype(float)
+
+        gas_prices_mid = gas_prices['Midgrade']
+        gas_prices_mid = gas_prices_mid.iloc[-number_of_days:]
+        gas_prices_mid = gas_prices_mid.str.replace('$','')
+        gas_prices_mid = gas_prices_mid.astype(float)
+
+        gas_prices_prem = gas_prices['Premium']
+        gas_prices_prem = gas_prices_prem.iloc[-number_of_days:]
+        gas_prices_prem = gas_prices_prem.str.replace('$','')
+        gas_prices_prem = gas_prices_prem.astype(float)
+
+        gas_prices_die = gas_prices['Diesel']
+        gas_prices_die = gas_prices_die.iloc[-number_of_days:]
+        gas_prices_die = gas_prices_die.str.replace('$','')
+        gas_prices_die = gas_prices_die.astype(float)
+
+        gas_prices_dates = gas_prices.index
+        gas_prices_dates = gas_prices_dates[-number_of_days:]
+
+        # plot all in one plot
+        fig, ax = plt.subplots()
+        ax.plot(gas_prices_dates, gas_prices_reg, label='Regular')
+        ax.plot(gas_prices_dates, gas_prices_mid, label='Midgrade')
+        ax.plot(gas_prices_dates, gas_prices_prem, label='Premium')
+        ax.plot(gas_prices_dates, gas_prices_die, label='Diesel')
+        ax.set_xlabel('Date')
+        ax.set_ylabel('Price ($)')
+        ax.set_title('Georgia Avg Gas Prices')
+        ax.legend()
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+        plt.savefig(ga_gas_historical_plot_path) 
+        return True
+    else:
+        return False
+    
+# delete the gas prices historical plot
+def clear_gas_prices_historical_plot():
+    if check_gas_prices_historical():
+        os.remove(ga_gas_historical_plot_path)
         return True
     else:
         return False

@@ -138,7 +138,7 @@ async def handler(client, message):
     
 
     # `$report` command
-    if message.content == '$report' and message.author.name == 'pipeeeeees':
+    if message.content == '$report':
         schedule_messages.morning_report_command(channel_id=STEEBON_ATL_STATION_ID)
     
     # `pipesbot, blah blah blah` command

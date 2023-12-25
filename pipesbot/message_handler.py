@@ -123,10 +123,12 @@ async def handler(client, message):
                 await dm_channel.send(f'```{gas_prices}```')
 
             # send plot for gas prices
-            schedule_messages.plot_gas_prices_historical()
-            await dm_channel.send(file=discord.File(r'pipesbot\plots\gas_prices_historical.png'))
-            schedule_messages.clear_gas_prices_historical()
-
+            outcome = schedule_messages.plot_gas_prices_historical()
+            if outcome:
+                await dm_channel.send(file=discord.File(schedule_messages.ga_gas_historical_plot_path))
+                schedule_messages.clear_gas_prices_historical()
+            else:
+                await dm_channel.send(f'No gas prices found.')
             
 
         except Exception as e:

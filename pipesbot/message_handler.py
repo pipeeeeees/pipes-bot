@@ -109,9 +109,9 @@ async def handler(client, message):
             # 5 print the pickle files in pipesbot/pickles
             if schedule_messages.check_gas_prices_historical():
                 await dm_channel.send(f'Found gas_prices_ga.pkl....')
-                #schedule_messages.daily_update_gas_prices()
-                #gas_prices = schedule_messages.get_gas_prices_historical()
-                #await dm_channel.send(f'```{gas_prices}```')
+                schedule_messages.daily_update_gas_prices()
+                gas_prices = schedule_messages.get_gas_prices_historical()
+                await dm_channel.send(f'```{gas_prices}```')
             else:
                 await dm_channel.send(f'No gas prices found.')
                 schedule_messages.create_gas_prices_historical()
@@ -126,7 +126,7 @@ async def handler(client, message):
             outcome = schedule_messages.plot_gas_prices_historical()
             if outcome:
                 await dm_channel.send(file=discord.File(schedule_messages.ga_gas_historical_plot_path))
-                schedule_messages.clear_gas_prices_historical()
+                schedule_messages.clear_gas_prices_historical_plot()
             else:
                 await dm_channel.send(f'No gas prices found.')
             

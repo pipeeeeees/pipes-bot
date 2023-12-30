@@ -319,8 +319,8 @@ def plot_gas_prices_historical(number_of_days=7):
         #ax.plot(gas_prices_dates, gas_prices_die, label='Diesel')
         ax.set_ylim(ymin=0)
         ax.set_xlabel('Date')
-        ax.set_ylabel('Price ($)')
-        ax.set_title('Georgia Avg Gas Prices')
+        ax.set_ylabel('Price per Gallon ($)')
+        ax.set_title(f'GA Average Gas Prices (last {number_of_days} days)')
         # legend in upper left
         ax.legend(loc='upper left')
         plt.xticks(rotation=45)

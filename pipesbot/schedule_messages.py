@@ -317,6 +317,7 @@ def plot_gas_prices_historical(number_of_days=7):
         ax.plot(gas_prices_dates, gas_prices_mid, label='Midgrade')
         ax.plot(gas_prices_dates, gas_prices_prem, label='Premium')
         #ax.plot(gas_prices_dates, gas_prices_die, label='Diesel')
+        ax.set_ylim(ymin=0)
         ax.set_xlabel('Date')
         ax.set_ylabel('Price ($)')
         ax.set_title('Georgia Avg Gas Prices')

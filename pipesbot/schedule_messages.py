@@ -309,8 +309,7 @@ def plot_gas_prices_historical(number_of_days=7, zero_out=True):
 
         gas_prices_dates = gas_prices.index
         gas_prices_dates = gas_prices_dates[-number_of_days:]
-        # make dates in the format of MM/DD
-        gas_prices_dates = [date.strftime('%m/%d') for date in gas_prices_dates]
+        gas_prices_dates = [date.strftime('%A %m/%d') for date in gas_prices_dates]
 
         # plot all in one plot
         fig, ax = plt.subplots()
@@ -320,7 +319,7 @@ def plot_gas_prices_historical(number_of_days=7, zero_out=True):
         ax.plot(gas_prices_dates, gas_prices_reg, label='Regular')
         if zero_out:
             ax.set_ylim(ymin=0)
-        ax.set_xlabel('Date')
+        ax.set_xlabel('Date Recorded')
         ax.set_ylabel('Price per Gallon ($)')
         ax.set_title(f'Georgia Avg Gas Prices (last {number_of_days} entries)')
         # legend in upper left

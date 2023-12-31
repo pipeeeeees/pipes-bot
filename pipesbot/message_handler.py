@@ -105,13 +105,18 @@ async def handler(client, message):
                 await message.channel.send("Nothing here, chief.")
             """
 
+            time.sleep(3)
 
             # 5 print the pickle files in pipesbot/pickles
             if schedule_messages.check_gas_prices_historical():
                 await dm_channel.send(f'Found gas_prices_ga.pkl....')
                 schedule_messages.daily_update_gas_prices()
                 gas_prices = schedule_messages.get_gas_prices_historical()
-                await dm_channel.send(f'```{gas_prices}```')
+                with open('gas_prices.txt', 'w') as f:
+                    f.write(gas_prices)
+                await dm_channel.send(file=discord.File(r'gas_prices.txt'))
+                os.remove('gas_prices.txt')
+
             else:
                 await dm_channel.send(f'No gas prices found.')
                 schedule_messages.create_gas_prices_historical()
@@ -120,7 +125,10 @@ async def handler(client, message):
                 schedule_messages.append_gas_prices_historical(reg,mid,prem,die,datetime.datetime.now())
                 await dm_channel.send(f'Updated gas_prices_ga.pkl....')
                 gas_prices = schedule_messages.get_gas_prices_historical()
-                await dm_channel.send(f'```{gas_prices}```')
+                with open('gas_prices.txt', 'w') as f:
+                    f.write(gas_prices)
+                await dm_channel.send(file=discord.File(r'gas_prices.txt'))
+                os.remove('gas_prices.txt')
 
             # send plot for gas prices
             outcome = schedule_messages.plot_gas_prices_historical(number_of_days=9999, zero_out=True)

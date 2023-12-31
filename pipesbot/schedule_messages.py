@@ -316,7 +316,7 @@ def plot_gas_prices_historical(number_of_days=7, zero_out=True):
 
         # plot all in one plot
         fig, ax = plt.subplots()
-        ax.plot(gas_prices_dates, gas_prices_die, label='Diesel')
+        #ax.plot(gas_prices_dates, gas_prices_die, label='Diesel')
         ax.plot(gas_prices_dates, gas_prices_prem, label='Premium')
         ax.plot(gas_prices_dates, gas_prices_mid, label='Midgrade')
         ax.plot(gas_prices_dates, gas_prices_reg, label='Regular')

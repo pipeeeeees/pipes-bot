@@ -17,6 +17,7 @@ import datetime
 import subprocess
 import pandas as pd
 import traceback
+import asyncio
 
 postables_folders_only = postables.return_postables_folders()
 # Create the variables using globals()
@@ -84,6 +85,7 @@ async def handler(client, message):
 
             # 2 check that the morning report message is working
             schedule_messages.morning_report_command()
+            await asyncio.sleep(2) 
 
 
             # 3 check that the rain plot is working

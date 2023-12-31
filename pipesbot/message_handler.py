@@ -110,6 +110,7 @@ async def handler(client, message):
                 await dm_channel.send(f'Found gas_prices_ga.pkl....')
                 schedule_messages.daily_update_gas_prices()
                 gas_prices = schedule_messages.get_gas_prices_historical()
+                gas_prices = gas_prices.to_string()
                 with open('gas_prices.txt', 'w') as f:
                     f.write(gas_prices)
                 await dm_channel.send(file=discord.File(r'gas_prices.txt'))
@@ -123,6 +124,7 @@ async def handler(client, message):
                 schedule_messages.append_gas_prices_historical(reg,mid,prem,die,datetime.datetime.now())
                 await dm_channel.send(f'Updated gas_prices_ga.pkl....')
                 gas_prices = schedule_messages.get_gas_prices_historical()
+                gas_prices = gas_prices.to_string()
                 with open('gas_prices.txt', 'w') as f:
                     f.write(gas_prices)
                 await dm_channel.send(file=discord.File(r'gas_prices.txt'))

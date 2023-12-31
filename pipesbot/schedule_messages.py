@@ -309,11 +309,14 @@ def plot_gas_prices_historical(number_of_days=7, zero_out=True):
 
         gas_prices_dates = gas_prices.index
         gas_prices_dates = gas_prices_dates[-number_of_days:]
-        gas_prices_dates = [date.strftime('%A\n%m/%d') for date in gas_prices_dates]
+        if number_of_days <= 10:
+            gas_prices_dates = [date.strftime('%A\n%m/%d') for date in gas_prices_dates]
+        else:
+            gas_prices_dates = [date.strftime('%m/%d') for date in gas_prices_dates]
 
         # plot all in one plot
         fig, ax = plt.subplots()
-        #ax.plot(gas_prices_dates, gas_prices_die, label='Diesel')
+        ax.plot(gas_prices_dates, gas_prices_die, label='Diesel')
         ax.plot(gas_prices_dates, gas_prices_prem, label='Premium')
         ax.plot(gas_prices_dates, gas_prices_mid, label='Midgrade')
         ax.plot(gas_prices_dates, gas_prices_reg, label='Regular')

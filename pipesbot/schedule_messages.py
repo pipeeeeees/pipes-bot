@@ -79,14 +79,14 @@ class MessageScheduler:
 
             # if the day is monday, send the gas prices historical plot
             if datetime.datetime.now().weekday() == 0:
-                outcome = plot_gas_prices_historical(14)
+                outcome = plot_gas_prices_historical(number_of_days=14, zero_out=False)
                 if outcome:
                     await channel.send(file=discord.File(ga_gas_historical_plot_path))
                     clear_gas_prices_historical_plot()
             
             # if the day is the first of the month, send the gas prices historical plot with 60 days
             if datetime.datetime.now().day == 1:
-                outcome = plot_gas_prices_historical(60)
+                outcome = plot_gas_prices_historical(number_of_days=60, zero_out=False)
                 if outcome:
                     await channel.send(file=discord.File(ga_gas_historical_plot_path))
                     clear_gas_prices_historical_plot()
@@ -135,13 +135,14 @@ def morning_report_message(plot=False):
     message_string = ''
 
     try:
-        message_string = message_string + f"Good morning! Here is your Atlanta Morning Report for {datetime.datetime.now().strftime('%B %d, %Y')}:"
+        message_string = message_string + f"Here is your Atlanta Morning Report for {datetime.datetime.now().strftime('%A, %B %d, %Y')}:"
         
         pollen_cnt = pollen.get_atl_pollen_count()
         if type(pollen_cnt) == int:
             message_string = message_string + f'\n- The pollen count for today is {pollen_cnt} ' + chr(0x1F333)
         else:
-            message_string = message_string + f'\n- The pollen count is not available at this time.'
+            #message_string = message_string + f'\n- The pollen count is not available at this time.'
+            pass
 
         reg, mid, prem, die = gas.get_gas('GA')
         reg = float(reg.removeprefix('$'))
@@ -278,7 +279,7 @@ def get_string_gas_prices_historical():
         return None
     
 # plot the last 7 entries of gas prices
-def plot_gas_prices_historical(number_of_days=7):
+def plot_gas_prices_historical(number_of_days=7, zero_out=True):
     if check_gas_prices_historical():
         gas_prices = pd.read_pickle(ga_gas_pickle_path)
 
@@ -313,11 +314,12 @@ def plot_gas_prices_historical(number_of_days=7):
 
         # plot all in one plot
         fig, ax = plt.subplots()
-        ax.plot(gas_prices_dates, gas_prices_reg, label='Regular')
-        ax.plot(gas_prices_dates, gas_prices_mid, label='Midgrade')
-        ax.plot(gas_prices_dates, gas_prices_prem, label='Premium')
         #ax.plot(gas_prices_dates, gas_prices_die, label='Diesel')
-        ax.set_ylim(ymin=0)
+        ax.plot(gas_prices_dates, gas_prices_prem, label='Premium')
+        ax.plot(gas_prices_dates, gas_prices_mid, label='Midgrade')
+        ax.plot(gas_prices_dates, gas_prices_reg, label='Regular')
+        if zero_out:
+            ax.set_ylim(ymin=0)
         ax.set_xlabel('Date')
         ax.set_ylabel('Price per Gallon ($)')
         ax.set_title(f'Georgia Avg Gas Prices (last {number_of_days} entries)')

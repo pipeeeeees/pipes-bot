@@ -123,7 +123,7 @@ async def handler(client, message):
                 await dm_channel.send(f'```{gas_prices}```')
 
             # send plot for gas prices
-            outcome = schedule_messages.plot_gas_prices_historical(99)
+            outcome = schedule_messages.plot_gas_prices_historical(number_of_days=9999, zero_out=True)
             if outcome:
                 await dm_channel.send(file=discord.File(schedule_messages.ga_gas_historical_plot_path))
                 schedule_messages.clear_gas_prices_historical_plot()
@@ -157,14 +157,14 @@ async def handler(client, message):
         try:
             num = int(message.content.replace('$gas historical ',''))
             if num > 0 and num < 100:
-                outcome = schedule_messages.plot_gas_prices_historical(num)
+                outcome = schedule_messages.plot_gas_prices_historical(number_of_days=num, zero_out=True)
                 if outcome:
                     await message.channel.send(file=discord.File(schedule_messages.ga_gas_historical_plot_path))
                     schedule_messages.clear_gas_prices_historical_plot()
                 else:
                     await message.channel.send(f'Something went wrong... :(')
         except:
-            outcome = schedule_messages.plot_gas_prices_historical(9999)
+            outcome = schedule_messages.plot_gas_prices_historical(number_of_days=9999, zero_out=True)
             if outcome:
                 await message.channel.send(file=discord.File(schedule_messages.ga_gas_historical_plot_path))
                 schedule_messages.clear_gas_prices_historical_plot()

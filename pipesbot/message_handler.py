@@ -183,7 +183,11 @@ async def handler(client, message):
     if message.content.startswith('$gas data'):
         schedule_messages.daily_update_gas_prices()
         gas_prices = schedule_messages.get_gas_prices_historical()
-        await message.channel.send(f'```{gas_prices}```')
+        gas_prices = gas_prices.to_string()
+        with open('gas_prices.txt', 'w') as f:
+            f.write(gas_prices)
+        await message.channel.send(file=discord.File(r'gas_prices.txt'))
+        os.remove('gas_prices.txt')
         return
     
     # `$commitid` command

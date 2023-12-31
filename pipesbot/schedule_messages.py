@@ -309,7 +309,7 @@ def plot_gas_prices_historical(number_of_days=7, zero_out=True):
 
         gas_prices_dates = gas_prices.index
         gas_prices_dates = gas_prices_dates[-number_of_days:]
-        gas_prices_dates = [date.strftime('%A %m/%d') for date in gas_prices_dates]
+        gas_prices_dates = [date.strftime('%A\n%m/%d') for date in gas_prices_dates]
 
         # plot all in one plot
         fig, ax = plt.subplots()

@@ -17,7 +17,6 @@ import datetime
 import subprocess
 import pandas as pd
 import traceback
-import time
 
 postables_folders_only = postables.return_postables_folders()
 # Create the variables using globals()
@@ -105,8 +104,6 @@ async def handler(client, message):
             else:
                 await message.channel.send("Nothing here, chief.")
             """
-
-            time.sleep(2)
 
             # 5 print the pickle files in pipesbot/pickles
             if schedule_messages.check_gas_prices_historical():

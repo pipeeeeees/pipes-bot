@@ -79,7 +79,7 @@ class MessageScheduler:
 
             # if the day is monday, send the gas prices historical plot
             if datetime.datetime.now().weekday() == 0:
-                outcome = plot_gas_prices_historical(number_of_days=14, zero_out=True)
+                outcome = plot_gas_prices_historical(number_of_days=14, zero_out=False)
                 if outcome:
                     await channel.send(file=discord.File(ga_gas_historical_plot_path))
                     clear_gas_prices_historical_plot()

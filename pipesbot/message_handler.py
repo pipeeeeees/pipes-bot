@@ -141,8 +141,8 @@ async def handler(client, message):
                 await dm_channel.send(f'No gas prices found.')
 
             # post it-gon-rain
-            dm_channel.send(file=discord.File(r'pipesbot\images\its-gon-rain.jpg'))
-            
+            dm_channel.send(file=discord.File(r'images\its-gon-rain.jpg'))
+
             
 
         except Exception as e:

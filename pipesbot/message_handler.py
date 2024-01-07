@@ -143,6 +143,7 @@ async def handler(client, message):
             # post it-gon-rain
             dm_channel.send(file=discord.File(r'pipesbot\images\its-gon-rain.jpg'))
             
+            
 
         except Exception as e:
             exception_traceback = traceback.format_exc()

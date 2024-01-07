@@ -139,20 +139,6 @@ async def handler(client, message):
                 schedule_messages.clear_gas_prices_historical_plot()
             else:
                 await dm_channel.send(f'No gas prices found.')
-
-            # send a list of all files within the images folder
-            await dm_channel.send(f'```{os.listdir("pipesbot/images")}```')
-
-            # post it-gon-rain from os cwd + /pipesbot/images/it-gon-rain.jpg
-            await dm_channel.send(file=discord.File(r'pipesbot/images/its-gon-rain.jpg'))
-
-            # send rain plot
-            weather.plot_rain()
-            await dm_channel.send(file=discord.File(r'pipesbot/plots/forecasted_rain.png'))
-            schedule_messages.clear_rain_plot()
-
-            
-
             
 
         except Exception as e:

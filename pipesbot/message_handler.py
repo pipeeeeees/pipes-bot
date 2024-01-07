@@ -148,6 +148,8 @@ async def handler(client, message):
         except Exception as e:
             exception_traceback = traceback.format_exc()
             await dm_channel.send(f'```{e}```\n```{exception_traceback}```')
+            #send cwd
+            await dm_channel.send(f'```{os.getcwd()}```')
         return
     
 

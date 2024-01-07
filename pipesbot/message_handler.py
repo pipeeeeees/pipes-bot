@@ -139,6 +139,9 @@ async def handler(client, message):
                 schedule_messages.clear_gas_prices_historical_plot()
             else:
                 await dm_channel.send(f'No gas prices found.')
+
+            # post it-gon-rain
+            dm_channel.send(file=discord.File(r'pipesbot\images\its-gon-rain.jpg'))
             
 
         except Exception as e:

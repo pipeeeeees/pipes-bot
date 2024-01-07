@@ -146,6 +146,11 @@ async def handler(client, message):
             # post it-gon-rain from os cwd + /pipesbot/images/it-gon-rain.jpg
             await dm_channel.send(file=discord.File(r'pipesbot/images/its-gon-rain.jpg'))
 
+            # send rain plot
+            weather.plot_rain()
+            await dm_channel.send(file=discord.File(r'pipesbot/plots/forecasted_rain.png'))
+            schedule_messages.clear_rain_plot()
+
             
 
             

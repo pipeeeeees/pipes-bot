@@ -67,12 +67,13 @@ class MessageScheduler:
         if message_string != '':
             await channel.send(message_string)
 
+            if 'It will rain today' in message_string:
+                await channel.send(file=discord.File(r'pipesbot/images/its-gon-rain.jpg'))
+
             # send a rain plot if one was generated
             if check_rain_plot():
                 try:
                     await channel.send(file=discord.File(forecasted_rain_plot_file_path))
-                    time.sleep(15)
-                    await channel.send(file=discord.File(its_gone_rain_file_path))
                 except:
                     pass
                 clear_rain_plot()

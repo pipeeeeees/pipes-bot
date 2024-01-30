@@ -13,6 +13,7 @@ from pipesbot import PIPEEEEEES_DISCORD_ID
 from pipesbot import STEEBON_ATL_STATION_ID
 from pipesbot import weather
 import traceback
+from pipesbot import urban_dict
 
 pipesbot_dir = 'pipesbot'
 pickle_subdir = 'pickles'
@@ -93,6 +94,28 @@ class MessageScheduler:
                     clear_gas_prices_historical_plot()
 
             await asyncio.sleep(65) 
+    
+    async def word_of_the_day(self, channel_id=STEEBON_ATL_STATION_ID):
+        # Compose the message
+        message_string = ''
+        word, definition = urban_dict.random_word()
+        if word and definition:
+            message_string = message_string + f'The word of the day is: ```{word}```\n\nDefinition: ```{definition}```'
+        else:
+            message_string = message_string + f'Unable to retrieve the word of the day.'
+
+        # Channel check
+        if channel_id == PIPEEEEEES_DISCORD_ID:
+            user = await self.client.fetch_user(PIPEEEEEES_DISCORD_ID)
+            channel = await user.create_dm()
+        else:
+            channel = await self.client.fetch_channel(channel_id)
+
+        # Send checker
+        if message_string != '':
+            await channel.send(message_string)
+            if channel_id != PIPEEEEEES_DISCORD_ID:
+                await asyncio.sleep(65)
         
     # Start the scheduler loop
     async def start(self):
@@ -109,6 +132,11 @@ class MessageScheduler:
             if now.hour == 9 and now.minute == 00 and min_flag == False:
                 min_flag = True
                 await self.morning_report()
+
+            # every day at noon
+            if now.hour == 12 and now.minute == 00 and min_flag == False:
+                min_flag = True
+                await self.word_of_the_day()
 
             # check every n seconds
             n = 30

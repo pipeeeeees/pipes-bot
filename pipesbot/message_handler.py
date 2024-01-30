@@ -139,6 +139,9 @@ async def handler(client, message):
                 schedule_messages.clear_gas_prices_historical_plot()
             else:
                 await dm_channel.send(f'No gas prices found.')
+
+            # send word of the day to dm
+            schedule_messages.word_of_the_day(channel_id=dm_channel.id)
             
 
         except Exception as e:

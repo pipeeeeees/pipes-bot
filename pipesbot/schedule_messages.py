@@ -157,8 +157,7 @@ def scheduler_setup(client):
 
 def word_of_the_day_message():
     message_string = ''
-    response_text = urban_dict.random_word()
-    word, definition = urban_dict.parse_random_word(response_text)
+    word, definition = urban_dict.random_popular_word()()
     if word and definition:
         message_string = message_string + f'Good afternoon! The word of the day is: ```{word}```\nDefinition: ```{definition}```'
     else:

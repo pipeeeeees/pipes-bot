@@ -1,31 +1,20 @@
 import requests
 import json
-
-def random_word():
-    response = requests.get("https://api.urbandictionary.com/v0/random")
-
-    return response.text
-
-def parse_random_word(response_text):
-    # Parse the JSON response
-    data = json.loads(response_text)
     
-    # Check if the response contains the 'list' key and if it's not empty
-    if 'list' in data and data['list']:
-        # Extract the first item from the 'list' array
-        random_word_data = data['list'][0]
+def random_popular_word():
+    while True:
+        response = requests.get("https://api.urbandictionary.com/v0/random")
+        data = json.loads(response.text)
         
-        # Extract word and definition
-        word = random_word_data.get('word', 'N/A')
-        definition = random_word_data.get('definition', 'N/A')
-        
-        return word, definition
-    else:
-        return None, None
+        for word_data in data['list']:
+            word = word_data.get('word', '').strip()
+            thumbs_up = word_data.get('thumbs_up', 0)
+            # Check if the word is one word and consists only of alphabetic characters
+            if word and len(word.split()) == 1 and word.isalpha() and thumbs_up >= 100:
+                return word, word_data.get('definition', 'N/A')
 
 if __name__ == "__main__":
-    response_text = random_word()
-    word, definition = parse_random_word(response_text)
+    word, definition = random_popular_word()
     if word and definition:
         print("Random Word:", word)
         print("Definition:", definition)

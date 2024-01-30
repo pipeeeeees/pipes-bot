@@ -10,6 +10,7 @@ from pipesbot import gas
 from pipesbot import spotify_search
 from pipesbot import commit_id_getter
 from pipesbot import weather
+from pipesbot import urban_dict
 from pipesbot.postable_content import meme_selector
 import os
 import discord
@@ -157,8 +158,15 @@ async def handler(client, message):
         schedule_messages.morning_report_command(channel_id=channel.id)
     
     if message.content == '$word':
-        await dm_channel.send(schedule_messages.word_of_the_day_message())
-    
+        message_string = ''
+        word, definition = urban_dict.random_popular_word()
+        if word and definition:
+            message_string = message_string + f'The Word is: ```{word}```\nDefinition: ```{definition}```'
+        else:
+            message_string = message_string + f'Unable to retrieve a word. Please complain to @pipeeeeees'
+        await message.channel.send(message_string)
+        return
+
     # `pipesbot, blah blah blah` command
     if message.content.startswith('pipesbot,'): #GPT reply
         msg = message.content.replace('pipesbot,','')

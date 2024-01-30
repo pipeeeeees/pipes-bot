@@ -160,7 +160,7 @@ def word_of_the_day_message():
     response_text = urban_dict.random_word()
     word, definition = urban_dict.parse_random_word(response_text)
     if word and definition:
-        message_string = message_string + f'The word of the day is: ```{word}```\n\nDefinition: ```{definition}```'
+        message_string = message_string + f'Good afternoon! The word of the day is: ```{word}```\nDefinition: ```{definition}```'
     else:
         message_string = message_string + f'Unable to retrieve the word of the day.'
     return message_string

@@ -141,7 +141,7 @@ async def handler(client, message):
                 await dm_channel.send(f'No gas prices found.')
 
             # send word of the day to dm
-            schedule_messages.word_of_the_day(channel_id=dm_channel.id)
+            await dm_channel.send(schedule_messages.word_of_the_day_message())
             
 
         except Exception as e:

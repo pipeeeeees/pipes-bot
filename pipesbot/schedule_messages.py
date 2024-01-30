@@ -97,12 +97,7 @@ class MessageScheduler:
     
     async def word_of_the_day(self, channel_id=STEEBON_ATL_STATION_ID):
         # Compose the message
-        message_string = ''
-        word, definition = urban_dict.random_word()
-        if word and definition:
-            message_string = message_string + f'The word of the day is: ```{word}```\n\nDefinition: ```{definition}```'
-        else:
-            message_string = message_string + f'Unable to retrieve the word of the day.'
+        message_string = word_of_the_day_message()
 
         # Channel check
         if channel_id == PIPEEEEEES_DISCORD_ID:
@@ -159,6 +154,15 @@ scheduler = None
 def scheduler_setup(client):
     global scheduler
     scheduler = MessageScheduler(client)
+
+def word_of_the_day_message():
+    message_string = ''
+    word, definition = urban_dict.random_word()
+    if word and definition:
+        message_string = message_string + f'The word of the day is: ```{word}```\n\nDefinition: ```{definition}```'
+    else:
+        message_string = message_string + f'Unable to retrieve the word of the day.'
+    return message_string
 
 def morning_report_message(plot=False):
     message_string = ''

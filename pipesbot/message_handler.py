@@ -161,7 +161,7 @@ async def handler(client, message):
         message_string = ''
         word, definition = urban_dict.random_popular_word()
         if word and definition:
-            message_string = message_string + f'The Word is: ```{word}```\nDefinition: ```{definition}```'
+            message_string = message_string + f'The Word is: ```{word}```Definition: ```{definition}```'
         else:
             message_string = message_string + f'Unable to retrieve a word. Please complain to @pipeeeeees'
         await message.channel.send(message_string)

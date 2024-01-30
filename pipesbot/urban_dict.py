@@ -11,7 +11,10 @@ def random_popular_word():
             thumbs_up = word_data.get('thumbs_up', 0)
             # Check if the word is one word and consists only of alphabetic characters
             if word and len(word.split()) == 1 and word.isalpha() and thumbs_up >= 100:
-                return word, word_data.get('definition', 'N/A')
+                definition = word_data.get('definition', 'N/A')
+                # Remove square brackets from the definition
+                definition = definition.replace("[", "").replace("]", "")
+                return word, definition
 
 if __name__ == "__main__":
     word, definition = random_popular_word()

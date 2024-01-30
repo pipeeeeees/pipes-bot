@@ -159,9 +159,9 @@ def word_of_the_day_message():
     message_string = ''
     word, definition = urban_dict.random_popular_word()
     if word and definition:
-        message_string = message_string + f'Good afternoon! The word of the day is: ```{word}```\nDefinition: ```{definition}```'
+        message_string = message_string + f'Good afternoon! The urban word of the day is: ```{word}```\nDefinition: ```{definition}```'
     else:
-        message_string = message_string + f'Unable to retrieve the word of the day.'
+        message_string = message_string + f'Unable to retrieve the word of the day. Please complain to @pipeeeeees'
     return message_string
 
 def morning_report_message(plot=False):

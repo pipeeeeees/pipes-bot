@@ -156,6 +156,9 @@ async def handler(client, message):
     if message.content == '$report':
         schedule_messages.morning_report_command(channel_id=channel.id)
     
+    if message.content == '$word':
+        await dm_channel.send(schedule_messages.word_of_the_day_message())
+    
     # `pipesbot, blah blah blah` command
     if message.content.startswith('pipesbot,'): #GPT reply
         msg = message.content.replace('pipesbot,','')

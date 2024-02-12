@@ -127,12 +127,12 @@ class MessageScheduler:
             if now.hour == 9 and now.minute == 00 and min_flag == False:
                 min_flag = True
                 await self.morning_report()
-
+            """
             # every day at noon
             if now.hour == 12 and now.minute == 00 and min_flag == False:
                 min_flag = True
                 await self.word_of_the_day()
-
+            """
             # check every n seconds
             n = 30
             await asyncio.sleep(n) 

@@ -206,23 +206,23 @@ def morning_report_message(plot=False):
                 # GAS PRICES
                 message_string = message_string + f'\n- In Georgia, the state-wide average gas prices are:'
                 if diff_reg > 0:
-                    message_string = message_string + f'\n\t\tRegular: {reg} ' + chr(0x2197)
+                    message_string = message_string + f'\n\t\tRegular: {reg} ' + chr(0x2197) + f' ({diff_reg:+.2f})'
                 elif diff_reg < 0:
-                    message_string = message_string + f'\n\t\tRegular: {reg} ' + chr(0x2198)
+                    message_string = message_string + f'\n\t\tRegular: {reg} ' + chr(0x2198) + f' ({diff_reg:.2f})'
                 else:
-                    message_string = message_string + f'\n\t\tRegular: {reg} ' + chr(0x2192)
+                    message_string = message_string + f'\n\t\tRegular: {reg} ' + chr(0x2192) + f' ({diff_reg:.2f})'
                 if diff_mid > 0:
-                    message_string = message_string + f'\n\t\tMidgrade: {mid} ' + chr(0x2197)
+                    message_string = message_string + f'\n\t\tMidgrade: {mid} ' + chr(0x2197) + f' ({diff_mid:+.2f})'
                 elif diff_mid < 0:
-                    message_string = message_string + f'\n\t\tMidgrade: {mid} ' + chr(0x2198)
+                    message_string = message_string + f'\n\t\tMidgrade: {mid} ' + chr(0x2198) + f' ({diff_mid:.2f})'
                 else:
-                    message_string = message_string + f'\n\t\tMidgrade: {mid} ' + chr(0x2192)
+                    message_string = message_string + f'\n\t\tMidgrade: {mid} ' + chr(0x2192) + f' ({diff_mid:.2f})'
                 if diff_prem > 0:
-                    message_string = message_string + f'\n\t\tPremium: {prem} ' + chr(0x2197)
+                    message_string = message_string + f'\n\t\tPremium: {prem} ' + chr(0x2197) + f' ({diff_prem:+.2f})'
                 elif diff_prem < 0:
-                    message_string = message_string + f'\n\t\tPremium: {prem} ' + chr(0x2198)
+                    message_string = message_string + f'\n\t\tPremium: {prem} ' + chr(0x2198) + f' ({diff_prem:.2f})'
                 else:
-                    message_string = message_string + f'\n\t\tPremium: {prem} ' + chr(0x2192)
+                    message_string = message_string + f'\n\t\tPremium: {prem} ' + chr(0x2192) + f' ({diff_prem:.2f})'
             else:
                 message_string = message_string + f'\n- In Georgia, the state-wide average gas prices are:\n\t\tRegular: {reg}\n\t\tMidgrade: {mid}\n\t\tPremium: {prem}'
         else:

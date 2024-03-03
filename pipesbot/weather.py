@@ -64,27 +64,29 @@ def real_time_weather_report(verbose = False, plot = False):
     # compose the message
     message_string = f''
     if temperature <= 32.0:
-        message_string = message_string + f'\n- It is cold as ice outside with a temp of {int(temperature)}°F \U0001F9CA\U0001F976'
+        message_string = message_string + f'\n- It is cold as ice right now with a temp of {int(temperature)}°F \U0001F9CA\U0001F976'
         #message_string = message_string + f'\n- The high for today is {int(temp_max)} °F and the low is {int(temp_min)}°F'
         #message_string = message_string + f'\n- With windchill it feels like {int(feels_like)}°F ' + chr(0x1F976)
-    elif temperature >= 90.0:
-        message_string = message_string + f'\n- It is hot as balls outside with a temp of {int(temperature)}°F \U0001F975\U0001F525'
+    elif temperature >= 85.0:
+        message_string = message_string + f'\n- It is hot as balls right now with a temp of {int(temperature)}°F \U0001F975\U0001F525'
         #message_string = message_string + f'\n- The high for today is {int(temp_max)} °F and the low is {int(temp_min)}°F'
         #message_string = message_string + f'\n- With heat index it feels like {int(feels_like)}°F ' + chr(0x1F525)
     else:
         message_string = message_string + f'\n- It is {int(temperature)}°F outside' #with a high of {int(temp_max)}°F and a low of {int(temp_min)} °F'
+    # add a line for the high and low temperatures
+    message_string = message_string + f'\n- The high for today is {int(temp_max)} °F and the low is {int(temp_min)}°F'
     #message_string = message_string + f'\n- You can expect {weather_description} today'
     message_string = message_string + daily_rain_report()
-    if humidity >= 80:
-        message_string = message_string + f'\n- The humidity is {humidity}%. It is very humid! ' + chr(0x1F4A7)
+    if humidity >= 90:
+        message_string = message_string + f'\n- The humidity is {humidity}%. It is hella humid!'
     elif humidity <= 20:
-        message_string = message_string + f'\n- The humidity is {humidity}%. It is very dry! ' + chr(0x1F3DC)
+        message_string = message_string + f'\n- The humidity is {humidity}%. It is hella dry!'
 
     if wind_speed >= 21:
-        message_string = message_string + f'\n- The wind speed is {wind_speed} mph. It is very windy today! ' + chr(0x1F4A8)
+        message_string = message_string + f'\n- The wind speed is {wind_speed} mph. It is hella windy! ' + chr(0x1F4A8)
 
     if cloudiness >= 80:
-        message_string = message_string + f'\n- The sky is {cloudiness}% cloudy today ' + chr(0x2601)
+        message_string = message_string + f'\n- It is hella cloudy today, at {cloudiness}% ' + chr(0x2601)
     
     if verbose:
         print(message_string)

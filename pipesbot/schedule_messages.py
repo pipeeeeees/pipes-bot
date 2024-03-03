@@ -362,8 +362,9 @@ def plot_gas_prices_historical(number_of_days=7, zero_out=True):
         ax.set_xlabel('Date Recorded')
         ax.set_ylabel('Price per Gallon ($)')
         ax.set_title(f'Georgia Avg Gas Prices (last {number_of_days} entries)')
-        # dont show all x labels, just 9 of them
-        ax.set_xticks(gas_prices_dates[::len(gas_prices_dates)//9])
+        # dont show all x labels, just 9 of them if there are more than 9 entries
+        if number_of_days > 9:
+            ax.set_xticks(gas_prices_dates[::(number_of_days//9)])
         ax.legend(loc='upper left')
         plt.xticks(rotation=45)
         plt.tight_layout()

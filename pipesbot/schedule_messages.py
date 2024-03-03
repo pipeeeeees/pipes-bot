@@ -92,7 +92,7 @@ class MessageScheduler:
             
             # if the day is the first of the month, send the gas prices historical plot with 60 days
             if datetime.datetime.now().day == 1:
-                outcome = plot_gas_prices_historical(number_of_days=60, zero_out=True)
+                outcome = plot_gas_prices_historical(number_of_days=60, zero_out=False)
                 if outcome:
                     await channel.send(file=discord.File(ga_gas_historical_plot_path))
                     clear_gas_prices_historical_plot()
@@ -362,7 +362,8 @@ def plot_gas_prices_historical(number_of_days=7, zero_out=True):
         ax.set_xlabel('Date Recorded')
         ax.set_ylabel('Price per Gallon ($)')
         ax.set_title(f'Georgia Avg Gas Prices (last {number_of_days} entries)')
-        # legend in upper left
+        # dont show all x labels, just 9 of them
+        ax.set_xticks(gas_prices_dates[::len(gas_prices_dates)//9])
         ax.legend(loc='upper left')
         plt.xticks(rotation=45)
         plt.tight_layout()

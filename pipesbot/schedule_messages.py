@@ -68,17 +68,21 @@ class MessageScheduler:
         if message_string != '':
             await channel.send(message_string)
 
+            """
             if 'It will rain today' in message_string:
                 await channel.send(file=discord.File(r'pipesbot/images/its-gon-rain.jpg'))
+            """
 
             # send a rain plot if one was generated
+            """
             if check_rain_plot():
                 try:
                     await channel.send(file=discord.File(forecasted_rain_plot_file_path))
                 except:
                     pass
                 clear_rain_plot()
-
+            """
+                
             # if the day is monday, send the gas prices historical plot
             if datetime.datetime.now().weekday() == 0:
                 outcome = plot_gas_prices_historical(number_of_days=14, zero_out=False)
@@ -206,23 +210,23 @@ def morning_report_message(plot=False):
                 # GAS PRICES
                 message_string = message_string + f'\n- In Georgia, the state-wide average gas prices are:'
                 if diff_reg > 0:
-                    message_string = message_string + f'\n\t\tRegular: {reg} ' + chr(0x2197) + f' ({diff_reg:+.2f})'
+                    message_string = message_string + f'\n\t\tRegular: {reg} ' + chr(0x2197) + f' ({diff_reg:+.3f})'
                 elif diff_reg < 0:
-                    message_string = message_string + f'\n\t\tRegular: {reg} ' + chr(0x2198) + f' ({diff_reg:.2f})'
+                    message_string = message_string + f'\n\t\tRegular: {reg} ' + chr(0x2198) + f' ({diff_reg:.3f})'
                 else:
-                    message_string = message_string + f'\n\t\tRegular: {reg} ' + chr(0x2192) + f' ({diff_reg:.2f})'
+                    message_string = message_string + f'\n\t\tRegular: {reg} ' + chr(0x2192) + f' ({diff_reg:.3f})'
                 if diff_mid > 0:
-                    message_string = message_string + f'\n\t\tMidgrade: {mid} ' + chr(0x2197) + f' ({diff_mid:+.2f})'
+                    message_string = message_string + f'\n\t\tMidgrade: {mid} ' + chr(0x2197) + f' ({diff_mid:+.3f})'
                 elif diff_mid < 0:
-                    message_string = message_string + f'\n\t\tMidgrade: {mid} ' + chr(0x2198) + f' ({diff_mid:.2f})'
+                    message_string = message_string + f'\n\t\tMidgrade: {mid} ' + chr(0x2198) + f' ({diff_mid:.3f})'
                 else:
-                    message_string = message_string + f'\n\t\tMidgrade: {mid} ' + chr(0x2192) + f' ({diff_mid:.2f})'
+                    message_string = message_string + f'\n\t\tMidgrade: {mid} ' + chr(0x2192) + f' ({diff_mid:.3f})'
                 if diff_prem > 0:
-                    message_string = message_string + f'\n\t\tPremium: {prem} ' + chr(0x2197) + f' ({diff_prem:+.2f})'
+                    message_string = message_string + f'\n\t\tPremium: {prem} ' + chr(0x2197) + f' ({diff_prem:+.3f})'
                 elif diff_prem < 0:
-                    message_string = message_string + f'\n\t\tPremium: {prem} ' + chr(0x2198) + f' ({diff_prem:.2f})'
+                    message_string = message_string + f'\n\t\tPremium: {prem} ' + chr(0x2198) + f' ({diff_prem:.3f})'
                 else:
-                    message_string = message_string + f'\n\t\tPremium: {prem} ' + chr(0x2192) + f' ({diff_prem:.2f})'
+                    message_string = message_string + f'\n\t\tPremium: {prem} ' + chr(0x2192) + f' ({diff_prem:.3f})'
             else:
                 message_string = message_string + f'\n- In Georgia, the state-wide average gas prices are:\n\t\tRegular: {reg}\n\t\tMidgrade: {mid}\n\t\tPremium: {prem}'
         else:

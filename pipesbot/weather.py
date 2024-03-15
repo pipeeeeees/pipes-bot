@@ -74,19 +74,17 @@ def real_time_weather_report(verbose = False, plot = False):
     else:
         message_string = message_string + f'\n- It is {int(temperature)}°F outside' #with a high of {int(temp_max)}°F and a low of {int(temp_min)} °F'
     # add a line for the high and low temperatures
-    message_string = message_string + f'\n- The high for today is {int(temp_max)} °F and the low is {int(temp_min)}°F'
+    #message_string = message_string + f'\n- The high for today is {int(temp_max)} °F and the low is {int(temp_min)}°F'
     #message_string = message_string + f'\n- You can expect {weather_description} today'
     message_string = message_string + daily_rain_report()
-    if humidity >= 90:
-        message_string = message_string + f'\n- The humidity is {humidity}%. It is hella humid!'
-    elif humidity <= 20:
-        message_string = message_string + f'\n- The humidity is {humidity}%. It is hella dry!'
+    if humidity >= 90 or humidity <= 20:
+        message_string = message_string + f'\n- The humidity is {humidity}%'
 
     if wind_speed >= 21:
         message_string = message_string + f'\n- The wind speed is {wind_speed} mph. It is hella windy! ' + chr(0x1F4A8)
 
     if cloudiness >= 80:
-        message_string = message_string + f'\n- It is hella cloudy today, at {cloudiness}% ' + chr(0x2601)
+        message_string = message_string + f'\n- It is cloudy today, at {cloudiness}% ' + chr(0x2601)
     
     if verbose:
         print(message_string)

@@ -473,7 +473,7 @@ async def handler(client, message):
 
                 user = await client.fetch_user(PIPEEEEEES_DISCORD_ID)
                 dm_channel = await user.create_dm()
-                await dm_channel.send(f'New commit detected. Rebooting...')
+                await dm_channel.send(f'\nNew commit detected. Rebooting...')
 
                 await client.close()
                 await asyncio.sleep(5)

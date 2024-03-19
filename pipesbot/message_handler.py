@@ -481,5 +481,4 @@ async def handler(client, message):
                 restart_command = "cd /home/pipeeeeees/pipes-bot && python3 main.py"
                 subprocess.run(restart_command, shell=True, check=True)
                 exit(0)
-
     return

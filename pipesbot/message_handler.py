@@ -475,11 +475,12 @@ async def handler(client, message):
                 dm_channel = await user.create_dm()
                 await dm_channel.send(f' \nNew commit detected. Rebooting...')
 
+                restart_command = "cd /home/pipeeeeees/pipes-bot && python3 main.py"
+                subprocess.run(restart_command, shell=True, check=True)
+
                 # close gracefully
                 await client.close()
                 await asyncio.sleep(5)
 
-                restart_command = "cd /home/pipeeeeees/pipes-bot && python3 main.py"
-                subprocess.run(restart_command, shell=True, check=True)
                 exit(0)
     return

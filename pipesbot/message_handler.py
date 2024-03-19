@@ -475,9 +475,11 @@ async def handler(client, message):
                 dm_channel = await user.create_dm()
                 await dm_channel.send(f'New commit detected. Rebooting...')
 
+                await client.close()
+                await asyncio.sleep(5)
+
                 restart_command = "cd /home/pipeeeeees/pipes-bot && python3 main.py"
                 subprocess.run(restart_command, shell=True, check=True)
-                await dm_channel.send(f'Old instance of pipes-bot has been terminated. New instance is now online.')
                 exit(0)
-                await dm_channel.send(f'Old instance of pipes-bot has been terminated. New instance is now online.')
+
     return

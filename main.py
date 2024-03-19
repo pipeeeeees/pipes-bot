@@ -38,9 +38,7 @@ async def on_ready():
     # Fetch the user object
     user = await client.fetch_user(PIPEEEEEES_DISCORD_ID)
     dm_channel = await user.create_dm()
-    await dm_channel.send(f'{client.user} is now online on commit ID {commit_id_getter.get_git_commit_id(os.getcwd())}.')
-    await dm_channel.send(f'Current hostname: {hostname}')
-    await dm_channel.send(f'Current directory: {os.getcwd()}')
+    await dm_channel.send(f'{client.user} is now online on commit ID {commit_id_getter.get_git_commit_id(os.getcwd())}.\nCurrent hostname: {hostname}\nCurrent directory: {os.getcwd()}')
     
     # Start the MessageScheduler, load messages from the database
     await db_handler.add_reminders_to_scheduler()

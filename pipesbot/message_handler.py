@@ -223,6 +223,9 @@ async def handler(client, message):
     if message.content.startswith('$pollen data'):
         schedule_messages.daily_update_pollen()
         pollenz = schedule_messages.get_pollen_historical()
+        if pollenz == None:
+            await message.channel.send('No pollen data found.')
+            return
         pollenz = pollenz.to_string()
         with open('pollen.txt', 'w') as f:
             f.write(pollenz)

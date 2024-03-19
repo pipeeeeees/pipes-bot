@@ -338,9 +338,11 @@ def get_gas_prices_historical():
 def get_pollen_historical():
     if os.path.exists(pollen_pickle_path):
         pollen = pd.read_pickle(pollen_pickle_path)
-        return pollen
     else:
-        return None
+        create_pollen_historical()
+        append_pollen_historical(pollen.get_atl_pollen_count(), datetime.datetime.now())
+        pollen = pd.read_pickle(pollen_pickle_path)
+    return pollen
 
 def append_gas_prices_historical(reg,mid,prem,die,datetime):
     # append to the pickle file. if the new data is on the same day as the last entry, overwrite it

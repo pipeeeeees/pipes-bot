@@ -473,7 +473,7 @@ def plot_pollen_historical(number_of_days=7, zero_out=True):
         plt.xticks(rotation=45)
         plt.tight_layout()
         plt.grid()
-        plt.savefig('pollen_historical.png') 
+        plt.savefig(pollen_historical_plot_path) 
         return True
     else:
         return False

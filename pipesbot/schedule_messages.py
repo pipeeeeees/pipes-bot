@@ -454,13 +454,15 @@ def plot_gas_prices_historical(number_of_days=7, zero_out=True):
     
 def plot_pollen_historical(number_of_days=7, zero_out=True):
     if check_pollen_historical():
-        pollen = pd.read_pickle(pollen_pickle_path)
-        pollen = pollen.iloc[-number_of_days:]
-        pollen_dates = pollen.index
+        pollen_pkl = pd.read_pickle(pollen_pickle_path)
+        if len(pollen_pkl) < number_of_days:
+            number_of_days = len(pollen_pkl)
+        pollen_pkl = pollen_pkl.iloc[-number_of_days:]
+        pollen_dates = pollen_pkl.index
         pollen_dates = pollen_dates[-number_of_days:]
-        pollen = pollen['Pollen Count']
+        pollen_pkl = pollen_pkl['Pollen Count']
         fig, ax = plt.subplots()
-        ax.plot(pollen_dates, pollen, label='Pollen Count')
+        ax.plot(pollen_dates, pollen_pkl, label='Pollen Count')
         if zero_out:
             ax.set_ylim(ymin=0)
         ax.set_xlabel('Date Recorded')

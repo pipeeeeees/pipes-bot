@@ -4,6 +4,7 @@ import datetime
 import discord
 import time
 import pandas as pd
+import pollen
 import matplotlib.pyplot as plt
 from pipesbot import db_handler
 from pipesbot import pollen
@@ -21,6 +22,7 @@ images_subdir = 'images'
 plots_subdir = 'plots'
 its_gone_rain_file = 'its-gon-rain.jpg'
 pickle_file = 'gas_prices_ga.pkl'
+pollen_pickle_file = 'pollen.pkl'
 forecasted_rain_plot_file = 'forecasted_rain.png'
 gas_historical_plot_file = 'gas_historical.png'
 
@@ -28,6 +30,7 @@ forecasted_rain_plot_file_path = os.path.join(pipesbot_dir, plots_subdir, foreca
 its_gone_rain_file_path = os.path.join(pipesbot_dir, images_subdir, its_gone_rain_file)
 ga_gas_pickle_path = os.path.join(pipesbot_dir, pickle_subdir, pickle_file)
 ga_gas_historical_plot_path = os.path.join(pipesbot_dir, plots_subdir, gas_historical_plot_file)
+pollen_pickle_path = os.path.join(pipesbot_dir, pickle_subdir, pollen_pickle_file)
 
 class MessageScheduler:
     def __init__(self, client):
@@ -263,10 +266,27 @@ def daily_update_gas_prices():
     append_gas_prices_historical(reg,mid,prem,die,now)
     return reg,mid,prem,die,now
 
+def daily_update_pollen():
+    now = datetime.datetime.now()
+    pollen_cnt = pollen.get_atl_pollen_count()
+    if type(pollen_cnt) == int:
+        db_handler.add_pollen_count(pollen_cnt, now)
+        return True
+    else:
+        return False
+
 def create_gas_prices_historical():
     if not check_gas_prices_historical():
         gas_prices = pd.DataFrame(columns=['Regular','Midgrade','Premium','Diesel'])
         gas_prices.to_pickle(ga_gas_pickle_path)
+        return True
+    else:
+        return False
+    
+def create_pollen_historical():
+    if not check_pollen_historical():
+        pollen = pd.DataFrame(columns=['Pollen Count'])
+        pollen.to_pickle(pollen_pickle_path)
         return True
     else:
         return False
@@ -282,11 +302,24 @@ def check_gas_prices_historical():
         return True
     else:
         return False
+    
+def check_pollen_historical():
+    if os.path.exists(pollen_pickle_path):
+        return True
+    else:
+        return False
 
 def get_gas_prices_historical():
     if os.path.exists(ga_gas_pickle_path):
         gas_prices = pd.read_pickle(ga_gas_pickle_path)
         return gas_prices
+    else:
+        return None
+    
+def get_pollen_historical():
+    if os.path.exists(pollen_pickle_path):
+        pollen = pd.read_pickle(pollen_pickle_path)
+        return pollen
     else:
         return None
 
@@ -308,13 +341,38 @@ def append_gas_prices_historical(reg,mid,prem,die,datetime):
     else:
         return False
     
+def append_pollen_historical(pollen_count, datetime):
+    # append to the pickle file. if the new data is on the same day as the last entry, overwrite it
+    # otherwise, append it
+    if check_pollen_historical():
+        pollen = pd.read_pickle(pollen_pickle_path)
+        if len(pollen) > 0:
+            if pollen.index[-1].date() == datetime.date():
+                pollen.loc[pollen.index[-1]] = [pollen_count]
+            else:
+                pollen.loc[datetime] = [pollen_count]
+            pollen.to_pickle(pollen_pickle_path)
+            return True
+        else:
+            pollen.loc[datetime] = [pollen_count]
+            pollen.to_pickle(pollen_pickle_path)
+    else:
+        return False
+    
 def get_string_gas_prices_historical():
     if check_gas_prices_historical():
         gas_prices = pd.read_pickle(ga_gas_pickle_path)
         return f'```{gas_prices}```'
     else:
         return None
-    
+
+def get_string_pollen_historical():
+    if check_pollen_historical():
+        pollen = pd.read_pickle(pollen_pickle_path)
+        return f'```{pollen}```'
+    else:
+        return None
+
 # plot the last 7 entries of gas prices
 def plot_gas_prices_historical(number_of_days=7, zero_out=True):
     if check_gas_prices_historical():
@@ -374,10 +432,43 @@ def plot_gas_prices_historical(number_of_days=7, zero_out=True):
     else:
         return False
     
+def plot_pollen_historical(number_of_days=7, zero_out=True):
+    if check_pollen_historical():
+        pollen = pd.read_pickle(pollen_pickle_path)
+        pollen = pollen.iloc[-number_of_days:]
+        pollen_dates = pollen.index
+        pollen_dates = pollen_dates[-number_of_days:]
+        pollen = pollen['Pollen Count']
+        fig, ax = plt.subplots()
+        ax.plot(pollen_dates, pollen, label='Pollen Count')
+        if zero_out:
+            ax.set_ylim(ymin=0)
+        ax.set_xlabel('Date Recorded')
+        ax.set_ylabel('Pollen Count')
+        ax.set_title(f'Atlanta Pollen Count (last {number_of_days} entries)')
+        # dont show all x labels, just 9 of them if there are more than 9 entries
+        if number_of_days > 9:
+            ax.set_xticks(pollen_dates[::(number_of_days//9)])
+        ax.legend(loc='upper left')
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+        plt.grid()
+        plt.savefig('pollen_historical.png') 
+        return True
+    else:
+        return False
+
 # delete the gas prices historical plot
 def clear_gas_prices_historical_plot():
     if check_gas_prices_historical():
         os.remove(ga_gas_historical_plot_path)
+        return True
+    else:
+        return False
+
+def clear_pollen_historical_plot():
+    if check_pollen_historical():
+        os.remove('pollen_historical.png')
         return True
     else:
         return False

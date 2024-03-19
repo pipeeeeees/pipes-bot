@@ -206,6 +206,25 @@ async def handler(client, message):
         os.remove('gas_prices.txt')
         return
     
+    if message.content.startswith('$pollen plot'):
+        outcome = schedule_messages.plot_pollen_historical(number_of_days=9999, zero_out=False)
+        if outcome:
+            await message.channel.send(file=discord.File(schedule_messages.atl_pollen_historical_plot_path))
+            schedule_messages.clear_pollen_historical_plot()
+        else:
+            await message.channel.send(f'Something went wrong... :(')
+        return
+    
+    if message.content.startswith('$pollen data'):
+        schedule_messages.daily_update_pollen()
+        pollen = schedule_messages.get_pollen_historical()
+        pollen = pollen.to_string()
+        with open('pollen.txt', 'w') as f:
+            f.write(pollen)
+        await message.channel.send(file=discord.File(r'pollen.txt'))
+        os.remove('pollen.txt')
+        return
+    
     # `$commitid` command
     if message.content.startswith('$commitid'):
         await message.channel.send(f'The commit id I am running on is {commit_id_getter.get_git_commit_id(os.getcwd())}')

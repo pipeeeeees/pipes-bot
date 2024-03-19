@@ -4,7 +4,6 @@ import datetime
 import discord
 import time
 import pandas as pd
-import pollen
 import matplotlib.pyplot as plt
 from pipesbot import db_handler
 from pipesbot import pollen

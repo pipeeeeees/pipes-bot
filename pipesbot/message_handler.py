@@ -213,7 +213,7 @@ async def handler(client, message):
     if message.content.startswith('$pollen plot'):
         outcome = schedule_messages.plot_pollen_historical(number_of_days=9999, zero_out=False)
         if outcome:
-            await message.channel.send(file=discord.File(schedule_messages.atl_pollen_historical_plot_path))
+            await message.channel.send(file=discord.File(schedule_messages.pollen_pickle_path))
             schedule_messages.clear_pollen_historical_plot()
         else:
             await message.channel.send(f'Something went wrong... :(')

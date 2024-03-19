@@ -30,6 +30,7 @@ its_gone_rain_file_path = os.path.join(pipesbot_dir, images_subdir, its_gone_rai
 ga_gas_pickle_path = os.path.join(pipesbot_dir, pickle_subdir, pickle_file)
 ga_gas_historical_plot_path = os.path.join(pipesbot_dir, plots_subdir, gas_historical_plot_file)
 pollen_pickle_path = os.path.join(pipesbot_dir, pickle_subdir, pollen_pickle_file)
+pollen_historical_plot_path = os.path.join(pipesbot_dir, plots_subdir, 'pollen_historical.png')
 
 class MessageScheduler:
     def __init__(self, client):

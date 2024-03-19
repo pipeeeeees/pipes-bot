@@ -221,14 +221,13 @@ async def handler(client, message):
     
     
     if message.content.startswith('$pollen data'):
+        if schedule_messages.check_pollen_historical() == False:
+            schedule_messages.create_pollen_historical()
         schedule_messages.daily_update_pollen()
-        pollenz = schedule_messages.get_pollen_historical()
-        if pollenz == None:
-            await message.channel.send('No pollen data found.')
-            return
-        pollenz = pollenz.to_string()
+        pollen_data = schedule_messages.get_pollen_historical()
+        pollen_data = pollen_data.to_string()
         with open('pollen.txt', 'w') as f:
-            f.write(pollenz)
+            f.write(pollen_data)
         await message.channel.send(file=discord.File(r'pollen.txt'))
         os.remove('pollen.txt')
         return

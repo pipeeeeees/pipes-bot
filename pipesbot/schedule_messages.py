@@ -92,7 +92,7 @@ class MessageScheduler:
                 if outcome:
                     await channel.send(file=discord.File(ga_gas_historical_plot_path))
                     clear_gas_prices_historical_plot()
-            
+
             # if the day is the first of the month, send the gas prices historical plot with 60 days
             if datetime.datetime.now().day == 1:
                 outcome = plot_gas_prices_historical(number_of_days=60, zero_out=False)
@@ -157,6 +157,11 @@ class MessageScheduler:
                 min_flag = True
                 await self.word_of_the_day()
             """
+
+            # every day at 11:30 AM, update the pollen count
+            if now.hour == 11 and now.minute == 30 and min_flag == False:
+                min_flag = True
+                daily_update_pollen()
 
             # every monday at 12:00 PM during March, April, and May
             if now.weekday() == 0 and now.hour == 12 and now.minute == 00 and min_flag == False and now.month in [3,4,5]:
@@ -292,8 +297,10 @@ def daily_update_gas_prices():
 def daily_update_pollen():
     now = datetime.datetime.now()
     pollen_cnt = pollen.get_atl_pollen_count()
-    append_pollen_historical(pollen_cnt, now)
-    return pollen_cnt, now
+    # check if the pollen count is an integer
+    if type(pollen_cnt) == int:
+        append_pollen_historical(pollen_cnt, now)
+        return pollen_cnt, now
 
 def create_gas_prices_historical():
     if not check_gas_prices_historical():

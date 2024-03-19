@@ -291,11 +291,8 @@ def daily_update_gas_prices():
 def daily_update_pollen():
     now = datetime.datetime.now()
     pollen_cnt = pollen.get_atl_pollen_count()
-    if type(pollen_cnt) == int:
-        db_handler.add_pollen_count(pollen_cnt, now)
-        return True
-    else:
-        return False
+    append_pollen_historical(pollen_cnt, now)
+    return pollen_cnt, now
 
 def create_gas_prices_historical():
     if not check_gas_prices_historical():

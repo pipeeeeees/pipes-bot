@@ -118,6 +118,23 @@ class MessageScheduler:
             if channel_id != PIPEEEEEES_DISCORD_ID:
                 await asyncio.sleep(65)
         
+    async def pollen_report(self, channel_id=STEEBON_ATL_STATION_ID):
+        # send plot of pollen count for the last 14 days
+        outcome = plot_pollen_historical(number_of_days=14, zero_out=False)
+        if outcome:
+            if channel_id == PIPEEEEEES_DISCORD_ID:
+                user = await self.client.fetch_user(PIPEEEEEES_DISCORD_ID)
+                channel = await user.create_dm()
+            else:
+                channel = await self.client.fetch_channel(channel_id)
+            await channel.send(file=discord.File('pollen_historical.png'))
+            clear_pollen_historical_plot()
+            await asyncio.sleep(65)
+        else:
+            # send "failed to generate pollen plot" message
+            await channel.send('Failed to generate pollen plot. Way to go, @pipeeeeees.')
+            await asyncio.sleep(65)
+
     # Start the scheduler loop
     async def start(self):
         counter = 0
@@ -139,6 +156,12 @@ class MessageScheduler:
                 min_flag = True
                 await self.word_of_the_day()
             """
+
+            # every monday at 12:00 PM during March, April, and May
+            if now.weekday() == 0 and now.hour == 12 and now.minute == 00 and min_flag == False and now.month in [3,4,5]:
+                min_flag = True
+                await self.pollen_report()
+
             # check every n seconds
             n = 30
             await asyncio.sleep(n) 

@@ -222,10 +222,10 @@ async def handler(client, message):
     
     if message.content.startswith('$pollen data'):
         schedule_messages.daily_update_pollen()
-        pollen = schedule_messages.get_pollen_historical()
-        pollen = pollen.to_string()
+        pollenz = schedule_messages.get_pollen_historical()
+        pollenz = pollenz.to_string()
         with open('pollen.txt', 'w') as f:
-            f.write(pollen)
+            f.write(pollenz)
         await message.channel.send(file=discord.File(r'pollen.txt'))
         os.remove('pollen.txt')
         return

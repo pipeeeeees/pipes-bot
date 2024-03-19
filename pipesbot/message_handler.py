@@ -152,6 +152,10 @@ async def handler(client, message):
             await dm_channel.send(f'```{os.getcwd()}```')
         return
     
+    # `$lol` command
+    if message.content == '$lol':
+        await message.channel.send('lol')
+        return
 
     # `$report` command
     if message.content == '$report':

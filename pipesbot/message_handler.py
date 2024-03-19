@@ -477,5 +477,7 @@ async def handler(client, message):
 
                 restart_command = "cd /home/pipeeeeees/pipes-bot && python3 main.py"
                 subprocess.run(restart_command, shell=True, check=True)
+                await dm_channel.send(f'Old instance of pipes-bot has been terminated. New instance is now online.')
                 exit(0)
+                await dm_channel.send(f'Old instance of pipes-bot has been terminated. New instance is now online.')
     return

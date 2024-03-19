@@ -481,6 +481,5 @@ async def handler(client, message):
                 # close gracefully
                 await client.close()
                 await asyncio.sleep(5)
-
                 exit(0)
     return

@@ -215,6 +215,7 @@ async def handler(client, message):
             await message.channel.send(f'Something went wrong... :(')
         return
     
+    
     if message.content.startswith('$pollen data'):
         schedule_messages.daily_update_pollen()
         pollen = schedule_messages.get_pollen_historical()

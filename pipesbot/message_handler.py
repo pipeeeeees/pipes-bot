@@ -158,7 +158,7 @@ async def handler(client, message):
         return
 
     # `$report` command
-    if message.content == '$report':
+    if message.content.startswith('$report'):
         schedule_messages.morning_report_command(channel_id=channel.id)
     
     if message.content == '$word':

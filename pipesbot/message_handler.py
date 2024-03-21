@@ -74,6 +74,9 @@ async def handler(client, message):
         restart_command = "cd /home/pipeeeeees/pipes-bot && python3 main.py"
         subprocess.run(restart_command, shell=True, check=True)
         exit(0)
+        
+    if message.content.startswith('$abhijit'):
+        await message.channel.send("Hi Abhijit")
 
     # `$test` command
     if message.content.startswith('$test') and message.author.name == 'pipeeeeees':

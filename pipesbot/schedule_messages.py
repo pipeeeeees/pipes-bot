@@ -475,7 +475,7 @@ def plot_pollen_historical(number_of_days=7, zero_out=True):
         
         fig, ax = plt.subplots()
         ax.plot(pollen_dates, pollen_pkl, label='Pollen Count')
-        ax.plot(pollen_dates, rolling_avg, color='red', label='3-day Rolling Average')  # Add red line for rolling average
+        ax.plot(pollen_dates, rolling_avg, color='red', label='3-"day" Rolling Average')  # Add red line for rolling average
         if zero_out:
             ax.set_ylim(ymin=0)
         ax.set_xlabel('Date Recorded')

@@ -459,6 +459,9 @@ def plot_gas_prices_historical(number_of_days=7, zero_out=True):
     else:
         return False
     
+import pandas as pd
+import matplotlib.pyplot as plt
+
 def plot_pollen_historical(number_of_days=7, zero_out=True):
     if check_pollen_historical():
         pollen_pkl = pd.read_pickle(pollen_pickle_path)
@@ -468,8 +471,13 @@ def plot_pollen_historical(number_of_days=7, zero_out=True):
         pollen_dates = pollen_pkl.index
         pollen_dates = pollen_dates[-number_of_days:]
         pollen_pkl = pollen_pkl['Pollen Count']
+        
+        # Calculate the rolling average
+        rolling_avg = pollen_pkl.rolling(window=3).mean()
+        
         fig, ax = plt.subplots()
         ax.plot(pollen_dates, pollen_pkl, label='Pollen Count')
+        ax.plot(pollen_dates, rolling_avg, color='red', label='3-day Rolling Average')  # Add red line for rolling average
         if zero_out:
             ax.set_ylim(ymin=0)
         ax.set_xlabel('Date Recorded')
@@ -486,6 +494,7 @@ def plot_pollen_historical(number_of_days=7, zero_out=True):
         return True
     else:
         return False
+
 
 # delete the gas prices historical plot
 def clear_gas_prices_historical_plot():

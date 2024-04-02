@@ -214,6 +214,7 @@ async def handler(client, message):
         return
     
     if message.content.startswith('$pollen plot'):
+        schedule_messages.daily_update_pollen()
         try:
             num = int(message.content.replace('$pollen plot ',''))
             if num > 0:
@@ -235,6 +236,7 @@ async def handler(client, message):
     
     
     if message.content.startswith('$pollen data'):
+        schedule_messages.daily_update_pollen()
         if schedule_messages.check_pollen_historical() == False:
             schedule_messages.create_pollen_historical()
         schedule_messages.daily_update_pollen()

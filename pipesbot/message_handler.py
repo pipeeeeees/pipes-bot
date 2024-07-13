@@ -264,11 +264,13 @@ async def handler(client, message):
         return
     
     # postables
+    """
     for sub_folder in postables_folders_only:
         if sub_folder in str(message.content).lower():
             await message.channel.send(file=discord.File(globals()[sub_folder].return_path()))
             #return
-
+    """
+    
     # `$gas` command   
     if message.content.startswith('$gas'):
         if len(str(message.content)) != 4:
@@ -417,12 +419,13 @@ async def handler(client, message):
         #await message.channel.send('Factual statement detected^')
         return
     
+    """
     if message.content == 'false':
         msg = "make a robotic message in a few sentences that a robot would say if a false statement was detected and confirmed false. Start the message with 'False statement confirmed.'"
         await message.channel.send(gpt_api.requestz(msg).replace('"',''))
         #await message.channel.send('Factual statement detected^')
         return
-    """
+    
     if 'SHEEEEE' in str(message.content).upper() and 'EEEEESH' in str(message.content).upper():
         msg = "make a short robotic message that a robot would say if a MAJOR SHEEEEESH statement was detected and validated. Start the message with 'Major sheeeeesh detected.'. No emojies"
         await message.channel.send(gpt_api.requestz(msg).replace('"',''))

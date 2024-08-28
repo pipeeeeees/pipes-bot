@@ -11,6 +11,7 @@ from pipesbot import spotify_search
 from pipesbot import commit_id_getter
 from pipesbot import weather
 from pipesbot import urban_dict
+from pipesbot import stocks
 from pipesbot.postable_content import meme_selector
 import os
 import discord
@@ -326,6 +327,10 @@ async def handler(client, message):
         await send_message(client,channel.id, f"Ok. I will remind you on {date.strftime('%m-%d-%Y')} at {time.strftime('%H:%M')}.")
         return
     
+    if message.content.startswith('market report'):
+        await message.channel.send('Here is your stock report for {date}')
+        return
+    
     # 
     if message.content.startswith('$birthday'):
         msg = message.content.replace('$birthday','')
@@ -484,6 +489,7 @@ async def handler(client, message):
             await message.channel.send('An error occurred. Syntax is wrong.')
         return
     
+    # webhook push pull
     if message.author.name == 'GitHub':
         for embed in embeds:
             # extract information from the embed

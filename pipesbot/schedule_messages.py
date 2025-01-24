@@ -268,8 +268,10 @@ def morning_report_message(plot=False):
         message_string = message_string + weather.real_time_weather_report(plot=True)
 
         # SUNSET
-        sunset_string = f"\n- The sun will set at {weather.get_sunset_time()} today."
+        sunset_string = f"\n- Sunset is at {weather.get_sun_time(0, "sunset")}."
+        sunrise_string = f"\n- Sunrise tomorrow is at {weather.get_sun_time(1, "sunrise")}."
         message_string = message_string + sunset_string
+        message_string = message_string + sunrise_string
 
         # if message string is 2000 chars or more, send the short version
         if len(message_string) >= 2000:

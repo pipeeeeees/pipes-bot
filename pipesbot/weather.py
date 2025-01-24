@@ -107,21 +107,22 @@ def is_dst(date):
     # Return True if the date is within the DST period
     return dst_start <= date < dst_end
 
-def get_sunset_time(delta_days=0):
+def get_sun_time(delta_days=0, event="sunset"):
     """
-    Fetches and returns the local sunset time for Atlanta, handling DST.
+    Fetches and returns the local sunrise or sunset time for Atlanta, handling DST.
     
     Args:
-        delta_days (int): Number of days from today to calculate the sunset time. 
+        delta_days (int): Number of days from today to calculate the event time. 
                           0 for today, 1 for tomorrow, -1 for yesterday, etc.
+        event (str): The event to fetch, either 'sunrise' or 'sunset'. Defaults to 'sunset'.
                           
     Returns:
-        str: Sunset time in HH:MM PM format with leading zeros stripped.
+        str: Event time in HH:MM AM/PM format with leading zeros stripped.
     """
     # Calculate the target date
     target_date = datetime.now() + timedelta(days=delta_days)
     
-    # API endpoint for sunset data
+    # API endpoint for sunrise/sunset data
     url = "https://api.sunrise-sunset.org/json"
     
     # Parameters for Atlanta (latitude and longitude)
@@ -138,11 +139,14 @@ def get_sunset_time(delta_days=0):
     
     # Check API response status
     if data["status"] != "OK":
-        raise Exception("Failed to fetch sunset time. API status: " + data["status"])
+        raise Exception("Failed to fetch event time. API status: " + data["status"])
     
-    # Extract sunset time in UTC
-    sunset_utc = data["results"]["sunset"]
-    sunset_utc_datetime = datetime.strptime(sunset_utc, "%Y-%m-%dT%H:%M:%S+00:00")
+    # Extract the specified event time (sunrise or sunset) in UTC
+    event_utc = data["results"].get(event)
+    if event_utc is None:
+        raise Exception(f"Invalid event: {event}. Please use 'sunrise' or 'sunset'.")
+    
+    event_utc_datetime = datetime.strptime(event_utc, "%Y-%m-%dT%H:%M:%S+00:00")
     
     # Determine the current offset based on DST
     if is_dst(target_date):
@@ -151,10 +155,10 @@ def get_sunset_time(delta_days=0):
         offset = timedelta(hours=5)  # EST (UTC-5)
     
     # Convert UTC to local time
-    sunset_local_datetime = sunset_utc_datetime - offset
+    event_local_datetime = event_utc_datetime - offset
     
-    # Return the local sunset time as a string in HH:MM PM format
-    return sunset_local_datetime.strftime("%I:%M %p").lstrip("0")
+    # Return the local event time as a string in HH:MM AM/PM format
+    return event_local_datetime.strftime("%I:%M %p").lstrip("0")
 
 
 def forecast_24hours(days = 1, verbose = False):

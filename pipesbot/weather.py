@@ -1,4 +1,5 @@
 import requests
+from datetime import datetime, timedelta
 
 if __name__ == '__main__':
     import creds
@@ -73,23 +74,88 @@ def real_time_weather_report(verbose = False, plot = False):
         #message_string = message_string + f'\n- With heat index it feels like {int(feels_like)}°F ' + chr(0x1F525)
     else:
         message_string = message_string + f'\n- It is {int(temperature)}°F outside' #with a high of {int(temp_max)}°F and a low of {int(temp_min)} °F'
+
+    return message_string
+
     # add a line for the high and low temperatures
     #message_string = message_string + f'\n- The high for today is {int(temp_max)} °F and the low is {int(temp_min)}°F'
     #message_string = message_string + f'\n- You can expect {weather_description} today'
-    message_string = message_string + daily_rain_report()
-    if humidity >= 90 or humidity <= 20:
-        message_string = message_string + f'\n- The humidity is {humidity}%'
+    #message_string = message_string + daily_rain_report()
+    #if humidity >= 90 or humidity <= 20:
+    #    message_string = message_string + f'\n- The humidity is {humidity}%'
+    #if wind_speed >= 21:
+    #    message_string = message_string + f'\n- The wind speed is {wind_speed} mph. It is hella windy! ' + chr(0x1F4A8)
+    #if cloudiness >= 80:
+    #    message_string = message_string + f'\n- It is cloudy today, at {cloudiness}% ' + chr(0x2601)
+    #
+    #if verbose:
+    #    print(message_string)
+    #return message_string
 
-    if wind_speed >= 21:
-        message_string = message_string + f'\n- The wind speed is {wind_speed} mph. It is hella windy! ' + chr(0x1F4A8)
+def is_dst(date):
+    """Determines if a given date is during Daylight Saving Time (DST) in the US."""
+    # Second Sunday in March
+    dst_start = datetime(date.year, 3, 8)
+    while dst_start.weekday() != 6:  # Find the next Sunday
+        dst_start += timedelta(days=1)
+    
+    # First Sunday in November
+    dst_end = datetime(date.year, 11, 1)
+    while dst_end.weekday() != 6:  # Find the next Sunday
+        dst_end += timedelta(days=1)
+    
+    # Return True if the date is within the DST period
+    return dst_start <= date < dst_end
 
-    if cloudiness >= 80:
-        message_string = message_string + f'\n- It is cloudy today, at {cloudiness}% ' + chr(0x2601)
+def get_sunset_time(delta_days=0):
+    """
+    Fetches and returns the local sunset time for Atlanta, handling DST.
     
-    if verbose:
-        print(message_string)
-    return message_string
+    Args:
+        delta_days (int): Number of days from today to calculate the sunset time. 
+                          0 for today, 1 for tomorrow, -1 for yesterday, etc.
+                          
+    Returns:
+        str: Sunset time in HH:MM PM format with leading zeros stripped.
+    """
+    # Calculate the target date
+    target_date = datetime.now() + timedelta(days=delta_days)
     
+    # API endpoint for sunset data
+    url = "https://api.sunrise-sunset.org/json"
+    
+    # Parameters for Atlanta (latitude and longitude)
+    params = {
+        "lat": 33.7490,  # Atlanta latitude
+        "lng": -84.3880,  # Atlanta longitude
+        "date": target_date.strftime("%Y-%m-%d"),  # Pass the target date in YYYY-MM-DD format
+        "formatted": 0   # Return times in UTC (24-hour format for easier conversion)
+    }
+    
+    # Make the API request
+    response = requests.get(url, params=params)
+    data = response.json()
+    
+    # Check API response status
+    if data["status"] != "OK":
+        raise Exception("Failed to fetch sunset time. API status: " + data["status"])
+    
+    # Extract sunset time in UTC
+    sunset_utc = data["results"]["sunset"]
+    sunset_utc_datetime = datetime.strptime(sunset_utc, "%Y-%m-%dT%H:%M:%S+00:00")
+    
+    # Determine the current offset based on DST
+    if is_dst(target_date):
+        offset = timedelta(hours=4)  # EDT (UTC-4)
+    else:
+        offset = timedelta(hours=5)  # EST (UTC-5)
+    
+    # Convert UTC to local time
+    sunset_local_datetime = sunset_utc_datetime - offset
+    
+    # Return the local sunset time as a string in HH:MM PM format
+    return sunset_local_datetime.strftime("%I:%M %p").lstrip("0")
+
 
 def forecast_24hours(days = 1, verbose = False):
     url = f'http://api.openweathermap.org/data/2.5/forecast?q={CITY_NAME},{COUNTRY_CODE}&units={UNITS}&cnt={days * 8}&appid={API_KEY}'
@@ -286,3 +352,6 @@ if __name__ == '__main__':
     print('\U0001F64C')
     # sun unicode: \U00002600
     print('\U00002600')
+    print("Today's sunset time in Atlanta:", get_sunset_time(0))  # For today
+    print("Tomorrow's sunset time in Atlanta:", get_sunset_time(1))  # For tomorrow
+    print("Yesterday's sunset time in Atlanta:", get_sunset_time(-1))  # For yesterday

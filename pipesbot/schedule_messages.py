@@ -268,8 +268,10 @@ def morning_report_message(plot=False):
         message_string = message_string + weather.real_time_weather_report(plot=True)
 
         # SUNSET
-        sunset_string = f"\n- Sunset is at {weather.get_sun_time(0, "sunset")}."
-        sunrise_string = f"\n- Sunrise tomorrow is at {weather.get_sun_time(1, "sunrise")}."
+        sunset = weather.get_sun_time(0, "sunset")
+        sunset_string = f"\n- Sunset is at {sunset}."
+        sunrise = weather.get_sun_time(1, "sunrise")
+        sunrise_string = f"\n- Sunrise tomorrow is at {sunrise}."
         message_string = message_string + sunset_string
         message_string = message_string + sunrise_string
 

@@ -239,7 +239,7 @@ def morning_report_message(plot=False):
                 #message_string = message_string + f'{last_prem_price} - {type(last_prem_price)}'
                 
                 # GAS PRICES
-                message_string = message_string + f'\n- In Georgia, the state-wide average gas prices are:'
+                message_string = message_string + f'\n⛽ In Georgia, the state-wide average gas prices are:'
                 if diff_reg > 0:
                     message_string = message_string + f'\n\t\tRegular: ${reg} ' + chr(0x2197) + f' (${diff_reg:+.3f})'
                 elif diff_reg < 0:
@@ -269,9 +269,9 @@ def morning_report_message(plot=False):
 
         # SUNSET
         sunset = weather.get_sun_time(0, "sunset")
-        sunset_string = f"\n- Sunset is at {sunset} 🌅"
+        sunset_string = f"\n🌅 Sunset is at {sunset}"
         sunrise = weather.get_sun_time(1, "sunrise")
-        sunrise_string = f"\n- Sunrise tomorrow is at {sunrise} 🌅"
+        sunrise_string = f"\n🌅 Sunrise tomorrow is at {sunrise}"
         message_string = message_string + sunset_string
         message_string = message_string + sunrise_string
 

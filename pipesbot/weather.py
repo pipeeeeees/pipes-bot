@@ -65,15 +65,15 @@ def real_time_weather_report(verbose = False, plot = False):
     # compose the message
     message_string = f''
     if temperature <= 32.0:
-        message_string = message_string + f'\n🌡️ It is cold as ice right now with a temp of {int(temperature)}°F \U0001F9CA\U0001F976'
+        message_string = message_string + f'\n- It is cold as ice right now with a temp of {int(temperature)}°F \U0001F9CA\U0001F976'
         #message_string = message_string + f'\n- The high for today is {int(temp_max)} °F and the low is {int(temp_min)}°F'
         #message_string = message_string + f'\n- With windchill it feels like {int(feels_like)}°F ' + chr(0x1F976)
     elif temperature >= 85.0:
-        message_string = message_string + f'\n🌡️ It is hot as balls right now with a temp of {int(temperature)}°F \U0001F975\U0001F525'
+        message_string = message_string + f'\n- It is hot as balls right now with a temp of {int(temperature)}°F \U0001F975\U0001F525'
         #message_string = message_string + f'\n- The high for today is {int(temp_max)} °F and the low is {int(temp_min)}°F'
         #message_string = message_string + f'\n- With heat index it feels like {int(feels_like)}°F ' + chr(0x1F525)
     else:
-        message_string = message_string + f'\n🌡️ It is {int(temperature)}°F outside' #with a high of {int(temp_max)}°F and a low of {int(temp_min)} °F'
+        message_string = message_string + f'\n- It is {int(temperature)}°F outside' #with a high of {int(temp_max)}°F and a low of {int(temp_min)} °F'
 
     return message_string
 

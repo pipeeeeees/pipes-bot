@@ -16,6 +16,7 @@ INTERVALS = (
     ('seconds', 1),
 )
 
+
 def display_time(seconds):
     result = []
     for name, count in INTERVALS:
